@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">iMistAway</string>
+    <string name="uuid">36e5a4702df411e2b5de12313d31f141</string>
+    <string name="config_hash">2eea428782e6b5fa8e919be3821bf4aa8f8a1fd6</string>
+    <string name="trigger_domain">https://trigger.io</string>
+    <string name="payments_publicKey">PAYMENTS_PUBLIC_KEY_HERE</string>
+    <string name="splashimage">src/img/mistaway/mistaway-144_x_144.png</string>
+    <string name="splashimage_landscape">src/img/mistaway/mistaway-144_x_144.png</string>
+    <string name="facebook_appid" />
+    <string name="disable_ics_acceleration">no</string>
+    <string-array name="modules">
+        <item>io.trigger.forge.android.modules.request</item><item>io.trigger.forge.android.modules.prefs</item><item>io.trigger.forge.android.modules.file</item><item>io.trigger.forge.android.modules.contact</item><item>io.trigger.forge.android.modules.internal</item>
+        <item>io.trigger.forge.android.modules.logging</item>
+        <item>io.trigger.forge.android.modules.launchimage</item>
+        <item>io.trigger.forge.android.modules.event</item>
+    </string-array>
+</resources>

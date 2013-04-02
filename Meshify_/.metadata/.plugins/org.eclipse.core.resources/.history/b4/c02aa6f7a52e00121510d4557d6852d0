@@ -1,0 +1,8 @@
+{
+    "android": {
+        "sdk": "/Users/Work/android-sdks/"
+    }, 
+    "ios": {
+        "device": "simulator"
+    }
+}

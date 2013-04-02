@@ -1,0 +1,6 @@
+INDEX VERSION 1.121+/Users/lewiswight/forge-workspace/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+1003407522.index
+4227739520.index
+3685511489.index
+1771653449.index
+893325991.index

@@ -1,0 +1,26 @@
+{
+	"author": "lewis@meshify.com", 
+	"config_version": "2", 
+	"description": "An empty app created by default", 
+	"modules": {
+		"contact": true, 
+		"file": true, 
+		"is": true, 
+		"logging": {
+			"level": "DEBUG"
+		}, 
+		"media": true, 
+		"prefs": true, 
+		"reload": true, 
+		"request": {
+			"permissions": [
+				"http://my.idigi.com/ws/sci", 
+				"https://*/*"
+			]
+		}, 
+		"tools": true
+	}, 
+	"name": "BreckensApp", 
+	"platform_version": "v1.4.19", 
+	"version": "0.1"
+}

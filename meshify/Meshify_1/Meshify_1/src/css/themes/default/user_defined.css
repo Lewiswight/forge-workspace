@@ -1,0 +1,25 @@
+
+/* user defined
+-----------------------------------------------------------------------------------------------------------*/
+
+#popupPanel-popup {
+	width: 80%;
+    right: 0 !important;
+    left: auto !important;
+}
+#popupPanel {
+	float: right;
+    width: 100%;
+    border: 1px solid #000;
+    border-right: none;
+    background: rgba(0,0,0,.65);
+    margin: -1px 0;
+}
+#popupPanel .ui-btn {
+    margin: 2em 15px;
+}
+
+
+
+
+

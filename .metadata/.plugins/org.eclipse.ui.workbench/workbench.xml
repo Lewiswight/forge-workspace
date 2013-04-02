@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbench progressCount="33" version="2.0">
+<workbenchAdvisor/>
+<window height="816" maximized="true" width="1440" x="-6" y="38">
+<fastViewData fastViewLocation="1024"/>
+<perspectiveBar>
+<itemSize x="160"/>
+</perspectiveBar>
+<coolbarLayout locked="0">
+<coolItem id="group.file" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.workbench.file" itemType="typeToolBarContribution" x="106" y="22"/>
+<coolItem id="additions" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.debug.ui.launchActionSet" itemType="typeToolBarContribution" x="100" y="22"/>
+<coolItem id="org.eclipse.search.searchActionSet" itemType="typeToolBarContribution" x="62" y="22"/>
+<coolItem id="org.eclipse.ui.edit.text.actionSet.presentation" itemType="typeToolBarContribution" x="32" y="22"/>
+<coolItem id="org.eclipse.wst.jsdt.ui.JavaElementCreationActionSet" itemType="typeToolBarContribution" x="54" y="22"/>
+<coolItem id="org.eclipse.wst.xml.ui.perspective.NewFileToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="org.eclipse.wst.xml.ui.design.DesignToolBar" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="group.nav" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.workbench.navigate" itemType="typeToolBarContribution" x="152" y="22"/>
+<coolItem id="group.editor" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.wst.css.core.csssource.source" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="org.eclipse.wst.html.core.htmlsource.source" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="csep.CoffeeScript" itemType="typeToolBarContribution" x="32" y="22"/>
+<coolItem id="org.eclipse.ui.DefaultTextEditor" itemType="typePlaceholder" x="-1" y="-1"/>
+<coolItem id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" itemType="typeToolBarContribution" x="-1" y="-1"/>
+<coolItem id="group.help" itemType="typeGroupMarker"/>
+<coolItem id="org.eclipse.ui.workbench.help" itemType="typeToolBarContribution" x="-1" y="-1"/>
+</coolbarLayout>
+<page aggregateWorkingSetId="Aggregate for window 1352934109944" focus="true" label="Workspace - JavaScript">
+<editors>
+<editorArea activeWorkbook="DefaultEditorWorkbook">
+<info part="DefaultEditorWorkbook">
+<folder appearance="1" expanded="2">
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+<part id="3"/>
+<part id="4"/>
+<part id="5"/>
+<part id="6"/>
+<part id="7"/>
+<part id="8"/>
+<part id="9"/>
+<part id="10"/>
+<part id="13"/>
+<part id="11"/>
+<part id="12"/>
+<part id="14"/>
+<part id="15"/>
+</presentation>
+</folder>
+</info>
+</editorArea>
+<editor id="csep.CoffeeScript" name="meshable-router.coffee" partName="meshable-router.coffee" path="/Users/lewiswight/forge-workspace/Meshify_/Coffee_Scripts/meshable-router.coffee" title="meshable-router.coffee" tooltip="Meshify_/Coffee_Scripts/meshable-router.coffee" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/Coffee_Scripts/meshable-router.coffee"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="838" selectionTopPixel="270"/>
+</editor>
+<editor id="csep.CoffeeScript" name="events.coffee" partName="events.coffee" path="/Users/lewiswight/forge-workspace/Meshify_/Coffee_Scripts/events.coffee" title="events.coffee" tooltip="Meshify_/Coffee_Scripts/events.coffee" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/Coffee_Scripts/events.coffee"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="762" selectionTopPixel="0"/>
+</editor>
+<editor id="csep.CoffeeScript" name="Meshable.coffee" partName="Meshable.coffee" path="/Users/lewiswight/forge-workspace/Meshify_/Coffee_Scripts/Meshable.coffee" title="Meshable.coffee" tooltip="Meshify_/Coffee_Scripts/Meshable.coffee" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/Coffee_Scripts/Meshable.coffee"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1323" selectionTopPixel="267"/>
+</editor>
+<editor activePart="true" focus="true" id="org.eclipse.wst.html.core.htmlsource.source" name="index.html" partName="index.html" path="/Users/lewiswight/forge-workspace/Meshify_/src/index.html" title="index.html" tooltip="Meshify_/src/index.html" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/src/index.html"/>
+<editorState selectionHorizontalPixel="105" selectionLength="0" selectionOffset="15894" selectionTopPixel="6364"/>
+</editor>
+<editor id="csep.CoffeeScript" name="login.coffee" partName="login.coffee" path="/Users/lewiswight/forge-workspace/Meshify_/Coffee_Scripts/login.coffee" title="login.coffee" tooltip="Meshify_/Coffee_Scripts/login.coffee" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/Coffee_Scripts/login.coffee"/>
+<editorState selectionHorizontalPixel="8" selectionLength="10" selectionOffset="3114" selectionTopPixel="1581"/>
+</editor>
+<editor id="csep.CoffeeScript" name="node.coffee" partName="node.coffee" path="/Users/lewiswight/forge-workspace/Meshify_/Coffee_Scripts/node.coffee" title="node.coffee" tooltip="Meshify_/Coffee_Scripts/node.coffee" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/Coffee_Scripts/node.coffee"/>
+<editorState selectionHorizontalPixel="1" selectionLength="0" selectionOffset="751" selectionTopPixel="404"/>
+</editor>
+<editor id="csep.CoffeeScript" name="angrycats.coffee" partName="angrycats.coffee" path="/Users/Work/forge-workspace/Meshify_/Coffee_Scripts/angrycats.coffee" title="angrycats.coffee" tooltip="Meshify_/Coffee_Scripts/angrycats.coffee" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/Coffee_Scripts/angrycats.coffee"/>
+<editorState selectionHorizontalPixel="0" selectionLength="196" selectionOffset="2504" selectionTopPixel="231"/>
+</editor>
+<editor id="csep.CoffeeScript" name="search.coffee" partName="search.coffee" path="/Users/lewiswight/forge-workspace/Meshify_/Coffee_Scripts/search.coffee" title="search.coffee" tooltip="Meshify_/Coffee_Scripts/search.coffee" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/Coffee_Scripts/search.coffee"/>
+<editorState selectionHorizontalPixel="0" selectionLength="248" selectionOffset="1876" selectionTopPixel="1270"/>
+</editor>
+<editor id="csep.CoffeeScript" name="require_startup.coffee" partName="require_startup.coffee" path="/Users/lewiswight/forge-workspace/Meshify_/Coffee_Scripts/require_startup.coffee" title="require_startup.coffee" tooltip="Meshify_/Coffee_Scripts/require_startup.coffee" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/Coffee_Scripts/require_startup.coffee"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="668" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" name="jqm.slidemenu.js" partName="jqm.slidemenu.js" path="/Users/Work/forge-workspace/Meshify_/src/js/jqm.slidemenu.js" title="jqm.slidemenu.js" tooltip="Meshify_/src/js/jqm.slidemenu.js" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/src/js/jqm.slidemenu.js"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="239" selectionTopPixel="0"/>
+</editor>
+<editor id="csep.CoffeeScript" name="menu.coffee" partName="menu.coffee" path="/Users/lewiswight/forge-workspace/Meshify_/Coffee_Scripts/menu.coffee" title="menu.coffee" tooltip="Meshify_/Coffee_Scripts/menu.coffee" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/Coffee_Scripts/menu.coffee"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="2418" selectionTopPixel="1315"/>
+</editor>
+<editor id="csep.CoffeeScript" name="dashboard.coffee" partName="dashboard.coffee" path="/Users/lewiswight/forge-workspace/Meshify_/Coffee_Scripts/dashboard.coffee" title="dashboard.coffee" tooltip="Meshify_/Coffee_Scripts/dashboard.coffee" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/Coffee_Scripts/dashboard.coffee"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+<editor id="csep.CoffeeScript" name="gateways.coffee" partName="gateways.coffee" path="/Users/lewiswight/forge-workspace/Meshify_/Coffee_Scripts/gateways.coffee" title="gateways.coffee" tooltip="Meshify_/Coffee_Scripts/gateways.coffee" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/Coffee_Scripts/gateways.coffee"/>
+<editorState selectionHorizontalPixel="0" selectionLength="361" selectionOffset="4916" selectionTopPixel="2367"/>
+</editor>
+<editor id="csep.CoffeeScript" name="nodes.coffee" partName="nodes.coffee" path="/Users/lewiswight/forge-workspace/Meshify_/Coffee_Scripts/nodes.coffee" title="nodes.coffee" tooltip="Meshify_/Coffee_Scripts/nodes.coffee" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/Coffee_Scripts/nodes.coffee"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1909" selectionTopPixel="1075"/>
+</editor>
+<editor id="org.eclipse.wst.css.core.csssource.source" name="mistaway.css" partName="mistaway.css" path="/Users/Work/forge-workspace/Meshify_/src/css/themes/mistaway.css" title="mistaway.css" tooltip="Meshify_/src/css/themes/mistaway.css" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/src/css/themes/mistaway.css"/>
+<editorState selectionHorizontalPixel="0" selectionLength="19" selectionOffset="415" selectionTopPixel="0"/>
+</editor>
+<editor id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" name="jquery.mobile.js" partName="jquery.mobile.js" path="/Users/lewiswight/forge-workspace/Meshify_/src/vendor/jquery.mobile.js" title="jquery.mobile.js" tooltip="Meshify_/src/vendor/jquery.mobile.js" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/Meshify_/src/vendor/jquery.mobile.js"/>
+<editorState selectionHorizontalPixel="0" selectionLength="290894" selectionOffset="0" selectionTopPixel="0"/>
+</editor>
+</editors>
+<views>
+<view id="org.eclipse.ui.navigator.ProjectExplorer" partName="Project Explorer">
+<viewState CommonNavigator.LINKING_ENABLED="0" org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets="0"/>
+</view>
+<view id="org.eclipse.wst.jsdt.ui.JavadocView" partName="Documentation"/>
+<view id="org.eclipse.search.ui.views.SearchView" partName="Search">
+<viewState isPinned="false">
+<view IMemento.internal.id="" org.eclipse.search.lastActivation="0"/>
+<view IMemento.internal.id="org.eclipse.search.text.FileSearchResultPage" org.eclipse.search.lastActivation="1" org.eclipse.search.resultpage.layout="2" org.eclipse.search.resultpage.limit="1000" org.eclipse.search.resultpage.sorting="2"/>
+</viewState>
+</view>
+<view id="org.eclipse.wst.jsdt.ui.SourceView" partName="Declaration"/>
+<view id="org.eclipse.ui.views.ProblemView" partName="Problems">
+<viewState PRIMARY_SORT_FIELD="org.eclipse.ui.ide.severityAndDescriptionField" categoryGroup="org.eclipse.ui.ide.severity" markerContentGenerator="org.eclipse.ui.ide.problemsGenerator" partName="Problems">
+<columnWidths org.eclipse.ui.ide.locationField="84" org.eclipse.ui.ide.markerType="114" org.eclipse.ui.ide.pathField="144" org.eclipse.ui.ide.resourceField="114" org.eclipse.ui.ide.severityAndDescriptionField="300"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.severityAndDescriptionField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.resourceField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.pathField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.locationField"/>
+<visible IMemento.internal.id="org.eclipse.ui.ide.markerType"/>
+</viewState>
+</view>
+<view id="org.eclipse.ui.views.ContentOutline" partName="Outline">
+<viewState/>
+</view>
+</views>
+<perspectives activePart="org.eclipse.wst.html.core.htmlsource.source" activePerspective="org.eclipse.wst.jsdt.ui.JavaPerspective">
+<perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
+<descriptor class="org.eclipse.wst.jsdt.internal.ui.JavaPerspectiveFactory" id="org.eclipse.wst.jsdt.ui.JavaPerspective" label="JavaScript"/>
+<alwaysOnActionSet id="org.eclipse.ui.cheatsheets.actionSet"/>
+<alwaysOnActionSet id="org.eclipse.search.searchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.annotationNavigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.navigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo"/>
+<alwaysOnActionSet id="org.eclipse.ui.externaltools.ExternalToolsSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.keyBindings"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.openFiles"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.launchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.wst.jsdt.ui.JavaActionSet"/>
+<alwaysOnActionSet id="org.eclipse.wst.jsdt.ui.JavaElementCreationActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.NavigateActionSet"/>
+<show_view_action id="org.eclipse.wst.jsdt.ui.PackageExplorer"/>
+<show_view_action id="org.eclipse.wst.jsdt.ui.TypeHierarchy"/>
+<show_view_action id="org.eclipse.wst.jsdt.ui.SourceView"/>
+<show_view_action id="org.eclipse.wst.jsdt.ui.JavadocView"/>
+<show_view_action id="org.eclipse.search.ui.views.SearchView"/>
+<show_view_action id="org.eclipse.ui.console.ConsoleView"/>
+<show_view_action id="org.eclipse.ui.views.ContentOutline"/>
+<show_view_action id="org.eclipse.ui.views.ProblemView"/>
+<show_view_action id="org.eclipse.ui.views.ResourceNavigator"/>
+<show_view_action id="org.eclipse.ui.views.TaskList"/>
+<show_view_action id="org.eclipse.ui.views.ProgressView"/>
+<show_view_action id="org.eclipse.ui.navigator.ProjectExplorer"/>
+<new_wizard_action id="org.eclipse.wst.jsdt.ui.wizards.JavaProjectWizard"/>
+<new_wizard_action id="org.eclipse.wst.jsdt.ui.wizards.NewPackageCreationWizard"/>
+<new_wizard_action id="org.eclipse.wst.jsdt.ui.wizards.NewClassCreationWizard"/>
+<new_wizard_action id="org.eclipse.wst.jsdt.ui.NewJSWizard"/>
+<new_wizard_action id="org.eclipse.wst.jsdt.ui.wizards.NewInterfaceCreationWizard"/>
+<new_wizard_action id="org.eclipse.wst.jsdt.ui.wizards.NewEnumCreationWizard"/>
+<new_wizard_action id="org.eclipse.wst.jsdt.ui.wizards.NewAnnotationCreationWizard"/>
+<new_wizard_action id="org.eclipse.wst.jsdt.ui.wizards.NewSourceFolderCreationWizard"/>
+<new_wizard_action id="org.eclipse.wst.jsdt.ui.wizards.NewSnippetFileCreationWizard"/>
+<new_wizard_action id="org.eclipse.ui.wizards.new.folder"/>
+<new_wizard_action id="org.eclipse.ui.wizards.new.file"/>
+<new_wizard_action id="org.eclipse.ui.editors.wizards.UntitledTextFileWizard"/>
+<perspective_action id="org.eclipse.jdt.ui.JavaPerspective"/>
+<perspective_action id="org.eclipse.debug.ui.DebugPerspective"/>
+<perspective_action id="org.eclipse.wst.web.ui.webDevPerspective"/>
+<perspective_action id="org.eclipse.ui.resourcePerspective"/>
+<hide_toolbar_item_id id="org.eclipse.jdt.ui.actions.OpenProjectWizard"/>
+<hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
+<view id="org.eclipse.ui.navigator.ProjectExplorer"/>
+<view id="org.eclipse.ui.views.ProblemView"/>
+<view id="org.eclipse.wst.jsdt.ui.JavadocView"/>
+<view id="org.eclipse.wst.jsdt.ui.SourceView"/>
+<view id="org.eclipse.search.ui.views.SearchView"/>
+<view id="org.eclipse.ui.views.ContentOutline"/>
+<fastViewBars/>
+<layout>
+<mainWindow>
+<info folder="true" part="left">
+<folder activePageID="org.eclipse.ui.navigator.ProjectExplorer" appearance="2" expanded="2">
+<page content="org.eclipse.ui.navigator.ProjectExplorer" label="Project Explorer"/>
+<page content="org.eclipse.wst.jsdt.ui.TypeHierarchy" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.ResourceNavigator" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="762" ratioRight="254" relationship="2" relative="left">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
+<page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
+</folder>
+</info>
+<info part="org.eclipse.ui.editorss" ratio="0.2246326" ratioLeft="321" ratioRight="1108" relationship="2" relative="left"/>
+<info folder="true" part="bottom" ratio="0.73351645" ratioLeft="534" ratioRight="194" relationship="4" relative="org.eclipse.ui.editorss">
+<folder activePageID="org.eclipse.search.ui.views.SearchView" appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ProblemView" label="Problems"/>
+<page content="org.eclipse.wst.jsdt.ui.JavadocView" label="Documentation"/>
+<page content="org.eclipse.wst.jsdt.ui.SourceView" label="Declaration"/>
+<page content="org.eclipse.search.ui.views.SearchView" label="Search"/>
+<page content="org.eclipse.ui.texteditor.TemplatesView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.console.ConsoleView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.BookmarkView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.ProgressView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.TaskList" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.PropertySheet" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+<part id="3"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@3c2465e5" ratio="0.7493438" ratioLeft="571" ratioRight="191" relationship="2" relative="org.eclipse.ui.editorss">
+<folder activePageID="org.eclipse.ui.views.ContentOutline" appearance="2" expanded="2">
+<page content="org.eclipse.ui.views.ContentOutline" label="Outline"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+</presentation>
+</folder>
+</info>
+</mainWindow>
+</layout>
+</perspective>
+</perspectives>
+<workingSets/>
+<navigationHistory>
+<editors>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="csep.CoffeeScript" path="/Meshify_/Coffee_Scripts/meshable-router.coffee"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="csep.CoffeeScript" path="/Meshify_/Coffee_Scripts/gateways.coffee"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.html.core.htmlsource.source" path="/Meshify_/src/index.html"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="csep.CoffeeScript" path="/Meshify_/Coffee_Scripts/search.coffee"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="csep.CoffeeScript" path="/Meshify_/Coffee_Scripts/login.coffee"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="csep.CoffeeScript" path="/Meshify_/Coffee_Scripts/menu.coffee"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="csep.CoffeeScript" path="/Meshify_/Coffee_Scripts/nodes.coffee"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="csep.CoffeeScript" path="/Meshify_/Coffee_Scripts/node.coffee"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.css.core.csssource.source" path="/Meshify_/src/css/jqm.slidemenu.css"/>
+</editors>
+<item historyLabel="search.coffee" index="3">
+<position info="not_deleted" x="1876" y="248"/>
+</item>
+<item historyLabel="login.coffee" index="4">
+<position/>
+</item>
+<item historyLabel="gateways.coffee" index="1">
+<position info="not_deleted" x="4916" y="361"/>
+</item>
+<item historyLabel="login.coffee" index="4">
+<position info="not_deleted" x="4961" y="0"/>
+</item>
+<item historyLabel="meshable-router.coffee" index="0">
+<position info="not_deleted" x="1809" y="0"/>
+</item>
+<item historyLabel="login.coffee" index="4">
+<position info="not_deleted" x="5129" y="0"/>
+</item>
+<item historyLabel="meshable-router.coffee" index="0">
+<position info="not_deleted" x="1809" y="0"/>
+</item>
+<item historyLabel="menu.coffee" index="5">
+<position info="not_deleted" x="1372" y="9"/>
+</item>
+<item historyLabel="login.coffee" index="4">
+<position info="not_deleted" x="5129" y="0"/>
+</item>
+<item historyLabel="index.html" index="2">
+<position info="not_deleted" x="15946" y="0"/>
+</item>
+<item historyLabel="meshable-router.coffee" index="0">
+<position info="not_deleted" x="1809" y="0"/>
+</item>
+<item historyLabel="nodes.coffee" index="6">
+<position info="not_deleted" x="2656" y="0"/>
+</item>
+<item historyLabel="node.coffee" index="7">
+<position info="not_deleted" x="2433" y="0"/>
+</item>
+<item historyLabel="index.html" index="2">
+<position info="not_deleted" x="17146" y="0"/>
+</item>
+<item historyLabel="meshable-router.coffee" index="0">
+<position info="not_deleted" x="949" y="0"/>
+</item>
+<item historyLabel="menu.coffee" index="5">
+<position info="not_deleted" x="1372" y="9"/>
+</item>
+<item historyLabel="node.coffee" index="7">
+<position info="not_deleted" x="624" y="100"/>
+</item>
+<item historyLabel="menu.coffee" index="5">
+<position/>
+</item>
+<item historyLabel="index.html" index="2">
+<position info="not_deleted" x="1215" y="0"/>
+</item>
+<item historyLabel="menu.coffee" index="5">
+<position/>
+</item>
+<item historyLabel="index.html" index="2">
+<position info="not_deleted" x="1215" y="0"/>
+</item>
+<item historyLabel="menu.coffee" index="5">
+<position info="not_deleted" x="1875" y="0"/>
+</item>
+<item historyLabel="index.html" index="2">
+<position info="not_deleted" x="1264" y="0"/>
+</item>
+<item historyLabel="menu.coffee" index="5">
+<position/>
+</item>
+<item historyLabel="nodes.coffee" index="6">
+<position info="not_deleted" x="2656" y="0"/>
+</item>
+<item historyLabel="menu.coffee" index="5">
+<position/>
+</item>
+<item historyLabel="meshable-router.coffee" index="0">
+<position info="not_deleted" x="872" y="0"/>
+</item>
+<item historyLabel="menu.coffee" index="5">
+<position info="not_deleted" x="703" y="0"/>
+</item>
+<item historyLabel="meshable-router.coffee" index="0">
+<position info="not_deleted" x="831" y="0"/>
+</item>
+<item historyLabel="menu.coffee" index="5">
+<position info="not_deleted" x="1546" y="18"/>
+</item>
+<item historyLabel="meshable-router.coffee" index="0">
+<position info="not_deleted" x="838" y="0"/>
+</item>
+<item historyLabel="menu.coffee" index="5">
+<position info="not_deleted" x="2418" y="0"/>
+</item>
+<item historyLabel="login.coffee" index="4">
+<position info="not_deleted" x="1087" y="0"/>
+</item>
+<item historyLabel="index.html" index="2">
+<position info="not_deleted" x="7829" y="0"/>
+</item>
+<item historyLabel="nodes.coffee" index="6">
+<position info="not_deleted" x="2656" y="0"/>
+</item>
+<item historyLabel="nodes.coffee" index="6">
+<position info="not_deleted" x="1909" y="0"/>
+</item>
+<item historyLabel="login.coffee" index="4">
+<position info="not_deleted" x="1087" y="0"/>
+</item>
+<item historyLabel="index.html" index="2">
+<position info="not_deleted" x="58" y="0"/>
+</item>
+<item historyLabel="jqm.slidemenu.css" index="8">
+<position info="not_deleted" x="1783" y="0"/>
+</item>
+<item historyLabel="index.html" index="2">
+<position info="not_deleted" x="58" y="0"/>
+</item>
+<item historyLabel="jqm.slidemenu.css" index="8">
+<position info="not_deleted" x="1704" y="9"/>
+</item>
+<item historyLabel="index.html" index="2">
+<position info="not_deleted" x="1197" y="0"/>
+</item>
+<item historyLabel="jqm.slidemenu.css" index="8">
+<position info="not_deleted" x="376" y="7"/>
+</item>
+<item historyLabel="index.html" index="2">
+<position info="not_deleted" x="1197" y="0"/>
+</item>
+<item historyLabel="jqm.slidemenu.css" index="8">
+<position info="not_deleted" x="1783" y="0"/>
+</item>
+<item historyLabel="index.html" index="2">
+<position info="not_deleted" x="1306" y="0"/>
+</item>
+<item historyLabel="menu.coffee" index="5">
+<position info="not_deleted" x="2418" y="0"/>
+</item>
+<item historyLabel="login.coffee" index="4">
+<position info="not_deleted" x="3114" y="10"/>
+</item>
+<item historyLabel="node.coffee" index="7">
+<position info="not_deleted" x="751" y="0"/>
+</item>
+<item active="true" historyLabel="index.html" index="2">
+<position info="not_deleted" x="1306" y="0"/>
+</item>
+</navigationHistory>
+<input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
+</page>
+<workbenchWindowAdvisor/>
+<actionBarAdvisor/>
+<trimLayout>
+<trimArea IMemento.internal.id="16384">
+<trimItem IMemento.internal.id="left"/>
+</trimArea>
+<trimArea IMemento.internal.id="131072">
+<trimItem IMemento.internal.id="org.eclipse.ui.internal.ViewStack@3c2465e5"/>
+</trimArea>
+<trimArea IMemento.internal.id="128">
+<trimItem IMemento.internal.id="org.eclipse.ui.internal.WorkbenchWindow.topBar"/>
+</trimArea>
+<trimArea IMemento.internal.id="1024">
+<trimItem IMemento.internal.id="org.eclise.ui.internal.FastViewBar"/>
+<trimItem IMemento.internal.id="org.eclipse.jface.action.StatusLineManager"/>
+<trimItem IMemento.internal.id="org.eclipse.ui.internal.progress.ProgressRegion"/>
+<trimItem IMemento.internal.id="bottom"/>
+</trimArea>
+</trimLayout>
+</window>
+<mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.css.core.csssource.source" name="jqm.slidemenu.css" tooltip="Meshify_/src/css/jqm.slidemenu.css">
+<persistable path="/Meshify_/src/css/jqm.slidemenu.css"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" name="jquery.mobile.js" tooltip="Meshify_/src/vendor/jquery.mobile.js">
+<persistable path="/Meshify_/src/vendor/jquery.mobile.js"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" name="jqm.globals.js" tooltip="Meshify_/src/js/jqm.globals.js">
+<persistable path="/Meshify_/src/js/jqm.globals.js"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" name="meshable-config.js" tooltip="Meshify_/src/meshable-config.js">
+<persistable path="/Meshify_/src/meshable-config.js"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" name="require_startup.js" tooltip="Meshify_/src/require_startup.js">
+<persistable path="/Meshify_/src/require_startup.js"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" name="jqm-config.js" tooltip="Meshify_/src/jqm-config.js">
+<persistable path="/Meshify_/src/jqm-config.js"/>
+</file>
+<file factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="org.eclipse.ui.DefaultTextEditor" name="lewiswight" tooltip="/Users/lewiswight">
+<persistable uri="file:/Users/lewiswight"/>
+</file>
+<file factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" name="jqm.slidemenu.js" tooltip="/Users/Work/forge-workspace/breckensapp/src/js/jqm.slidemenu.js">
+<persistable uri="file:/Users/Work/forge-workspace/breckensapp/src/js/jqm.slidemenu.js"/>
+</file>
+<file factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="org.eclipse.wst.html.core.htmlsource.source" name="app.html" tooltip="/Users/Work/Downloads/mobile_website 4/app.html">
+<persistable uri="file:/Users/Work/Downloads/mobile_website%204/app.html"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" name="nodes.js" tooltip="Meshify_/src/nodes.js">
+<persistable path="/Meshify_/src/nodes.js"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.jsdt.ui.CompilationUnitEditor" name="Meshable.js" tooltip="Meshify_/src/Meshable.js">
+<persistable path="/Meshify_/src/Meshable.js"/>
+</file>
+<file factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="org.eclipse.wst.html.core.htmlsource.source" name="index.html" tooltip="/Users/Work/forge-workspace/breckensapp/src/index.html">
+<persistable uri="file:/Users/Work/forge-workspace/breckensapp/src/index.html"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.wst.css.core.csssource.source" name="mistaway.css" tooltip="Meshify_/src/css/themes/mistaway.css">
+<persistable path="/Meshify_/src/css/themes/mistaway.css"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ui.systemExternalEditor" name="smico6.png" tooltip="Meshify_/src/img/smico6.png">
+<persistable path="/Meshify_/src/img/smico6.png"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ui.systemExternalEditor" name="smico5.png" tooltip="Meshify_/src/img/smico5.png">
+<persistable path="/Meshify_/src/img/smico5.png"/>
+</file>
+</mruList>
+</workbench>

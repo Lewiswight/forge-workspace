@@ -1,0 +1,19 @@
+{
+    "ios": {
+        "device": "simulator", 
+        "simulatorsdk": "6.0", 
+        "simulatorfamily": "iphone", 
+        "profiles": {
+            "DEFAULT": {
+                "developer_certificate_password": "123", 
+                "provisioning_profile": "/Users/lewiswight/Library/MobileDevice/Provisioning Profiles/619F1422-52A9-4C38-B083-3C3AB01098D0.mobileprovision", 
+                "developer_certificate_path": "/Users/lewiswight/Downloads/ios_development (3).cer"
+            }
+        }
+    }, 
+    "general": {
+        "reload": {
+            "external": false
+        }
+    }
+}

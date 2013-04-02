@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Meshify_/src/images&apos; to &apos;img&apos;" description="Rename resource &apos;images&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/images" name="img" stamp="1354153002518" updateReferences="true"/>
+</session>

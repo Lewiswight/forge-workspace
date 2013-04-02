@@ -1,0 +1,42 @@
+require ["jquery", "jqm-config", 'jqm', 'cordova', "backbone", "underscore", "marionette", "Meshable", "Router", "Events", "login", 'dashboard', 'search'], ($, jqm_config, jqm, cordova, Backbone, _, Marionette, Meshable, Router, Events, login, dashboard, search) ->
+  
+  # The "app" dependency is passed in as "Meshable"
+
+	#$(document).bind "pagechange", ->
+  	#			$(".ui-page-active .ui-listview").listview "refresh"
+  	#			$(".ui-page-active :jqmData(role=content)").trigger "create"
+
+	$(document).ready ->
+
+		Meshable.events = Events 
+		Meshable.router = new Router()
+		 
+		
+		#Backbone.history.start
+		
+		
+		#Meshable.loginRegion.show(login)
+		
+		
+		
+		
+		
+		Meshable.start
+			authModel: "login"
+		
+		
+
+		
+
+	#^	Backbone.history.start()
+		
+		
+		
+	    
+
+  
+    
+
+    
+  
+

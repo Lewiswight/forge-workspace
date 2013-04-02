@@ -1,0 +1,130 @@
+what,kind,bundleId,bundleVersion,description,time
+error,log,,,"Errors occurred during the build.",1352932021436
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932021461
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932021630
+activated,view,org.eclipse.ui.navigator.resources,3.4.200.I20100601-0800,"org.eclipse.ui.navigator.ProjectExplorer",1352932021696
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932023692
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932023858
+activated,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932023879
+activated,view,org.eclipse.ui.navigator.resources,3.4.200.I20100601-0800,"org.eclipse.ui.navigator.ProjectExplorer",1352932026213
+started,bundle,org.eclipse.wst.html.core,1.1.400.v201005261534,"org.eclipse.wst.html.core",1352932026797
+opened,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932028892
+activated,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932028937
+activated,view,org.eclipse.ui.navigator.resources,3.4.200.I20100601-0800,"org.eclipse.ui.navigator.ProjectExplorer",1352932032670
+activated,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932040254
+executed,command,org.eclipse.ui,3.6.0.I20100603-1100,"org.eclipse.ui.file.saveAll",1352932043832
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932048706
+error,log,,,"Problems occurred when invoking code from plug-in: ""org.eclipse.core.resources"".",1352932049763
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932049821
+executed,command,org.eclipse.ui,3.6.0.I20100603-1100,"org.eclipse.ui.file.saveAll",1352932050349
+error,log,,,"Problems occurred when invoking code from plug-in: ""org.eclipse.core.resources"".",1352932055352
+error,log,,,"Errors occurred during the build.",1352932055357
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932055387
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932059788
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932062338
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932109387
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932137702
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932208283
+executed,command,org.eclipse.ui,3.6.0.I20100603-1100,"org.eclipse.ui.file.saveAll",1352932211695
+error,log,,,"Problems occurred when invoking code from plug-in: ""org.eclipse.core.resources"".",1352932217584
+error,log,,,"Errors occurred during the build.",1352932217589
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932217616
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932219697
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932224140
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932284595
+activated,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932287070
+closed,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932287099
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932295711
+activated,view,org.eclipse.ui.navigator.resources,3.4.200.I20100601-0800,"org.eclipse.ui.navigator.ProjectExplorer",1352932327997
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932328269
+started,bundle,org.eclipse.ltk.core.refactoring,3.5.100.v20100526-0800,"org.eclipse.ltk.core.refactoring",1352932330126
+started,bundle,org.eclipse.ltk.ui.refactoring,3.5.0.v20100526-0800,"org.eclipse.ltk.ui.refactoring",1352932330530
+opened,editor,org.eclipse.wst.jsdt.ui,1.1.0.v201005200157,"org.eclipse.wst.jsdt.ui.CompilationUnitEditor",1352932330681
+started,bundle,org.eclipse.wst.jsdt.debug.ui,1.0.0.v201005250108,"org.eclipse.wst.jsdt.debug.ui",1352932330868
+started,bundle,org.eclipse.debug.core,3.6.0.v20100519,"org.eclipse.debug.core",1352932331025
+started,bundle,org.eclipse.debug.ui,3.6.0.v20100601-1530,"org.eclipse.debug.ui",1352932331221
+activated,editor,org.eclipse.wst.jsdt.ui,1.1.0.v201005200157,"org.eclipse.wst.jsdt.ui.CompilationUnitEditor",1352932331388
+started,bundle,org.eclipse.team.ui,3.5.100.I20100527-0800,"org.eclipse.team.ui",1352932336051
+started,bundle,org.eclipse.compare,3.5.100.I20100526-0800,"org.eclipse.compare",1352932336085
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932354073
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932398298
+executed,command,,,"AUTOGEN:::org.eclipse.wst.jsdt.internal.ui.CompilationUnitEditor.ruler.actions/org.eclipse.wst.jsdt.internal.ui.javaeditor.JavaSelectRulerAction",1352932402776
+executed,command,,,"AUTOGEN:::org.eclipse.wst.jsdt.debug.ui.togglebreakpoint/org.eclipse.wst.jsdt.debug.ui.RulerToggleBreakpoint",1352932403238
+executed,command,org.eclipse.ui.editors,3.6.0.v20100520-0800,"org.eclipse.ui.editors.lineNumberToggle",1352932406245
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932427293
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932461553
+executed,command,org.eclipse.ui,3.6.0.I20100603-1100,"org.eclipse.ui.file.saveAll",1352932462999
+error,log,,,"Problems occurred when invoking code from plug-in: ""org.eclipse.core.resources"".",1352932471499
+error,log,,,"Errors occurred during the build.",1352932471507
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932471665
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932474334
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932475381
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932657139
+activated,view,org.eclipse.ui.navigator.resources,3.4.200.I20100601-0800,"org.eclipse.ui.navigator.ProjectExplorer",1352932663494
+opened,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932663955
+activated,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932664018
+activated,view,org.eclipse.ui.navigator.resources,3.4.200.I20100601-0800,"org.eclipse.ui.navigator.ProjectExplorer",1352932680843
+opened,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932681217
+activated,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932681267
+activated,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932683239
+closed,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932683239
+activated,view,org.eclipse.ui.navigator.resources,3.4.200.I20100601-0800,"org.eclipse.ui.navigator.ProjectExplorer",1352932692223
+opened,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932692850
+activated,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932692907
+activated,view,org.eclipse.ui.navigator.resources,3.4.200.I20100601-0800,"org.eclipse.ui.navigator.ProjectExplorer",1352932721115
+opened,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932721597
+activated,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352932721646
+executed,command,org.eclipse.ui,3.6.0.I20100603-1100,"org.eclipse.ui.file.saveAll",1352932737977
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352932740590
+error,log,,,"Problems occurred when invoking code from plug-in: ""org.eclipse.core.resources"".",1352932743997
+error,log,,,"Errors occurred during the build.",1352932744003
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352933457449
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352933460512
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352933651436
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352933655935
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352933707761
+activated,view,org.eclipse.ui.navigator.resources,3.4.200.I20100601-0800,"org.eclipse.ui.navigator.ProjectExplorer",1352933720160
+activated,editor,org.eclipse.wst.jsdt.ui,1.1.0.v201005200157,"org.eclipse.wst.jsdt.ui.CompilationUnitEditor",1352933729647
+executed,command,org.eclipse.ui,3.6.0.I20100603-1100,"org.eclipse.ui.file.saveAll",1352933744551
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352933746199
+error,log,,,"Problems occurred when invoking code from plug-in: ""org.eclipse.core.resources"".",1352933751866
+error,log,,,"Errors occurred during the build.",1352933751871
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352933903494
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352933904613
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352933905758
+activated,view,org.eclipse.ui.navigator.resources,3.4.200.I20100601-0800,"org.eclipse.ui.navigator.ProjectExplorer",1352933916794
+activated,editor,org.eclipse.wst.jsdt.ui,1.1.0.v201005200157,"org.eclipse.wst.jsdt.ui.CompilationUnitEditor",1352933923561
+closed,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352933923650
+closed,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352933924853
+activated,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352933925794
+closed,editor,org.eclipse.wst.jsdt.ui,1.1.0.v201005200157,"org.eclipse.wst.jsdt.ui.CompilationUnitEditor",1352933925795
+closed,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352933927166
+closed,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352933928281
+activated,view,org.eclipse.ui.navigator.resources,3.4.200.I20100601-0800,"org.eclipse.ui.navigator.ProjectExplorer",1352933929171
+closed,editor,csep.ui,0.2.2,"csep.CoffeeScript",1352933929171
+opened,editor,org.eclipse.wst.jsdt.ui,1.1.0.v201005200157,"org.eclipse.wst.jsdt.ui.CompilationUnitEditor",1352933963925
+activated,editor,org.eclipse.wst.jsdt.ui,1.1.0.v201005200157,"org.eclipse.wst.jsdt.ui.CompilationUnitEditor",1352933963993
+executed,command,org.eclipse.ui,3.6.0.I20100603-1100,"org.eclipse.ui.file.saveAll",1352933975508
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352933977737
+error,log,,,"Problems occurred when invoking code from plug-in: ""org.eclipse.core.resources"".",1352933982829
+error,log,,,"Errors occurred during the build.",1352933982833
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352933985460
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352933987383
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352934047683
+activated,view,org.eclipse.ui.navigator.resources,3.4.200.I20100601-0800,"org.eclipse.ui.navigator.ProjectExplorer",1352934068426
+closed,editor,org.eclipse.wst.jsdt.ui,1.1.0.v201005200157,"org.eclipse.wst.jsdt.ui.CompilationUnitEditor",1352934068426
+deactivated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352934095067
+activated,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352934099368
+started,bundle,org.eclipse.wst.jsdt.debug.core,1.0.0.v201006082045,"org.eclipse.wst.jsdt.debug.core",1352934099516
+closed,workbench,org.eclipse.ui.workbench,3.6.0.I20100603-1100,"",1352934099599
+stopped,bundle,org.eclipse.equinox.p2.ui.sdk,1.0.100.v20100513,"org.eclipse.equinox.p2.ui.sdk",1352934100586
+stopped,bundle,org.eclipse.wst.dtd.ui,1.0.500.v201004290328,"org.eclipse.wst.dtd.ui",1352934100608
+stopped,bundle,org.eclipse.wst.jsdt.web.ui,1.0.300.v201006030742,"org.eclipse.wst.jsdt.web.ui",1352934100628
+stopped,bundle,org.eclipse.wst.web.ui,1.1.400.v201004141630,"org.eclipse.wst.web.ui",1352934100628
+stopped,bundle,org.eclipse.wst.html.ui,1.0.500.v201006030742,"org.eclipse.wst.html.ui",1352934100675
+stopped,bundle,org.eclipse.wst.css.ui,1.0.500.v201004290328,"org.eclipse.wst.css.ui",1352934100696
+stopped,bundle,org.eclipse.wst.xsl.exslt.ui,1.0.0.v201006012005,"org.eclipse.wst.xsl.exslt.ui",1352934100716
+stopped,bundle,org.eclipse.wst.xsl.jaxp.debug.ui,1.0.100.v201004290328,"org.eclipse.wst.xsl.jaxp.debug.ui",1352934100736
+stopped,bundle,org.eclipse.wst.xsl.ui,1.1.0.v201004290328,"org.eclipse.wst.xsl.ui",1352934100748
+stopped,bundle,org.eclipse.wst.xml.xpath.ui,1.1.0.v201004290328,"org.eclipse.wst.xml.xpath.ui",1352934100767
+stopped,bundle,org.eclipse.wst.xsd.ui,1.2.303.v201004290328,"org.eclipse.wst.xsd.ui",1352934100780
