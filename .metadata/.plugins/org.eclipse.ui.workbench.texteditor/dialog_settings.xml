@@ -2,34 +2,37 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="263" key="DIALOG_WIDTH"/>
-		<item value="104" key="DIALOG_Y_ORIGIN"/>
+		<item value="179" key="DIALOG_Y_ORIGIN"/>
+		<item value="935" key="DIALOG_X_ORIGIN"/>
 		<item value="395" key="DIALOG_HEIGHT"/>
-		<item value="938" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="isRegEx"/>
 		<item value="false" key="casesensitive"/>
+		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="AuthPageView" key="selection"/>
+		<item value="hidePage" key="selection"/>
 		<list key="findhistory">
-			<item value="AuthPageView"/>
-			<item value="##"/>
-			<item value="Meshable.currentpage"/>
+			<item value="hidePage"/>
+			<item value="showPage"/>
+			<item value="show.page"/>
+			<item value="ui-dis"/>
+			<item value="$.mobile.showPageLoadingMsg()"/>
+			<item value="$.mobile.showPageLoadingMsg(&quot;a&quot;, &quot;This is only a test&quot;, true)"/>
+			<item value="current-units"/>
 			<item value="render"/>
-			<item value="alert"/>
-			<item value="changePage("/>
-			<item value="changePage()"/>
-			<item value="changePage"/>
 		</list>
 		<list key="replacehistory">
+			<item value="$.mobile.showPageLoadingMsg(&quot;a&quot;, &quot;Loading&quot;, false)"/>
+			<item value="$.mobile.showPageLoadingMsg(&quot;a&quot;, &quot;This is only a test&quot;, )"/>
+			<item value="$.mobile.showPageLoadingMsg(&quot;a&quot;, &quot;This is only a test&quot;, true)"/>
+			<item value="coffee -o /Users/lewiswight/forge-workspace/Meshify_/src/ -cw /Users/lewiswight/forge-workspace/Meshify_/Coffee_Scripts/"/>
+			<item value="Meshify"/>
 			<item value="Tuxedo Mosquito"/>
 			<item value="data-theme=&quot;a&quot;"/>
 			<item value="@model.attributes."/>
-			<item value="@model.attributes"/>
-			<item value="images"/>
 		</list>
 	</section>
 </section>

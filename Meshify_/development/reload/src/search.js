@@ -51,10 +51,10 @@
     searchView = Backbone.Marionette.CompositeView.extend({
       itemView: searchsView,
       itemViewOptions: this.model,
-      template: "#wrapper_dashboard",
+      template: "#wrapper_ul",
       itemViewContainer: "ul",
       appendHtml: function(collectionView, itemView) {
-        return collectionView.$("#dashboard_insert").append(itemView.el);
+        return collectionView.$("#placeholder").append(itemView.el);
       }
     });
     return Meshable.vent.on("goto:search", function() {
@@ -65,9 +65,11 @@
       });
       Meshable.currentpage = "search";
       search.render();
-      $('#search').empty();
-      $('#search').append($(search.el));
-      return Meshable.changePage(search, false);
+      $('#mainDiv').empty();
+      $('#mainDiv').append($(search.el));
+      $("#mainDiv").trigger('create');
+      $("#mainPage a").removeClass('ui-btn-active');
+      return $("#searchbtnn").addClass('ui-btn-active');
     });
   });
 

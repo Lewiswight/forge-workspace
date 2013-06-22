@@ -7,29 +7,29 @@
 		"file": true, 
 		"icons": {
 			"android": {
-				"36": "img/mistaway/mistaway-36_x_36.png", 
-				"48": "img/mistaway/mistaway-48_x_48.png", 
-				"72": "img/mistaway/mistaway-72_x_72.png"
+				"36": "img/img_Meshify/Icon (36x36).png", 
+				"48": "img/img_Meshify/Icon (48x48).png", 
+				"72": "img/img_Meshify/Icon (72x72).png"
 			}, 
 			"ios": {
-				"114": "img/mistaway/mistaway-114_x_114.png", 
-				"144": "img/mistaway/mistaway-144_x_144.png", 
-				"512": "img/mistaway/mistaway-512_x_512.png", 
-				"57": "img/mistaway/mistaway-57_x_57.png", 
-				"72": "img/mistaway/mistaway-72_x_72.png"
+				"114": "img/img_Meshify/Icon (114x114).png", 
+				"144": "img/img_Meshify/Icon (144x144).png", 
+				"512": "img/img_Meshify/Icon (512x512).png", 
+				"57": "img/img_Meshify/Icon (57x57).png", 
+				"72": "img/img_Meshify/Icon (72x72).png"
 			}
 		}, 
 		"is": true, 
 		"launchimage": {
-			"android": "img/mistaway/mistaway-144_x_144.png", 
-			"android-landscape": "img/mistaway/mistaway-144_x_144.png", 
-			"ipad": "img/mistaway/mistaway-512_x_512.png", 
+			"android": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png", 
+			"android-landscape": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png", 
+			"ipad": "img/img_Meshify/Icon (512x512).png", 
 			"ipad-landscape": "img/mistaway/mistaway-512_x_512.png", 
-			"ipad-landscape-retina": "img/mistaway/mistaway-512_x_512.png", 
-			"ipad-retina": "img/mistaway/mistaway-512_x_512.png", 
-			"iphone": "img/mistaway/mistaway-512_x_512.png", 
-			"iphone-retina": "img/mistaway/mistaway-512_x_512.png", 
-			"iphone-retina4": "img/mistaway/mistaway-512_x_512.png"
+			"ipad-landscape-retina": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png", 
+			"ipad-retina": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png", 
+			"iphone": "img/img_Meshify/iPhone 3 Splash Screen (320x480).png", 
+			"iphone-retina": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png", 
+			"iphone-retina4": "img/img_Meshify/iPhone 5 Splash Screen (640x1136).png"
 		}, 
 		"prefs": true, 
 		"request": {
@@ -40,7 +40,7 @@
 			]
 		}
 	}, 
-	"name": "iMistAway", 
+	"name": "Meshify", 
 	"platform_version": "v1.4.20", 
 	"version": "0.2"
 }

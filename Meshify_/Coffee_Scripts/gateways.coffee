@@ -62,25 +62,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		
 
 		
-		events:
-			"click #gatewayItm": "get_gateway"
-			
-		get_gateway: ->
-			
-			window.forge.ajax
-			url: "http://devbuildinglynx.apphb.com/api/gateway"
-			data:  macaddress: "00409DFF-FF45871E"
-			dataType: "json"
-			type: "GET"
-			error: (e) -> 
-				alert "An error occurred while getting node details... sorry!"
-			success: (data) =>
-				if data.isAuthenticated == false
-					alert "auth:logout"
-				else if data.length == 0
-					alert "No Results"
-				else
-					alert "you did it, now start debugging"
+		
 			
 			 
 			
@@ -91,7 +73,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 
 	gatewayCompView = Backbone.Marionette.CompositeView.extend
 		itemView: gatewayView
-		template: "#wrapper_dashboard"
+		template: "#wrapper_ul"
 		itemViewContainer: "ul"
 		#id: "gateway"
 		
@@ -118,44 +100,59 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			
 		
 		appendHtml: (collectionView, itemView) ->
-			collectionView.$("#dashboard_insert").append(itemView.el) 
+			collectionView.$("#placeholder").append(itemView.el) 
 
 	
 	
-	Meshable.vent.on "goto:gateways", ->
+	Meshable.vent.on "goto:gateways", (refresh) ->
 		
-		$.mobile.showPageLoadingMsg()
+		$("body").addClass('ui-disabled')
+		$.mobile.showPageLoadingMsg("a", "Loading", false)
+		if not refresh and Meshable.current_gateways != ""
+			displayResults Meshable.current_gateways
+			return
+		
+		
 		window.forge.ajax
-			url: "http://devbuildinglynx.apphb.com/api/address"
-			data: { term: "Search", pagenum: 0 }
+			url: "http://devbuildinglynx.apphb.com/api/Locations"
+			data: { term: "", systemTypes: "", problemStatuses: "", customGroups: "", pageIndex: 0, pageSize: 10 }
 			dataType: "json"
 			type: "GET"
 			error: (e) -> 
 				alert "An error occurred on search... sorry!"
 			success: (data) =>
+				list = []
+				data = data.CurrentPageListItems
+				for node in data
+					list.push(node.gateway.macaddress)
+				#alert list
 				if data.isAuthenticated == false
 					myvent.trigger "auth:logout"
 				else if data.length == 0
 					alert "No Results" 
 				else
+					Meshable.current_gateways = data
 					displayResults data
 					
 	Meshable.vent.on "search:gateways", (sdata) ->
-		
-		$.mobile.showPageLoadingMsg()
+		$("body").addClass('ui-disabled')
+		$.mobile.showPageLoadingMsg("a", "Loading", false)
 		window.forge.ajax
-			url: "http://devbuildinglynx.apphb.com/api/address"
-			data: { term: sdata, pagenum: 0 } 
+			url: "http://devbuildinglynx.apphb.com/api/Locations"
+			data: { term: sdata, systemTypes: "", problemStatuses: "", customGroups: "", pageIndex: 0, pageSize: 10 }
 			dataType: "json"
 			type: "GET"
 			error: (e) -> 
 				alert "An error occurred on search... sorry!"
 			success: (data) =>
+				data = data.CurrentPageListItems
 				if data.isAuthenticated == false
 					myvent.trigger "auth:logout"
 				else if data.length == 0
+					$("body").removeClass('ui-disabled')
 					$.mobile.hidePageLoadingMsg()
 					alert "No Results" 
+					Backbone.history.navigate "search", replace: true, trigger: false
 				else
 					#Backbone.history.navigate "search-gateways", replace: false, trigger: false
 					displayResults data
@@ -164,7 +161,6 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 	
 					
 	displayResults = (data) ->
-		
 		nodeCollection = new gateways
 		for model in data
 			cModel = new gateway
@@ -178,12 +174,17 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 
 			
 		Meshable.currentpage = "gateways"
-		 
 		gateView.render()
-		$('#gateways').empty()
-		$('#gateways').append($(gateView.el))
-		Meshable.changePage gateView, false
-					
+		$('#mainDiv').empty()
+		$('#mainDiv').append($(gateView.el))
+		$("#mainPage").trigger('create')
+		$.mobile.hidePageLoadingMsg()
+		$("body").removeClass('ui-disabled')
+		#$("[data-role=footer]").fixedtoolbar({ fullscreen: true })
+		$("[data-role=footer]").fixedtoolbar({ tapToggle: true })
+		$("[data-role=footer]").fixedtoolbar({ tapToggleBlacklist: "a, button, tap, div, img, input, select, textarea, .ui-header-fixed, .ui-footer-fixed" })
+		$("#mainPage a").removeClass('ui-btn-active')
+		$("#locationbtnn").addClass('ui-btn-active')
 				
 				
 				

@@ -81,12 +81,12 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		itemViewOptions: @model
 			
 		
-		template: "#wrapper_dashboard"
+		template: "#wrapper_ul"
 		itemViewContainer: "ul"
 		#id: "search"				
 					
 		appendHtml: (collectionView, itemView) ->
-			collectionView.$("#dashboard_insert").append(itemView.el) 
+			collectionView.$("#placeholder").append(itemView.el) 
 
 	
 		
@@ -102,10 +102,13 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		Meshable.currentpage = "search"
 		
 		search.render()
-		$('#search').empty()
-		$('#search').append($(search.el))
+		$('#mainDiv').empty()
+		$('#mainDiv').append($(search.el))
+		$("#mainDiv").trigger('create')
 		#$("#body").trigger("create")
-		Meshable.changePage search, false
+		#Meshable.changePage search, false
+		$("#mainPage a").removeClass('ui-btn-active')
+		$("#searchbtnn").addClass('ui-btn-active')
 		
 		
 	

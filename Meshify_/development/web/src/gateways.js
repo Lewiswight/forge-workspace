@@ -55,53 +55,33 @@
       template: '#gatewayitem-template',
       tagName: 'li',
       className: "list_item",
-      id: "gatewayItm",
-      events: {
-        "click #gatewayItm": "get_gateway"
-      },
-      get_gateway: function() {
-        var _this = this;
-
-        window.forge.ajax;
-        return {
-          url: "http://devbuildinglynx.apphb.com/api/gateway",
-          data: {
-            macaddress: "00409DFF-FF45871E"
-          },
-          dataType: "json",
-          type: "GET",
-          error: function(e) {
-            return alert("An error occurred while getting node details... sorry!");
-          },
-          success: function(data) {
-            if (data.isAuthenticated === false) {
-              return alert("auth:logout");
-            } else if (data.length === 0) {
-              return alert("No Results");
-            } else {
-              return alert("you did it, now start debugging");
-            }
-          }
-        };
-      }
+      id: "gatewayItm"
     });
     gatewayCompView = Backbone.Marionette.CompositeView.extend({
       itemView: gatewayView,
-      template: "#wrapper_dashboard",
+      template: "#wrapper_ul",
       itemViewContainer: "ul",
       appendHtml: function(collectionView, itemView) {
-        return collectionView.$("#dashboard_insert").append(itemView.el);
+        return collectionView.$("#placeholder").append(itemView.el);
       }
     });
-    Meshable.vent.on("goto:gateways", function() {
+    Meshable.vent.on("goto:gateways", function(refresh) {
       var _this = this;
 
-      $.mobile.showPageLoadingMsg();
+      if (!refresh && Meshable.current_gateways !== "") {
+        displayResults(Meshable.current_gateways);
+        return;
+      }
+      $.mobile.showPageLoadingMsg("a", "Loading", false);
       return window.forge.ajax({
-        url: "http://devbuildinglynx.apphb.com/api/address",
+        url: "http://devbuildinglynx.apphb.com/api/Locations",
         data: {
-          term: "Search",
-          pagenum: 0
+          term: "",
+          systemTypes: "",
+          problemStatuses: "",
+          customGroups: "",
+          pageIndex: 0,
+          pageSize: 10
         },
         dataType: "json",
         type: "GET",
@@ -109,11 +89,20 @@
           return alert("An error occurred on search... sorry!");
         },
         success: function(data) {
+          var list, node, _i, _len;
+
+          list = [];
+          data = data.CurrentPageListItems;
+          for (_i = 0, _len = data.length; _i < _len; _i++) {
+            node = data[_i];
+            list.push(node.gateway.macaddress);
+          }
           if (data.isAuthenticated === false) {
             return myvent.trigger("auth:logout");
           } else if (data.length === 0) {
             return alert("No Results");
           } else {
+            Meshable.current_gateways = data;
             return displayResults(data);
           }
         }
@@ -122,12 +111,16 @@
     Meshable.vent.on("search:gateways", function(sdata) {
       var _this = this;
 
-      $.mobile.showPageLoadingMsg();
+      $.mobile.showPageLoadingMsg("a", "Loading", false);
       return window.forge.ajax({
-        url: "http://devbuildinglynx.apphb.com/api/address",
+        url: "http://devbuildinglynx.apphb.com/api/Locations",
         data: {
           term: sdata,
-          pagenum: 0
+          systemTypes: "",
+          problemStatuses: "",
+          customGroups: "",
+          pageIndex: 0,
+          pageSize: 10
         },
         dataType: "json",
         type: "GET",
@@ -135,11 +128,16 @@
           return alert("An error occurred on search... sorry!");
         },
         success: function(data) {
+          data = data.CurrentPageListItems;
           if (data.isAuthenticated === false) {
             return myvent.trigger("auth:logout");
           } else if (data.length === 0) {
             $.mobile.hidePageLoadingMsg();
-            return alert("No Results");
+            alert("No Results");
+            return Backbone.history.navigate("search", {
+              replace: true,
+              trigger: false
+            });
           } else {
             return displayResults(data);
           }
@@ -160,9 +158,18 @@
       });
       Meshable.currentpage = "gateways";
       gateView.render();
-      $('#gateways').empty();
-      $('#gateways').append($(gateView.el));
-      return Meshable.changePage(gateView, false);
+      $('#mainDiv').empty();
+      $('#mainDiv').append($(gateView.el));
+      $("#mainPage").trigger('create');
+      $.mobile.hidePageLoadingMsg();
+      $("[data-role=footer]").fixedtoolbar({
+        tapToggle: true
+      });
+      $("[data-role=footer]").fixedtoolbar({
+        tapToggleBlacklist: "a, button, tap, div, img, input, select, textarea, .ui-header-fixed, .ui-footer-fixed"
+      });
+      $("#mainPage a").removeClass('ui-btn-active');
+      return $("#locationbtnn").addClass('ui-btn-active');
     };
   });
 

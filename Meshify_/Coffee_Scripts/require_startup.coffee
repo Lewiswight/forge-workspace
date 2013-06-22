@@ -1,4 +1,4 @@
-require ["jquery", 'jqmglobe', 'jqm', "backbone", "underscore", "marionette", "Meshable", "Router", "Events", "login", 'dashboard', 'search', 'animate', 'slide', 'menu', 'gateways', 'nodes', 'node'], ($, jqmglobe, jqm, Backbone, _, Marionette, Meshable, Router, Events, login, dashboard, search, animate, slide, menu, gateways, nodes, node) ->
+require ["jquery", 'jqmglobe', 'jqm', "backbone", "underscore", "marionette", "Meshable", "Router", "Events", "login", 'dashboard', 'search', 'animate', 'slide', 'menu', 'gateways', 'nodes', 'node', 'units'], ($, jqmglobe, jqm, Backbone, _, Marionette, Meshable, Router, Events, login, dashboard, search, animate, slide, menu, gateways, nodes, node, units) ->
   
   # The "app" dependency is passed in as "Meshable"
 
@@ -12,7 +12,7 @@ require ["jquery", 'jqmglobe', 'jqm', "backbone", "underscore", "marionette", "M
 		Meshable.router = new Router()
 		
 		Meshable.router.on "route:searchterm", (searchField) ->	
-			$.mobile.showPageLoadingMsg()
+			$.mobile.showPageLoadingMsg("a", "Loading", false)
 			Meshable.vent.trigger "search:gateways", searchField
 		
 		Backbone.history.navigate "", replace: true, trigger: true

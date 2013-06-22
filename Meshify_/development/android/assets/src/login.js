@@ -42,6 +42,9 @@
           var hi;
 
           if (value === true) {
+            forge.prefs.get("password", function(value) {
+              return $('#pw').val(value);
+            });
             forge.prefs.get("username", function(value) {
               return $('#un').val(value);
             });
@@ -76,7 +79,6 @@
       submitauth: function() {
         var pass, remember, self, username;
 
-        Meshable.vent.trigger("goto:menu");
         pass = $('#pw').val();
         username = $('#un').val();
         remember = $('#remember-me').prop("checked");
@@ -86,9 +88,10 @@
           forge.prefs.set("username", username);
         }
         self = this;
-        $.mobile.showPageLoadingMsg();
+        $("body").addClass('ui-disabled');
+        $.mobile.showPageLoadingMsg("a", "Loading", false);
         return window.forge.ajax({
-          url: "http://devbuildinglynx.apphb.com/api/authentication",
+          url: "http://devbuildinglynx.apphb.com/api/authentication/login",
           data: {
             UserName: username,
             Password: pass,
@@ -97,18 +100,26 @@
           dataType: "json",
           type: "POST",
           error: function(e) {
-            alert("something crazy happened");
-            return Meshable.router.navigate("authorized", {
+            $("body").removeClass('ui-disabled');
+            $.mobile.hidePageLoadingMsg();
+            alert("Please Try Again");
+            return Meshable.router.navigate("", {
               trigger: true
             });
           },
           success: function(data) {
             if (data.IsAuthenticated === true) {
+              $.mobile.changePage($("#mainPage"), {
+                changeHash: false,
+                reverse: false,
+                transition: "fade"
+              });
               return Meshable.router.navigate("gateways", {
                 trigger: true
               });
             } else {
               alert("Password and Username Combination not Valid... Please Retry");
+              $("body").removeClass('ui-disabled');
               return $.mobile.hidePageLoadingMsg();
             }
           }
@@ -162,16 +173,25 @@
     return Meshable.vent.on("goto:login", function() {
       var loginView;
 
+      $.mobile.showPageLoadingMsg("a", "Loading", false);
       window.forge.ajax({
         url: "http://devbuildinglynx.apphb.com/api/authentication",
         dataType: "json",
         type: "GET",
         error: function(e) {
-          return alert("something crazy happened");
+          $("body").removeClass('ui-disabled');
+          $.mobile.hidePageLoadingMsg();
+          return alert("Please Try Again");
         },
         success: function(data) {
           if (data.IsAuthenticated === true) {
-            Meshable.vent.trigger("goto:menu");
+            $("body").addClass('ui-disabled');
+            $.mobile.showPageLoadingMsg("a", "Loading", false);
+            $.mobile.changePage($("#mainPage"), {
+              changeHash: false,
+              reverse: false,
+              transition: "fade"
+            });
             Meshable.router.navigate("gateways", {
               trigger: true
             });

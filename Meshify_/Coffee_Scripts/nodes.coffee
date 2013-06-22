@@ -1,24 +1,6 @@
 define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Events'], ($, jqm, Backbone, _, Marionette, Meshable, Events) ->									 
 	
-	make_collection = ->
-		
-		
-		window.forge.ajax
-			url: "http://devbuildinglynx.apphb.com/api/dashboard"
-			dataType: "json"
-			type: "GET"
-			error: (e) -> 
-				alert e.content
-			success: (data) ->
-				
-				
-				
-				nodeCollection = new dashboards
-				for model in data
-					cModel = new dashboard
-					nodeCollection.add cModel.parse(model)
-				
-				return nodeCollection
+	
 				
 				
 				
@@ -50,21 +32,23 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		
 		
 		events:
-			"click .node-item": "displayNode"
+			"click .ui-link-inherit": "displayNode"
 			
 		
 		displayNode: ->
-			$.mobile.showPageLoadingMsg()
-			Meshable.vent.trigger "goto:node", @model.attributes
+			$("body").addClass('ui-disabled')
+			$.mobile.showPageLoadingMsg("a", "Loading", false)
+			#Meshable.router.navigate "/#gateway/" + @model.attributes.macaddress + "/" + @model.attributes.node.NodeId, trigger: false
+			#Meshable.vent.trigger "goto:node", @model.attributes
 			
 		
 
 
 	nodeCompView = Backbone.Marionette.CompositeView.extend
 		itemView: nodeView
-		template: "#wrapper_dashboard"
+		template: "#wrapper_ul"
 		itemViewContainer: "ul"
-		#id: "node"
+		#id: "node-test"
 		
 		
 		
@@ -72,13 +56,13 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			
 		
 		appendHtml: (collectionView, itemView) ->
-			collectionView.$("#dashboard_insert").append(itemView.el) 
+			collectionView.$("#placeholder").append(itemView.el) 
 
 	
 	
 	Meshable.vent.on "goto:nodes", (macaddress) ->
-		
-		$.mobile.showPageLoadingMsg()
+		$("body").addClass('ui-disabled')
+		$.mobile.showPageLoadingMsg("a", "Loading", false)
 		window.forge.ajax
 			url: "http://devbuildinglynx.apphb.com/api/gateway"
 			data:  macaddress: macaddress
@@ -90,6 +74,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 				if data.isAuthenticated == false
 					alert "auth:logout"
 				else if data.length == 0
+					$("body").removeClass('ui-disabled')
 					$.mobile.hidePageLoadingMsg()
 					alert "No nodes at this location"
 					Backbone.history.navigate "gateways", trigger : false , replace: true
@@ -108,6 +93,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		if data.length < 3
 			for obj in data
 				if obj.nodetemplate != "mainMistaway"
+					$("body").addClass('ui-disabled')
 					$.mobile.showPageLoadingMsg()
 					Meshable.vent.trigger "goto:node", obj
 					return
@@ -115,6 +101,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			if obj.nodetemplate != "mainMistaway"
 				tempNode = new node
 				nodeCollection.add tempNode.parse(obj)
+		
 		nodeCoView = new nodeCompView
 			collection: nodeCollection
 	
@@ -125,10 +112,14 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 					
 		Meshable.currentpage = "nodes"
 		nodeCoView.render()
-		$('#nodes').empty()
-		$('#nodes').append($(nodeCoView.el))
-	
-		Meshable.changePage nodeCoView, false
+		$('#mainDiv').empty()
+		$('#mainDiv').append($(nodeCoView.el))
+		$("#mainDiv").trigger('create')
+		$("body").removeClass('ui-disabled')
+		$.mobile.hidePageLoadingMsg()
+		$("#mainPage a").removeClass('ui-btn-active')
+		$("#nodesbtnn").addClass('ui-btn-active')
+		#Meshable.changePage nodeCoView, false
 					
 				
 				

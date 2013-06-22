@@ -28,10 +28,10 @@
       setbutton: function(e) {
         var channel, full_name, localobj, mistData, node_type, value;
 
-        $.mobile.showPageLoadingMsg();
-        value = $(e.target).parent().data('setvalue');
-        node_type = $(e.target).parent().data('nodetype');
-        channel = $(e.target).parent().data('channel');
+        $.mobile.showPageLoadingMsg("a", "Loading", false);
+        value = $(e.currentTarget).data("setvalue");
+        node_type = $(e.currentTarget).data("nodetype");
+        channel = $(e.currentTarget).data("channel");
         full_name = node_type + "." + channel;
         mistData = new Array;
         localobj = {
@@ -48,11 +48,11 @@
           _this = this;
 
         mac = new Array;
-        mac[0] = Meshable.currentMac;
+        mac[0] = this.model.attributes.macaddress;
         return window.forge.ajax({
           url: Meshable.rooturl + "/api/channel",
           data: JSON.stringify({
-            macaddresses: [Meshable.currentMac],
+            macaddresses: [this.model.attributes.macaddress],
             channelDTO: channels
           }),
           dataType: "json",
@@ -69,12 +69,43 @@
     });
     nodeCompView = Backbone.Marionette.CompositeView.extend({
       itemView: nodeView,
-      template: "#wrapper_dashboard",
+      template: "#wrapper_ul",
       itemViewContainer: "ul",
       id: "node",
       appendHtml: function(collectionView, itemView) {
-        return collectionView.$("#dashboard_insert").append(itemView.el);
+        return collectionView.$("#placeholder").append(itemView.el);
       }
+    });
+    Meshable.vent.on("goto:nodeRefresh", function(mac, idn) {
+      var _this = this;
+
+      $.mobile.showPageLoadingMsg("a", "Loading", false);
+      return window.forge.ajax({
+        url: "http://devbuildinglynx.apphb.com/api/gateway",
+        data: {
+          macaddress: mac,
+          nodeid: idn
+        },
+        dataType: "json",
+        type: "GET",
+        error: function(e) {
+          return alert("An error occurred while getting node details... sorry!");
+        },
+        success: function(data) {
+          if (data.isAuthenticated === false) {
+            return alert("auth:logout");
+          } else if (data.length === 0) {
+            $.mobile.hidePageLoadingMsg();
+            alert("No nodes at this location");
+            return Backbone.history.navigate("gateways", {
+              trigger: false,
+              replace: true
+            });
+          } else {
+            return displayResults(data);
+          }
+        }
+      });
     });
     Meshable.vent.on("goto:node", function(model) {
       return displayResults(model);
@@ -90,9 +121,12 @@
       });
       Meshable.currentpage = "node";
       nodeCoView.render();
-      $('#node').empty();
-      $('#node').append($(nodeCoView.el));
-      return Meshable.changePage(nodeCoView, false);
+      $('#mainDiv').empty();
+      $('#mainDiv').append($(nodeCoView.el));
+      $("#mainDiv").trigger('create');
+      $.mobile.hidePageLoadingMsg();
+      $("#mainPage a").removeClass('ui-btn-active');
+      return $("#nodesbtnn").addClass('ui-btn-active');
     };
   });
 

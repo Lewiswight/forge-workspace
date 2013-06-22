@@ -4,8 +4,8 @@
     <string name="config_hash">CONFIG_HASH_HERE</string>
     <string name="trigger_domain">TRIGGER_DOMAIN_HERE</string>
     <string name="payments_publicKey">PAYMENTS_PUBLIC_KEY_HERE</string>
-    <string name="splashimage">src/img/mistaway/mistaway-144_x_144.png</string>
-    <string name="splashimage_landscape">src/img/mistaway/mistaway-144_x_144.png</string>
+    <string name="splashimage">src/img/img_Meshify/iPhone 4 Splashscreen (640x960).png</string>
+    <string name="splashimage_landscape">src/img/img_Meshify/iPhone 4 Splashscreen (640x960).png</string>
     <string name="facebook_appid" />
     <string name="disable_ics_acceleration">no</string>
     <string-array name="modules">

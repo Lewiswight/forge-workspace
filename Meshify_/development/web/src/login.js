@@ -42,6 +42,9 @@
           var hi;
 
           if (value === true) {
+            forge.prefs.get("password", function(value) {
+              return $('#pw').val(value);
+            });
             forge.prefs.get("username", function(value) {
               return $('#un').val(value);
             });
@@ -76,7 +79,6 @@
       submitauth: function() {
         var pass, remember, self, username;
 
-        Meshable.vent.trigger("goto:menu");
         pass = $('#pw').val();
         username = $('#un').val();
         remember = $('#remember-me').prop("checked");
@@ -86,9 +88,9 @@
           forge.prefs.set("username", username);
         }
         self = this;
-        $.mobile.showPageLoadingMsg();
+        $.mobile.showPageLoadingMsg("a", "Loading", false);
         return window.forge.ajax({
-          url: "http://devbuildinglynx.apphb.com/api/authentication",
+          url: "http://devbuildinglynx.apphb.com/api/authentication/login",
           data: {
             UserName: username,
             Password: pass,
@@ -97,13 +99,19 @@
           dataType: "json",
           type: "POST",
           error: function(e) {
-            alert("something crazy happened");
-            return Meshable.router.navigate("authorized", {
+            $.mobile.hidePageLoadingMsg();
+            alert("Please Try Again");
+            return Meshable.router.navigate("", {
               trigger: true
             });
           },
           success: function(data) {
             if (data.IsAuthenticated === true) {
+              $.mobile.changePage($("#mainPage"), {
+                changeHash: false,
+                reverse: false,
+                transition: "fade"
+              });
               return Meshable.router.navigate("gateways", {
                 trigger: true
               });
@@ -162,16 +170,22 @@
     return Meshable.vent.on("goto:login", function() {
       var loginView;
 
+      $.mobile.showPageLoadingMsg("a", "Loading", false);
       window.forge.ajax({
         url: "http://devbuildinglynx.apphb.com/api/authentication",
         dataType: "json",
         type: "GET",
         error: function(e) {
-          return alert("something crazy happened");
+          $.mobile.hidePageLoadingMsg();
+          return alert("Please Try Again");
         },
         success: function(data) {
           if (data.IsAuthenticated === true) {
-            Meshable.vent.trigger("goto:menu");
+            $.mobile.changePage($("#mainPage"), {
+              changeHash: false,
+              reverse: false,
+              transition: "fade"
+            });
             Meshable.router.navigate("gateways", {
               trigger: true
             });

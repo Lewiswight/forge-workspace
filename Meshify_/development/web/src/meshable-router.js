@@ -5,7 +5,9 @@
 
     Routing = Backbone.Router.extend({
       routes: {
-        "gateway/:id": "gateway",
+        "units": "units",
+        "gateway/:mac": "gateway",
+        "gateway/:mac/:id": "nodeDetails",
         "": "home",
         "dashboard": "dashboard",
         "menu": "menu",
@@ -19,15 +21,25 @@
         "ref-page": "refPage",
         "logout": "logout"
       },
+      units: function() {
+        return Meshable.vent.trigger("goto:units", false);
+      },
+      nodeDetails: function(mac, id) {
+        return Meshable.vent.trigger("goto:nodeRefresh", mac, id);
+      },
       logout: function() {
+        $.mobile.showPageLoadingMsg("a", "Loading", false);
         return window.forge.ajax({
           url: "http://devbuildinglynx.apphb.com/api/authentication?logmeoff=true",
           dataType: "json",
           type: "GET",
           error: function(e) {
+            $.mobile.hidePageLoadingMsg();
+            Meshable.vent.trigger("goto:login");
             return alert("error logging out");
           },
           success: function(data) {
+            $.mobile.hidePageLoadingMsg();
             return Meshable.vent.trigger("goto:login");
           }
         });
@@ -44,7 +56,7 @@
         return Meshable.vent.trigger("goto:nodes", macaddress);
       },
       gateways: function() {
-        return Meshable.vent.trigger("goto:gateways");
+        return Meshable.vent.trigger("goto:gateways", false);
       },
       search: function() {
         return Meshable.vent.trigger("goto:search");

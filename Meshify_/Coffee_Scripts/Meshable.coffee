@@ -8,6 +8,8 @@ define ['jquery', 'jqm', 'backbone','marionette' ], ($, jqm, Backbone, Marionett
 	Meshable.theme = "a"
 	Meshable.rooturl = "http://devbuildinglynx.apphb.com"
 	Meshable.current-search = null 
+	Meshable.current_units = ""
+	Meshable.current_gateways = ""
 	Meshable.addRegions
 		loginRegion: "#login"
 		mainRegion: "#mainR"
@@ -36,20 +38,22 @@ define ['jquery', 'jqm', 'backbone','marionette' ], ($, jqm, Backbone, Marionett
 		$.mobile.hashListeningEnabled = false
 		$.mobile.pushStateEnabled = false
 		$.mobile.loader.prototype.options.text = "loading"
-		$.mobile.loader.prototype.options.textVisible = false
-		$.mobile.loader.prototype.options.theme = "a"
-		$.mobile.loader.prototype.options.html = ""
+		$.mobile.loader.prototype.options.textVisible = true
+		$.mobile.loader.prototype.options.theme = "c"
+		#$.mobile.loader.prototype.options.html = ""
 		
 		#$("div[data-role=\"page\"]").live "pagehide", (event, ui) ->
 		#$(event.currentTarget).remove()
 		
 		Backbone.history.start
 			root: window.location.protocol + "//" + window.location.host
+			pushState: false
 
 	Meshable.changePage = (page, direction) ->
 		$(page.el).attr "data-role", "page"
 		$(page.el).attr "data-theme", Meshable.theme
-		$.mobile.changePage $(page.el), changeHash: true, reverse: direction, transition: "none"
+		$.mobile.changePage $(page.el), changeHash: true, reverse: direction, transition: "fade"
+		$("#locationbtnn").addClass('ui-btn-active')
 
 	Meshable.chooseLight = (light) -> 
 		if light == "green"

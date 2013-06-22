@@ -38,10 +38,11 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			
 		
 		setbutton: (e) ->
-			$.mobile.showPageLoadingMsg()
-			value = $(e.target).parent().data 'setvalue'		
-			node_type = $(e.target).parent().data 'nodetype'
-			channel = $(e.target).parent().data 'channel'
+			$("body").addClass('ui-disabled')
+			$.mobile.showPageLoadingMsg("a", "Loading", false)
+			value = $(e.currentTarget).data "setvalue"
+			node_type = $(e.currentTarget).data "nodetype"	
+			channel = $(e.currentTarget).data "channel" 
 			full_name = node_type + "." + channel
 			mistData = new Array
 			localobj = 
@@ -57,26 +58,28 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		
 		setChannel: (channels) -> 
 			mac = new Array
-			mac[0] = Meshable.currentMac
+			mac[0] = @model.attributes.macaddress
 			#add validation
 			#find the channels that need to be set 
 
 			window.forge.ajax
 				url: Meshable.rooturl + "/api/channel"
-				data:  JSON.stringify({macaddresses: [Meshable.currentMac], channelDTO: channels})
+				data:  JSON.stringify({macaddresses: [@model.attributes.macaddress], channelDTO: channels})
 				dataType: "json"
 				type: "POST"
 				contentType: 'application/json; charset=utf-8'
-				error: (e) -> 
+				error: (e) ->
+					$("body").removeClass('ui-disabled') 
 					$.mobile.hidePageLoadingMsg()
 					#alert "An error occurred while getting node details... sorry!"
 				success: (data) =>
+					$("body").removeClass('ui-disabled')
 					$.mobile.hidePageLoadingMsg()
 
 
 	nodeCompView = Backbone.Marionette.CompositeView.extend
 		itemView: nodeView
-		template: "#wrapper_dashboard"
+		template: "#wrapper_ul"
 		itemViewContainer: "ul"
 		id: "node"
 		
@@ -86,13 +89,35 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			
 		
 		appendHtml: (collectionView, itemView) ->
-			collectionView.$("#dashboard_insert").append(itemView.el) 
+			collectionView.$("#placeholder").append(itemView.el) 
 
+	
+	Meshable.vent.on "goto:nodeRefresh", (mac, idn) ->
+		
+		$("body").addClass('ui-disabled')
+		$.mobile.showPageLoadingMsg("a", "Loading", false)
+		window.forge.ajax
+			url: "http://devbuildinglynx.apphb.com/api/gateway"
+			data: {  macaddress: mac, nodeid: idn  }
+			dataType: "json"
+			type: "GET"
+			error: (e) -> 
+				alert "An error occurred while getting node details... sorry!"
+			success: (data) =>
+				if data.isAuthenticated == false
+					alert "auth:logout"
+				else if data.length == 0
+					$("body").removeClass('ui-disabled')
+					$.mobile.hidePageLoadingMsg()
+					alert "No nodes at this location"
+					Backbone.history.navigate "gateways", trigger : false , replace: true
+				else
+					displayResults data
 	
 	
 	Meshable.vent.on "goto:node", (model) ->
 		
-					
+	
 		displayResults model
 		
 		
@@ -103,7 +128,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 					
 	displayResults = (data) ->
 		
-		# check here to see if we are a mc3, mc3z, mc13, or mc13z
+		# check here to see if we are a mc3, mc3z, mc13, or mc13z or gate and so on
 		
 		nodeCollection = new nodes
 
@@ -120,9 +145,14 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		Meshable.currentpage = "node"
 		
 		nodeCoView.render()
-		$('#node').empty()
-		$('#node').append($(nodeCoView.el))
-		Meshable.changePage nodeCoView, false
+		$('#mainDiv').empty()
+		$('#mainDiv').append($(nodeCoView.el))
+		$("#mainDiv").trigger('create')
+		$.mobile.hidePageLoadingMsg()
+		$("body").removeClass('ui-disabled')
+		$("#mainPage a").removeClass('ui-btn-active')
+		$("#nodesbtnn").addClass('ui-btn-active')
+				
 		
 		
 		

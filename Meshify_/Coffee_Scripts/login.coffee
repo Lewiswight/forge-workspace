@@ -46,8 +46,8 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			forge.prefs.get "remember", (value) ->
 				if value is true
 					#$('#remember-me').val true
-					#forge.prefs.get "password", (value) ->
-					#	$('#pw').val value
+					forge.prefs.get "password", (value) ->
+						$('#pw').val value
 					forge.prefs.get "username", (value) ->
 						$('#un').val value
 				#if value is false
@@ -91,7 +91,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 				$('#username-input').val ""
 				$('#username-input').removeClass 'italic'			
 		submitauth: ->
-			Meshable.vent.trigger "goto:menu"
+			#Meshable.vent.trigger "goto:menu"
 			#Meshable.router.navigate "dashboard", trigger : true
 			#@model.updatePassword $('#password-input').val()
 			#@model.updateUsername $('#username-input').val()
@@ -106,10 +106,11 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 				
 			
 				
-			self = @   
-			$.mobile.showPageLoadingMsg()
+			self = @  
+			$("body").addClass('ui-disabled') 
+			$.mobile.showPageLoadingMsg("a", "Loading", false)
 			window.forge.ajax
-				url: "http://devbuildinglynx.apphb.com/api/authentication"
+				url: "http://devbuildinglynx.apphb.com/api/authentication/login"
 				data:  { 
 					UserName: username 
 					Password: pass 
@@ -118,19 +119,22 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 				dataType: "json"
 				type: "POST"
 				error: (e) -> 
-					alert "something crazy happened"#e.content
-					Meshable.router.navigate "authorized", trigger : true
+					$("body").removeClass('ui-disabled')
+					$.mobile.hidePageLoadingMsg()
+					alert "Please Try Again"#e.content
+					Meshable.router.navigate "", trigger : true
 					#self.model.updateMsg "An error occurred on authentication... sorry!"
 				success: (data) ->
 					
 					
 					if data.IsAuthenticated == true
-						
+						$.mobile.changePage $("#mainPage"), changeHash: false, reverse: false, transition: "fade"
 						Meshable.router.navigate "gateways", trigger : true
 						#self.model.updateMsg data.statusMsg 
 					else 
 					#this would be navigate on router
 						alert "Password and Username Combination not Valid... Please Retry"
+						$("body").removeClass('ui-disabled')
 						$.mobile.hidePageLoadingMsg()
 						#self.model.updateMsg data.statusMsg
 						#Meshable.router.navigate "authorized", trigger : true 
@@ -173,17 +177,24 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			
 			
 	Meshable.vent.on "goto:login", ->
-		
+		$.mobile.showPageLoadingMsg("a", "Loading", false)
 		window.forge.ajax
 			url: "http://devbuildinglynx.apphb.com/api/authentication"
 			dataType: "json"
 			type: "GET"
 			error: (e) -> 
-				alert "something crazy happened"
+				$("body").removeClass('ui-disabled')
+				$.mobile.hidePageLoadingMsg()
+				alert "Please Try Again"
 			success: (data) ->	
 				if data.IsAuthenticated == true
-					Meshable.vent.trigger "goto:menu"
+					#Meshable.vent.trigger "goto:menu"
+					$("body").addClass('ui-disabled') 
+					$.mobile.showPageLoadingMsg("a", "Loading", false)
+					$.mobile.changePage $("#mainPage"), changeHash: false, reverse: false, transition: "fade"
 					Meshable.router.navigate "gateways", trigger : true
+					#Meshable.vent.trigger "goto:units", true
+					
 					return
 			
 		

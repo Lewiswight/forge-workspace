@@ -78,6 +78,7 @@ require.config({
         'slide': 'js/jqm.slidemenu',
         'menu': 'menu',
         'gateways': 'gateways',
+        'units': 'units',
         'nodes': 'nodes',
         'node': 'node'
         	
