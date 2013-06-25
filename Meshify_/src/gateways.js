@@ -4,8 +4,8 @@
     var displayResults, gateway, gatewayCompView, gatewayView, gateways, make_collection;
 
     make_collection = function() {
-      return window.forge.ajax({
-        url: "http://devbuildinglynx.apphb.com/api/dashboard",
+      return forge.request.ajax({
+        url: Meshable.rooturl + "/api/dashboard",
         dataType: "json",
         type: "GET",
         error: function(e) {
@@ -65,7 +65,7 @@
         return collectionView.$("#placeholder").append(itemView.el);
       }
     });
-    Meshable.vent.on("goto:gateways", function(refresh) {
+    Meshable.vent.on("goto:gateways", function(refresh, searchField) {
       var _this = this;
 
       $("body").addClass('ui-disabled');
@@ -74,10 +74,10 @@
         displayResults(Meshable.current_gateways);
         return;
       }
-      return window.forge.ajax({
-        url: "http://devbuildinglynx.apphb.com/api/Locations",
+      return forge.request.ajax({
+        url: Meshable.rooturl + "/api/Locations",
         data: {
-          term: "",
+          term: searchField,
           systemTypes: "",
           problemStatuses: "",
           customGroups: "",
@@ -87,21 +87,31 @@
         dataType: "json",
         type: "GET",
         error: function(e) {
-          return alert("An error occurred on search... sorry!");
+          alert("An error occurred on search... sorry!");
+          $("body").removeClass('ui-disabled');
+          return $.mobile.hidePageLoadingMsg();
         },
         success: function(data) {
-          var list, node, _i, _len;
+          var TempObj, dataObj, node, _i, _len;
 
-          list = [];
+          dataObj = new Object;
+          dataObj.list = [];
           data = data.CurrentPageListItems;
           for (_i = 0, _len = data.length; _i < _len; _i++) {
             node = data[_i];
-            list.push(node.gateway.macaddress);
+            TempObj = node;
+            dataObj.list.push(TempObj);
           }
+          Meshable.currentDataObj = dataObj;
+          Meshable.refreshUnits = true;
           if (data.isAuthenticated === false) {
-            return myvent.trigger("auth:logout");
+            myvent.trigger("auth:logout");
+            $("body").removeClass('ui-disabled');
+            return $.mobile.hidePageLoadingMsg();
           } else if (data.length === 0) {
-            return alert("No Results");
+            alert("No Results");
+            $("body").removeClass('ui-disabled');
+            return $.mobile.hidePageLoadingMsg();
           } else {
             Meshable.current_gateways = data;
             return displayResults(data);
@@ -114,8 +124,8 @@
 
       $("body").addClass('ui-disabled');
       $.mobile.showPageLoadingMsg("a", "Loading", false);
-      return window.forge.ajax({
-        url: "http://devbuildinglynx.apphb.com/api/Locations",
+      return forge.request.ajax({
+        url: Meshable.rooturl + "/api/Locations",
         data: {
           term: sdata,
           systemTypes: "",

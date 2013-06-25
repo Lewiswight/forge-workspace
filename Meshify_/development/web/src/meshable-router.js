@@ -5,6 +5,7 @@
 
     Routing = Backbone.Router.extend({
       routes: {
+        "unit/:mac/:first/:last": "unitsM",
         "units": "units",
         "gateway/:mac": "gateway",
         "gateway/:mac/:id": "nodeDetails",
@@ -21,26 +22,47 @@
         "ref-page": "refPage",
         "logout": "logout"
       },
+      unitsM: function(mac, first, last) {
+        var listObj, obj;
+
+        obj = new Object;
+        obj.list = [];
+        listObj = new Object;
+        listObj.person = new Object;
+        listObj.gateway = new Object;
+        listObj.gateway.macaddress = mac;
+        listObj.person.first = first;
+        listObj.person.last = last;
+        obj.list.push(listObj);
+        return Meshable.vent.trigger("goto:units", false, obj);
+      },
       units: function() {
-        return Meshable.vent.trigger("goto:units", false);
+        return Meshable.vent.trigger("goto:units", false, "");
       },
       nodeDetails: function(mac, id) {
         return Meshable.vent.trigger("goto:nodeRefresh", mac, id);
       },
       logout: function() {
+        $("body").addClass('ui-disabled');
+        $.mobile.showPageLoadingMsg("a", "Loading", false);
         $.mobile.showPageLoadingMsg("a", "Loading", false);
         return window.forge.ajax({
-          url: "http://devbuildinglynx.apphb.com/api/authentication?logmeoff=true",
+          url: Meshable.rooturl + "/api/authentication?logmeoff=true",
           dataType: "json",
           type: "GET",
           error: function(e) {
+            $("body").removeClass('ui-disabled');
             $.mobile.hidePageLoadingMsg();
             Meshable.vent.trigger("goto:login");
             return alert("error logging out");
           },
           success: function(data) {
+            Meshable.current_units = "";
+            Meshable.current_gateways = "";
             $.mobile.hidePageLoadingMsg();
-            return Meshable.vent.trigger("goto:login");
+            $("body").removeClass('ui-disabled');
+            Meshable.vent.trigger("goto:login");
+            return $('#mainDiv').empty();
           }
         });
       },
@@ -56,7 +78,7 @@
         return Meshable.vent.trigger("goto:nodes", macaddress);
       },
       gateways: function() {
-        return Meshable.vent.trigger("goto:gateways", false);
+        return Meshable.vent.trigger("goto:gateways", false, "");
       },
       search: function() {
         return Meshable.vent.trigger("goto:search");

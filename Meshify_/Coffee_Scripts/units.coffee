@@ -19,24 +19,32 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		initialize: (node) ->
 			
 			@bindTo @model, "change", @render
+			if node.model.attributes.nodetemplate == "header"
+				@template = "#label-template"
+				@.$el.attr('data-role', 'list-divider')
+			else 
+				@template = '#nodeitem-template'
+
 			
 			
-		template: '#nodeitem-template'
+			
+			
+		
 		tagName: 'li'
 		className: "list_item_node"
 		onRender: ->
 			$("#mainDiv").trigger('create')
 			$("#mainPage").trigger('create')
 		
-		events:
-			"click .ui-link-inherit": "displayNode"
+		#events:
+		#	"click .ui-link-inherit": "displayNode"
 			
 		
 		displayNode: ->
 			$("body").addClass('ui-disabled')
 			$.mobile.showPageLoadingMsg("a", "Loading", false)
-			#Meshable.router.navigate "/#gateway/" + @model.attributes.macaddress + "/" + @model.attributes.node.NodeId, trigger: false
-			#Meshable.vent.trigger "goto:node", @model.attributes
+			Meshable.router.navigate "/gateway/" + @model.attributes.macaddress + "/" + @model.attributes.node.NodeId, trigger: false
+			Meshable.vent.trigger "goto:node", @model.attributes
 			
 		
 
@@ -46,7 +54,6 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		template: "#wrapper_ul"
 		itemViewContainer: "ul"
 		#id: "node-test"
-		
 		
 		
 		
@@ -60,47 +67,66 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 
 	
 	
-	Meshable.vent.on "goto:units", (refresh) ->
-		
-		if not refresh and Meshable.current_units != ""
-			showResults Meshable.current_units
-			return
+	Meshable.vent.on "goto:units", (refresh, routerObj) ->
 		$("body").addClass('ui-disabled')
 		$.mobile.showPageLoadingMsg("a", "Loading", false)
-		window.forge.ajax
-			url: "http://devbuildinglynx.apphb.com/api/Locations"
-			data: { term: "", systemTypes: "", problemStatuses: "", customGroups: "", pageIndex: 0, pageSize: 30 }
+		
+		if routerObj != ""
+			displayResults routerObj
+			return
+		
+		if not refresh and Meshable.current_units != "" and Meshable.refreshUnits == false
+			showResults Meshable.current_units
+			return
+		
+		if Meshable.currentDataObj != ""
+				displayResults Meshable.currentDataObj
+				return
+				
+		
+		$("body").addClass('ui-disabled')
+		$.mobile.showPageLoadingMsg("a", "Loading", false)
+		forge.request.ajax
+			url: Meshable.rooturl + "/api/Locations"
+			data: { term: "", systemTypes: "", problemStatuses: "", customGroups: "", pageIndex: 0, pageSize: 10 }
 			dataType: "json"
 			type: "GET"
 			error: (e) -> 
 				alert "An error occurred on search... sorry!"
 			success: (data) =>
-				list = []
+				dataObj = new Object 
+				dataObj.list = []
 				data = data.CurrentPageListItems
 				for node in data
-					list.push(node.gateway.macaddress)
+					TempObj = node
+					dataObj.list.push(TempObj)
+					#dataObj.list.push(node.gateway.macaddress)
+					#dataObj.first = node.person.first
+					#dataObj.last = node.person.last
 				#alert list
 				if data.isAuthenticated == false
 					Backbone.history.navigate "logout", replace: false, trigger: true
 				else if data.length == 0
-					alert "No Results" 
+					alert "No Results"
 				else
-					displayResults list
+					displayResults dataObj
 					
 	 
 
 	
-	displayResults = (list) ->
-		nodeCollection = new nodes
-		listlen = list.length
+	displayResults = (dataObj) ->
+		Meshable.refreshUnits = false
+		nodeCollection = new nodes 
+		listlen = dataObj.list.length
 		count = 0
-		for macaddress in list
-			do (macaddress) ->
+		for obj in dataObj.list
+			
+			do (obj) ->
 		
 				$.mobile.showPageLoadingMsg("a", "Loading", false)
-				window.forge.ajax
-					url: "http://devbuildinglynx.apphb.com/api/gateway"
-					data:  macaddress: macaddress
+				forge.request.ajax
+					url: Meshable.rooturl + "/api/gateway"
+					data:  macaddress: obj.gateway.macaddress
 					dataType: "json"
 					type: "GET"
 					error: (e) -> 
@@ -109,11 +135,17 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 						if data.isAuthenticated == false
 							Backbone.history.navigate "logout", replace: false, trigger: true
 						else
+							tempNode = new nodea { 
+								first: obj.person.first
+								nodetemplate: "header"
+								last: obj.person.last
+								}
+							nodeCollection.add tempNode
 							
-							for obj in data
-								if obj.nodetemplate != "mainMistaway"
+							for obja in data
+								if obja.nodetemplate != "mainMistaway"
 									tempNode = new nodea
-									nodeCollection.add tempNode.parse(obj)
+									nodeCollection.add tempNode.parse(obja)
 							count += 1
 							if count >= listlen
 								Meshable.current_units = nodeCollection
@@ -129,7 +161,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		
 			
 			
-	showResults = (nodeCollection) ->	
+	showResults = (nodeCollection) ->
 			
 		nodeCoView = new nodeCompView
 			collection: nodeCollection

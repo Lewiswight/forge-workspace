@@ -23,12 +23,13 @@
       template: '#nodeitem-template',
       tagName: 'li',
       className: "list_item_node",
-      events: {
-        "click .ui-link-inherit": "displayNode"
-      },
       displayNode: function() {
         $("body").addClass('ui-disabled');
-        return $.mobile.showPageLoadingMsg("a", "Loading", false);
+        $.mobile.showPageLoadingMsg("a", "Loading", false);
+        Meshable.router.navigate("/gateway/" + this.model.attributes.macaddress + "/" + this.model.attributes.node.NodeId, {
+          trigger: false
+        });
+        return Meshable.vent.trigger("goto:node", this.model.attributes);
       }
     });
     nodeCompView = Backbone.Marionette.CompositeView.extend({
@@ -45,7 +46,7 @@
       $("body").addClass('ui-disabled');
       $.mobile.showPageLoadingMsg("a", "Loading", false);
       return window.forge.ajax({
-        url: "http://devbuildinglynx.apphb.com/api/gateway",
+        url: Meshable.rooturl + "/api/gateway",
         data: {
           macaddress: macaddress
         },

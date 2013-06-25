@@ -30,7 +30,7 @@ code								{ font-family: Courier New !important; font-size: 0.85em;}
  */
  
 /*  1. OVERRIDE SOME JQM CSS */
-.ui-footer													{ background: #000000; z-index:1000; width: 100%; margin: -1px;}
+.ui-footer													{ background: #000000; z-index:1000; width: 100%; margin: 0px;}
 .ui-footer .ui-navbar										{ margin: 0; }
 .ui-btn-icon-top .ui-btn-inner .ui-icon, .ui-btn-icon-bottom .ui-btn-inner .ui-icon { margin-left: 0px;}
 .apple-navbar-ui a:link, .apple-navbar-ui a:visited, .apple-navbar-ui a:hover, .apple-navbar-ui a:active

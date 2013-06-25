@@ -3,8 +3,8 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 	make_collection = ->
 		
 		
-		window.forge.ajax
-			url: "http://devbuildinglynx.apphb.com/api/dashboard"
+		forge.request.ajax
+			url: Meshable.rooturl + "/api/dashboard"
 			dataType: "json"
 			type: "GET"
 			error: (e) -> 
@@ -104,7 +104,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 
 	
 	
-	Meshable.vent.on "goto:gateways", (refresh) ->
+	Meshable.vent.on "goto:gateways", (refresh, searchField) ->
 		
 		$("body").addClass('ui-disabled')
 		$.mobile.showPageLoadingMsg("a", "Loading", false)
@@ -113,23 +113,32 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			return
 		
 		
-		window.forge.ajax
-			url: "http://devbuildinglynx.apphb.com/api/Locations"
-			data: { term: "", systemTypes: "", problemStatuses: "", customGroups: "", pageIndex: 0, pageSize: 10 }
+		forge.request.ajax
+			url: Meshable.rooturl + "/api/Locations"
+			data: { term: searchField, systemTypes: "", problemStatuses: "", customGroups: "", pageIndex: 0, pageSize: 10 }
 			dataType: "json"
 			type: "GET"
 			error: (e) -> 
 				alert "An error occurred on search... sorry!"
+				$("body").removeClass('ui-disabled')
+				$.mobile.hidePageLoadingMsg()
 			success: (data) =>
-				list = []
+				dataObj = new Object 
+				dataObj.list = []
 				data = data.CurrentPageListItems
 				for node in data
-					list.push(node.gateway.macaddress)
-				#alert list
+					TempObj = node
+					dataObj.list.push(TempObj)
+				Meshable.currentDataObj = dataObj
+				Meshable.refreshUnits = true
 				if data.isAuthenticated == false
 					myvent.trigger "auth:logout"
+					$("body").removeClass('ui-disabled')
+					$.mobile.hidePageLoadingMsg()
 				else if data.length == 0
 					alert "No Results" 
+					$("body").removeClass('ui-disabled')
+					$.mobile.hidePageLoadingMsg()
 				else
 					Meshable.current_gateways = data
 					displayResults data
@@ -137,8 +146,8 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 	Meshable.vent.on "search:gateways", (sdata) ->
 		$("body").addClass('ui-disabled')
 		$.mobile.showPageLoadingMsg("a", "Loading", false)
-		window.forge.ajax
-			url: "http://devbuildinglynx.apphb.com/api/Locations"
+		forge.request.ajax
+			url: Meshable.rooturl + "/api/Locations"
 			data: { term: sdata, systemTypes: "", problemStatuses: "", customGroups: "", pageIndex: 0, pageSize: 10 }
 			dataType: "json"
 			type: "GET"

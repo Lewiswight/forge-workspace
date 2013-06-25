@@ -5,7 +5,7 @@
 
     make_collection = function() {
       return window.forge.ajax({
-        url: "http://devbuildinglynx.apphb.com/api/dashboard",
+        url: Meshable.rooturl + "/api/dashboard",
         dataType: "json",
         type: "GET",
         error: function(e) {
@@ -73,7 +73,7 @@
     });
     Meshable.vent.on("goto:dashboard", function() {
       return window.forge.ajax({
-        url: "http://devbuildinglynx.apphb.com/api/dashboard",
+        url: Meshable.rooturl + "/api/dashboard",
         dataType: "json",
         type: "GET",
         error: function(e) {

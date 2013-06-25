@@ -109,19 +109,20 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			self = @  
 			$("body").addClass('ui-disabled') 
 			$.mobile.showPageLoadingMsg("a", "Loading", false)
-			window.forge.ajax
-				url: "http://devbuildinglynx.apphb.com/api/authentication/login"
+			forge.request.ajax
+				url: Meshable.rooturl + "/api/authentication/login"
+				dataType: "json"
+				type: "POST"
 				data:  { 
 					UserName: username 
 					Password: pass 
 					RememberMe: true
 				}
-				dataType: "json"
-				type: "POST"
+				
 				error: (e) -> 
 					$("body").removeClass('ui-disabled')
 					$.mobile.hidePageLoadingMsg()
-					alert "Please Try Again"#e.content
+					alert "Please Try Again, didn't work"#e.content
 					Meshable.router.navigate "", trigger : true
 					#self.model.updateMsg "An error occurred on authentication... sorry!"
 				success: (data) ->
@@ -129,6 +130,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 					
 					if data.IsAuthenticated == true
 						$.mobile.changePage $("#mainPage"), changeHash: false, reverse: false, transition: "fade"
+						$.mobile.showPageLoadingMsg("a", "Loading", false)
 						Meshable.router.navigate "gateways", trigger : true
 						#self.model.updateMsg data.statusMsg 
 					else 
@@ -150,7 +152,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			else 
 				self = @
 				
-				window.forge.ajax
+				forge.request.ajax
 					url: Meshable.rooturl + "/Account/doesusernameExist"
 					data:  {username: @model.get "username" }
 					dataType: "json"
@@ -178,20 +180,21 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			
 	Meshable.vent.on "goto:login", ->
 		$.mobile.showPageLoadingMsg("a", "Loading", false)
-		window.forge.ajax
-			url: "http://devbuildinglynx.apphb.com/api/authentication"
+		forge.request.ajax
+			url: Meshable.rooturl + "/api/authentication"
 			dataType: "json"
 			type: "GET"
 			error: (e) -> 
 				$("body").removeClass('ui-disabled')
 				$.mobile.hidePageLoadingMsg()
-				alert "Please Try Again"
+				alert "Please Try Again from authenticate"
 			success: (data) ->	
 				if data.IsAuthenticated == true
 					#Meshable.vent.trigger "goto:menu"
 					$("body").addClass('ui-disabled') 
 					$.mobile.showPageLoadingMsg("a", "Loading", false)
 					$.mobile.changePage $("#mainPage"), changeHash: false, reverse: false, transition: "fade"
+					$.mobile.showPageLoadingMsg("a", "Loading", false)
 					Meshable.router.navigate "gateways", trigger : true
 					#Meshable.vent.trigger "goto:units", true
 					

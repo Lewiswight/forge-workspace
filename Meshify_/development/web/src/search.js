@@ -43,7 +43,7 @@
         if (searchField.length < 1) {
           return alert("Please Enter Text");
         } else {
-          href = "##searching/" + searchField;
+          href = "#searching/" + searchField;
           return window.location = href;
         }
       }

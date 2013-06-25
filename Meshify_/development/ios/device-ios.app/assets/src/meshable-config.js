@@ -64,7 +64,7 @@ require.config({
         
     	"jquery": "vendor/jquery",
     	'jqmglobe': 'js/jqm.globals',
-    	"jqm": "vendor/jquery.mobile",
+    	"jqm": "vendor/jquery.mobile-1.3.1",
     	'backbone': "vendor/backbone",
     	'underscore': "vendor/underscore",
         'marionette': "vendor/backbone.marionette.min", 

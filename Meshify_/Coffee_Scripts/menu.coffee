@@ -76,7 +76,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 	Meshable.vent.on "goto:menu", ->
 		
 		###window.forge.ajax
-			url: "http://devbuildinglynx.apphb.com/api/dashboard"
+			url: Meshable.rooturl + "/api/dashboard"
 			dataType: "json"
 			type: "GET"
 			error: (e) -> 

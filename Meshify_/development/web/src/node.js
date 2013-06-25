@@ -28,6 +28,7 @@
       setbutton: function(e) {
         var channel, full_name, localobj, mistData, node_type, value;
 
+        $("body").addClass('ui-disabled');
         $.mobile.showPageLoadingMsg("a", "Loading", false);
         value = $(e.currentTarget).data("setvalue");
         node_type = $(e.currentTarget).data("nodetype");
@@ -59,9 +60,11 @@
           type: "POST",
           contentType: 'application/json; charset=utf-8',
           error: function(e) {
+            $("body").removeClass('ui-disabled');
             return $.mobile.hidePageLoadingMsg();
           },
           success: function(data) {
+            $("body").removeClass('ui-disabled');
             return $.mobile.hidePageLoadingMsg();
           }
         });
@@ -79,9 +82,10 @@
     Meshable.vent.on("goto:nodeRefresh", function(mac, idn) {
       var _this = this;
 
+      $("body").addClass('ui-disabled');
       $.mobile.showPageLoadingMsg("a", "Loading", false);
       return window.forge.ajax({
-        url: "http://devbuildinglynx.apphb.com/api/gateway",
+        url: Meshable.rooturl + "/api/gateway",
         data: {
           macaddress: mac,
           nodeid: idn
@@ -95,6 +99,7 @@
           if (data.isAuthenticated === false) {
             return alert("auth:logout");
           } else if (data.length === 0) {
+            $("body").removeClass('ui-disabled');
             $.mobile.hidePageLoadingMsg();
             alert("No nodes at this location");
             return Backbone.history.navigate("gateways", {
@@ -125,6 +130,7 @@
       $('#mainDiv').append($(nodeCoView.el));
       $("#mainDiv").trigger('create');
       $.mobile.hidePageLoadingMsg();
+      $("body").removeClass('ui-disabled');
       $("#mainPage a").removeClass('ui-btn-active');
       return $("#nodesbtnn").addClass('ui-btn-active');
     };

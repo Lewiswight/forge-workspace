@@ -97,7 +97,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		$("body").addClass('ui-disabled')
 		$.mobile.showPageLoadingMsg("a", "Loading", false)
 		window.forge.ajax
-			url: "http://devbuildinglynx.apphb.com/api/gateway"
+			url: Meshable.rooturl + "/api/gateway"
 			data: {  macaddress: mac, nodeid: idn  }
 			dataType: "json"
 			type: "GET"

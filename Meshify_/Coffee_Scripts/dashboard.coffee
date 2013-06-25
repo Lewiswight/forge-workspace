@@ -4,7 +4,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		
 		
 		window.forge.ajax
-			url: "http://devbuildinglynx.apphb.com/api/dashboard"
+			url: Meshable.rooturl + "/api/dashboard"
 			dataType: "json"
 			type: "GET"
 			error: (e) -> 
@@ -107,7 +107,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		
 		
 		window.forge.ajax
-			url: "http://devbuildinglynx.apphb.com/api/dashboard"
+			url: Meshable.rooturl + "/api/dashboard"
 			dataType: "json"
 			type: "GET"
 			error: (e) -> 

@@ -6,7 +6,10 @@ define ['jquery','jqm', 'backbone','underscore','marionette', 'Meshable', 'Event
 	
 	
 	Routing = Backbone.Router.extend
+	
+	
 		routes:
+			"unit/:mac/:first/:last": "unitsM"
 			"units": "units"
 			"gateway/:mac": "gateway"
 			"gateway/:mac/:id": "nodeDetails"
@@ -23,8 +26,20 @@ define ['jquery','jqm', 'backbone','underscore','marionette', 'Meshable', 'Event
 			"ref-page": "refPage"
 			"logout": "logout"
 			
+		unitsM: (mac, first, last) ->
+			obj = new Object
+			obj.list = []
+			listObj = new Object
+			listObj.person = new Object
+			listObj.gateway = new Object
+			listObj.gateway.macaddress = mac
+			listObj.person.first = first
+			listObj.person.last = last
+			obj.list.push(listObj)
+			Meshable.vent.trigger "goto:units", false, obj
+			
 		units: ->
-			Meshable.vent.trigger "goto:units", false
+			Meshable.vent.trigger "goto:units", false, ""
 			
 		nodeDetails: (mac, id) ->
 			Meshable.vent.trigger "goto:nodeRefresh", mac, id
@@ -34,8 +49,8 @@ define ['jquery','jqm', 'backbone','underscore','marionette', 'Meshable', 'Event
 			$.mobile.showPageLoadingMsg("a", "Loading", false)
 			$.mobile.showPageLoadingMsg("a", "Loading", false)
 			
-			window.forge.ajax
-				url: "http://devbuildinglynx.apphb.com/api/authentication?logmeoff=true"
+			forge.request.ajax
+				url: Meshable.rooturl + "/api/authentication?logmeoff=true"
 				dataType: "json"
 				type: "GET"
 				error: (e) ->
@@ -44,11 +59,13 @@ define ['jquery','jqm', 'backbone','underscore','marionette', 'Meshable', 'Event
 					Meshable.vent.trigger "goto:login" 
 					alert "error logging out"
 				success: (data) ->
+					
 					Meshable.current_units = ""
 					Meshable.current_gateways = ""
 					$.mobile.hidePageLoadingMsg()
 					$("body").removeClass('ui-disabled')
 					Meshable.vent.trigger "goto:login"
+					$('#mainDiv').empty()
 		
 		refPage: ->
 			$.mobile.changePage $('#ref-page'), changeHash: false,  transition: 'none', showLoadMsg: true
@@ -59,7 +76,7 @@ define ['jquery','jqm', 'backbone','underscore','marionette', 'Meshable', 'Event
 			Meshable.vent.trigger "goto:nodes", macaddress
 				
 		gateways: ->
-			Meshable.vent.trigger "goto:gateways", false	
+			Meshable.vent.trigger "goto:gateways", false, ""	
 		
 		#searchterm: (searchField) -> 
 		#	$.mobile.showPageLoadingMsg()

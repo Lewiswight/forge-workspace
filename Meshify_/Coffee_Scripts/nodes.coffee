@@ -31,15 +31,15 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		className: "list_item_node"
 		
 		
-		events:
-			"click .ui-link-inherit": "displayNode"
+		#events:
+		#	"click .ui-link-inherit": "displayNode"
 			
 		
 		displayNode: ->
 			$("body").addClass('ui-disabled')
 			$.mobile.showPageLoadingMsg("a", "Loading", false)
-			#Meshable.router.navigate "/#gateway/" + @model.attributes.macaddress + "/" + @model.attributes.node.NodeId, trigger: false
-			#Meshable.vent.trigger "goto:node", @model.attributes
+			Meshable.router.navigate "/gateway/" + @model.attributes.macaddress + "/" + @model.attributes.node.NodeId, trigger: false
+			Meshable.vent.trigger "goto:node", @model.attributes
 			
 		
 
@@ -64,7 +64,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		$("body").addClass('ui-disabled')
 		$.mobile.showPageLoadingMsg("a", "Loading", false)
 		window.forge.ajax
-			url: "http://devbuildinglynx.apphb.com/api/gateway"
+			url: Meshable.rooturl + "/api/gateway"
 			data:  macaddress: macaddress
 			dataType: "json"
 			type: "GET"

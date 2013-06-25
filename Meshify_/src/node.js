@@ -85,7 +85,7 @@
       $("body").addClass('ui-disabled');
       $.mobile.showPageLoadingMsg("a", "Loading", false);
       return window.forge.ajax({
-        url: "http://devbuildinglynx.apphb.com/api/gateway",
+        url: Meshable.rooturl + "/api/gateway",
         data: {
           macaddress: mac,
           nodeid: idn

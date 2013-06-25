@@ -18,21 +18,27 @@
     });
     nodeView = Backbone.Marionette.ItemView.extend({
       initialize: function(node) {
-        return this.bindTo(this.model, "change", this.render);
+        this.bindTo(this.model, "change", this.render);
+        if (node.model.attributes.nodetemplate === "header") {
+          this.template = "#label-template";
+          return this.$el.attr('data-role', 'list-divider');
+        } else {
+          return this.template = '#nodeitem-template';
+        }
       },
-      template: '#nodeitem-template',
       tagName: 'li',
       className: "list_item_node",
       onRender: function() {
         $("#mainDiv").trigger('create');
         return $("#mainPage").trigger('create');
       },
-      events: {
-        "click .ui-link-inherit": "displayNode"
-      },
       displayNode: function() {
         $("body").addClass('ui-disabled');
-        return $.mobile.showPageLoadingMsg("a", "Loading", false);
+        $.mobile.showPageLoadingMsg("a", "Loading", false);
+        Meshable.router.navigate("/gateway/" + this.model.attributes.macaddress + "/" + this.model.attributes.node.NodeId, {
+          trigger: false
+        });
+        return Meshable.vent.trigger("goto:node", this.model.attributes);
       }
     });
     nodeCompView = Backbone.Marionette.CompositeView.extend({
@@ -43,24 +49,34 @@
         return collectionView.$("#placeholder").append(itemView.el);
       }
     });
-    Meshable.vent.on("goto:units", function(refresh) {
+    Meshable.vent.on("goto:units", function(refresh, routerObj) {
       var _this = this;
 
-      if (!refresh && Meshable.current_units !== "") {
+      $("body").addClass('ui-disabled');
+      $.mobile.showPageLoadingMsg("a", "Loading", false);
+      if (routerObj !== "") {
+        displayResults(routerObj);
+        return;
+      }
+      if (!refresh && Meshable.current_units !== "" && Meshable.refreshUnits === false) {
         showResults(Meshable.current_units);
+        return;
+      }
+      if (Meshable.currentDataObj !== "") {
+        displayResults(Meshable.currentDataObj);
         return;
       }
       $("body").addClass('ui-disabled');
       $.mobile.showPageLoadingMsg("a", "Loading", false);
-      return window.forge.ajax({
-        url: "http://devbuildinglynx.apphb.com/api/Locations",
+      return forge.request.ajax({
+        url: Meshable.rooturl + "/api/Locations",
         data: {
           term: "",
           systemTypes: "",
           problemStatuses: "",
           customGroups: "",
           pageIndex: 0,
-          pageSize: 30
+          pageSize: 10
         },
         dataType: "json",
         type: "GET",
@@ -68,13 +84,15 @@
           return alert("An error occurred on search... sorry!");
         },
         success: function(data) {
-          var list, node, _i, _len;
+          var TempObj, dataObj, node, _i, _len;
 
-          list = [];
+          dataObj = new Object;
+          dataObj.list = [];
           data = data.CurrentPageListItems;
           for (_i = 0, _len = data.length; _i < _len; _i++) {
             node = data[_i];
-            list.push(node.gateway.macaddress);
+            TempObj = node;
+            dataObj.list.push(TempObj);
           }
           if (data.isAuthenticated === false) {
             return Backbone.history.navigate("logout", {
@@ -84,28 +102,30 @@
           } else if (data.length === 0) {
             return alert("No Results");
           } else {
-            return displayResults(list);
+            return displayResults(dataObj);
           }
         }
       });
     });
-    displayResults = function(list) {
-      var count, listlen, macaddress, nodeCollection, _i, _len, _results;
+    displayResults = function(dataObj) {
+      var count, listlen, nodeCollection, obj, _i, _len, _ref, _results;
 
+      Meshable.refreshUnits = false;
       nodeCollection = new nodes;
-      listlen = list.length;
+      listlen = dataObj.list.length;
       count = 0;
+      _ref = dataObj.list;
       _results = [];
-      for (_i = 0, _len = list.length; _i < _len; _i++) {
-        macaddress = list[_i];
-        _results.push((function(macaddress) {
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        obj = _ref[_i];
+        _results.push((function(obj) {
           var _this = this;
 
           $.mobile.showPageLoadingMsg("a", "Loading", false);
-          return window.forge.ajax({
-            url: "http://devbuildinglynx.apphb.com/api/gateway",
+          return forge.request.ajax({
+            url: Meshable.rooturl + "/api/gateway",
             data: {
-              macaddress: macaddress
+              macaddress: obj.gateway.macaddress
             },
             dataType: "json",
             type: "GET",
@@ -113,7 +133,7 @@
               return alert("An error occurred while getting node details... sorry!");
             },
             success: function(data) {
-              var obj, tempNode, _j, _len1;
+              var obja, tempNode, _j, _len1;
 
               if (data.isAuthenticated === false) {
                 return Backbone.history.navigate("logout", {
@@ -121,11 +141,17 @@
                   trigger: true
                 });
               } else {
+                tempNode = new nodea({
+                  first: obj.person.first,
+                  nodetemplate: "header",
+                  last: obj.person.last
+                });
+                nodeCollection.add(tempNode);
                 for (_j = 0, _len1 = data.length; _j < _len1; _j++) {
-                  obj = data[_j];
-                  if (obj.nodetemplate !== "mainMistaway") {
+                  obja = data[_j];
+                  if (obja.nodetemplate !== "mainMistaway") {
                     tempNode = new nodea;
-                    nodeCollection.add(tempNode.parse(obj));
+                    nodeCollection.add(tempNode.parse(obja));
                   }
                 }
                 count += 1;
@@ -136,7 +162,7 @@
               }
             }
           });
-        })(macaddress));
+        })(obj));
       }
       return _results;
     };

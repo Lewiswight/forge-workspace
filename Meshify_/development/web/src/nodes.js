@@ -23,11 +23,13 @@
       template: '#nodeitem-template',
       tagName: 'li',
       className: "list_item_node",
-      events: {
-        "click .ui-link-inherit": "displayNode"
-      },
       displayNode: function() {
-        return $.mobile.showPageLoadingMsg("a", "Loading", false);
+        $("body").addClass('ui-disabled');
+        $.mobile.showPageLoadingMsg("a", "Loading", false);
+        Meshable.router.navigate("/gateway/" + this.model.attributes.macaddress + "/" + this.model.attributes.node.NodeId, {
+          trigger: false
+        });
+        return Meshable.vent.trigger("goto:node", this.model.attributes);
       }
     });
     nodeCompView = Backbone.Marionette.CompositeView.extend({
@@ -41,9 +43,10 @@
     Meshable.vent.on("goto:nodes", function(macaddress) {
       var _this = this;
 
+      $("body").addClass('ui-disabled');
       $.mobile.showPageLoadingMsg("a", "Loading", false);
       return window.forge.ajax({
-        url: "http://devbuildinglynx.apphb.com/api/gateway",
+        url: Meshable.rooturl + "/api/gateway",
         data: {
           macaddress: macaddress
         },
@@ -56,6 +59,7 @@
           if (data.isAuthenticated === false) {
             return alert("auth:logout");
           } else if (data.length === 0) {
+            $("body").removeClass('ui-disabled');
             $.mobile.hidePageLoadingMsg();
             alert("No nodes at this location");
             return Backbone.history.navigate("gateways", {
@@ -76,6 +80,7 @@
         for (_i = 0, _len = data.length; _i < _len; _i++) {
           obj = data[_i];
           if (obj.nodetemplate !== "mainMistaway") {
+            $("body").addClass('ui-disabled');
             $.mobile.showPageLoadingMsg();
             Meshable.vent.trigger("goto:node", obj);
             return;
@@ -97,6 +102,7 @@
       $('#mainDiv').empty();
       $('#mainDiv').append($(nodeCoView.el));
       $("#mainDiv").trigger('create');
+      $("body").removeClass('ui-disabled');
       $.mobile.hidePageLoadingMsg();
       $("#mainPage a").removeClass('ui-btn-active');
       return $("#nodesbtnn").addClass('ui-btn-active');

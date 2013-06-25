@@ -88,19 +88,21 @@
           forge.prefs.set("username", username);
         }
         self = this;
+        $("body").addClass('ui-disabled');
         $.mobile.showPageLoadingMsg("a", "Loading", false);
-        return window.forge.ajax({
-          url: "http://devbuildinglynx.apphb.com/api/authentication/login",
+        return forge.request.ajax({
+          url: Meshable.rooturl + "/api/authentication/login",
+          dataType: "json",
+          type: "POST",
           data: {
             UserName: username,
             Password: pass,
             RememberMe: true
           },
-          dataType: "json",
-          type: "POST",
           error: function(e) {
+            $("body").removeClass('ui-disabled');
             $.mobile.hidePageLoadingMsg();
-            alert("Please Try Again");
+            alert("Please Try Again, didn't work");
             return Meshable.router.navigate("", {
               trigger: true
             });
@@ -112,11 +114,13 @@
                 reverse: false,
                 transition: "fade"
               });
+              $.mobile.showPageLoadingMsg("a", "Loading", false);
               return Meshable.router.navigate("gateways", {
                 trigger: true
               });
             } else {
               alert("Password and Username Combination not Valid... Please Retry");
+              $("body").removeClass('ui-disabled');
               return $.mobile.hidePageLoadingMsg();
             }
           }
@@ -172,20 +176,24 @@
 
       $.mobile.showPageLoadingMsg("a", "Loading", false);
       window.forge.ajax({
-        url: "http://devbuildinglynx.apphb.com/api/authentication",
+        url: Meshable.rooturl + "/api/authentication",
         dataType: "json",
         type: "GET",
         error: function(e) {
+          $("body").removeClass('ui-disabled');
           $.mobile.hidePageLoadingMsg();
-          return alert("Please Try Again");
+          return alert("Please Try Again from authenticate");
         },
         success: function(data) {
           if (data.IsAuthenticated === true) {
+            $("body").addClass('ui-disabled');
+            $.mobile.showPageLoadingMsg("a", "Loading", false);
             $.mobile.changePage($("#mainPage"), {
               changeHash: false,
               reverse: false,
               transition: "fade"
             });
+            $.mobile.showPageLoadingMsg("a", "Loading", false);
             Meshable.router.navigate("gateways", {
               trigger: true
             });

@@ -6,10 +6,12 @@ define ['jquery', 'jqm', 'backbone','marionette' ], ($, jqm, Backbone, Marionett
 
 	Meshable = new Backbone.Marionette.Application()
 	Meshable.theme = "a"
-	Meshable.rooturl = "http://devbuildinglynx.apphb.com"
+	Meshable.rooturl = "http://imistaway.com"
 	Meshable.current-search = null 
 	Meshable.current_units = ""
 	Meshable.current_gateways = ""
+	Meshable.currentDataObj = ""
+	Meshable.refreshUnits = false
 	Meshable.addRegions
 		loginRegion: "#login"
 		mainRegion: "#mainR"
@@ -19,7 +21,8 @@ define ['jquery', 'jqm', 'backbone','marionette' ], ($, jqm, Backbone, Marionett
 		
 	#$(document).on "click", "#menu-btn", ->
   		#Meshable.vent.trigger "click:menu"
-
+	$(document).on "click", "#refresh-btn", ->
+  		window.history.refresh()
 	
 	$(document).on "click", "#back-btn", ->
   		window.history.back()
@@ -33,10 +36,12 @@ define ['jquery', 'jqm', 'backbone','marionette' ], ($, jqm, Backbone, Marionett
 	
 	
 	Meshable.on "initialize:after", (options) ->
+		$.mobile.autoInitializePage = false
+		$.mobile.pageContainer = $("body")
 		$.mobile.ajaxEnabled = false
 		$.mobile.linkBindingEnabled = false
 		$.mobile.hashListeningEnabled = false
-		$.mobile.pushStateEnabled = false
+		$.mobile.pushStateEnabled = true
 		$.mobile.loader.prototype.options.text = "loading"
 		$.mobile.loader.prototype.options.textVisible = true
 		$.mobile.loader.prototype.options.theme = "c"

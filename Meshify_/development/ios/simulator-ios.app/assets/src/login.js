@@ -90,19 +90,19 @@
         self = this;
         $("body").addClass('ui-disabled');
         $.mobile.showPageLoadingMsg("a", "Loading", false);
-        return window.forge.ajax({
-          url: "http://devbuildinglynx.apphb.com/api/authentication/login",
+        return forge.request.ajax({
+          url: Meshable.rooturl + "/api/authentication/login",
+          dataType: "json",
+          type: "POST",
           data: {
             UserName: username,
             Password: pass,
             RememberMe: true
           },
-          dataType: "json",
-          type: "POST",
           error: function(e) {
             $("body").removeClass('ui-disabled');
             $.mobile.hidePageLoadingMsg();
-            alert("Please Try Again");
+            alert("Please Try Again, didn't work");
             return Meshable.router.navigate("", {
               trigger: true
             });
@@ -114,6 +114,7 @@
                 reverse: false,
                 transition: "fade"
               });
+              $.mobile.showPageLoadingMsg("a", "Loading", false);
               return Meshable.router.navigate("gateways", {
                 trigger: true
               });
@@ -139,7 +140,7 @@
           return $('#un').addClass('italic');
         } else {
           self = this;
-          return window.forge.ajax({
+          return forge.request.ajax({
             url: Meshable.rooturl + "/Account/doesusernameExist",
             data: {
               username: this.model.get("username")
@@ -174,14 +175,14 @@
       var loginView;
 
       $.mobile.showPageLoadingMsg("a", "Loading", false);
-      window.forge.ajax({
-        url: "http://devbuildinglynx.apphb.com/api/authentication",
+      forge.request.ajax({
+        url: Meshable.rooturl + "/api/authentication",
         dataType: "json",
         type: "GET",
         error: function(e) {
           $("body").removeClass('ui-disabled');
           $.mobile.hidePageLoadingMsg();
-          return alert("Please Try Again");
+          return alert("Please Try Again from authenticate");
         },
         success: function(data) {
           if (data.IsAuthenticated === true) {
@@ -192,6 +193,7 @@
               reverse: false,
               transition: "fade"
             });
+            $.mobile.showPageLoadingMsg("a", "Loading", false);
             Meshable.router.navigate("gateways", {
               trigger: true
             });

@@ -63,7 +63,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			if searchField.length < 1
 				alert "Please Enter Text"
 			else
-				href = "##searching/" + searchField
+				href = "#searching/" + searchField
 				window.location = href
 				#route = "searching/" + searchField
 				#Backbone.history.navigate route, trigger : true , replace: false, pushState: false
