@@ -2,9 +2,9 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="263" key="DIALOG_WIDTH"/>
-		<item value="179" key="DIALOG_Y_ORIGIN"/>
+		<item value="356" key="DIALOG_Y_ORIGIN"/>
 		<item value="395" key="DIALOG_HEIGHT"/>
-		<item value="935" key="DIALOG_X_ORIGIN"/>
+		<item value="934" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
@@ -13,26 +13,26 @@
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="Please" key="selection"/>
+		<item value="search" key="selection"/>
 		<list key="findhistory">
-			<item value="please"/>
-			<item value="nodea"/>
-			<item value="hideP"/>
-			<item value="hide"/>
-			<item value="##"/>
-			<item value="hidePage"/>
-			<item value="showPage"/>
-			<item value="show.page"/>
+			<item value="search"/>
+			<item value="value"/>
+			<item value="Meshify"/>
+			<item value="results_insert"/>
+			<item value="body"/>
+			<item value="background"/>
+			<item value="Meshable.current_gateways"/>
+			<item value="currentDataObj"/>
 		</list>
 		<list key="replacehistory">
+			<item value="iMistaway"/>
+			<item value=""/>
+			<item value="modelList"/>
+			<item value="current_units"/>
+			<item value="Meshable.Current_units"/>
+			<item value="forge.request.ajax"/>
 			<item value="#"/>
 			<item value="$.mobile.showPageLoadingMsg(&quot;a&quot;, &quot;Loading&quot;, false)"/>
-			<item value="$.mobile.showPageLoadingMsg(&quot;a&quot;, &quot;This is only a test&quot;, )"/>
-			<item value="$.mobile.showPageLoadingMsg(&quot;a&quot;, &quot;This is only a test&quot;, true)"/>
-			<item value="coffee -o /Users/lewiswight/forge-workspace/Meshify_/src/ -cw /Users/lewiswight/forge-workspace/Meshify_/Coffee_Scripts/"/>
-			<item value="Meshify"/>
-			<item value="Tuxedo Mosquito"/>
-			<item value="data-theme=&quot;a&quot;"/>
 		</list>
 	</section>
 </section>

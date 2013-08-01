@@ -3,7 +3,7 @@ var http = require('http');
 var https = require('https');
 var Cookie = require('./cookie').Cookie;
 
-var app = express.createServer();
+var app = express();
 
 app.use(express.logger());
 app.use(express.bodyParser());
@@ -89,27 +89,25 @@ app.post(/^\/_forge\/proxy\//, function(request, response) {
 		headers: request.body.headers || {}
 	};
 
-	var handler = (url.protocol == "http:" ? http : https)
+	var handler = (url.protocol == "http:" ? http : https);
 	
 	var req = handler.request(options, function(res) {
 		response.statusCode = res.statusCode;
 		Object.keys(res.headers).forEach(function (header) {
 			if (header.toLowerCase() == 'set-cookie') {
-				// broken by commas in cookie values
-				// var cookies = res.headers[header].toString().split(',');
-				var cookies = res.headers[header].toString().split('[^\s],[^\s]');
-				cookies.forEach(function (cookieStr) {
-					// Munge cookies on url->proxy->user
-					var cookie = new Cookie().parse(cookieStr);
-					cookie.value = JSON.stringify({
-						value: cookie.value,
-						domain: cookie.domain || url.hostname,
-						path: cookie.path
-					});
-					cookie.path = '/_forge/proxy/'+(cookie.domain || url.hostname).split("").reverse().join("").replace(/\./g, "/");
-					delete cookie.domain;
-					response.setHeader("Set-Cookie", cookie.toString());
+				// several set-cookie headers collapsed into one
+				// comma-separated header value is not supported. Set-cookie
+				// headers must be one header per cookie.
+				var cookieStr = res.headers[header].toString(),
+					cookie = new Cookie().parse(cookieStr);
+				cookie.value = JSON.stringify({
+					value: cookie.value,
+					domain: cookie.domain || url.hostname,
+					path: cookie.path
 				});
+				cookie.path = '/_forge/proxy/'+(cookie.domain || url.hostname).split("").reverse().join("").replace(/\./g, "/");
+				delete cookie.domain;
+				response.setHeader("Set-Cookie", cookie.toString());
 			} else {
 				response.setHeader(header, res.headers[header]);
 			}

@@ -16,8 +16,8 @@
 			<item value="11" key="includeMask"/>
 			<item value="2" key="limitTo"/>
 			<item value="0" key="scope"/>
-			<item value="cordova" key="pattern"/>
 			<item value="" key="javaElement"/>
+			<item value="cordova" key="pattern"/>
 			<item value="12" key="searchFor"/>
 			<item value="false" key="isCaseSensitive"/>
 			<list key="workingSets">

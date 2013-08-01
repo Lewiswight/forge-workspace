@@ -1,6 +1,10 @@
+import re
+
 def _generate_package_name(build):
-	if "package_names" not in build.config["modules"]:
-		build.config["modules"]["package_names"] = {}
-	if "safari" not in build.config["modules"]["package_names"]:
-		build.config["modules"]["package_names"]["safari"] = "forge.safari.{package_name}".format(package_name=build.config["package_name"])
-	return build.config["modules"]["package_names"]["safari"]
+	if "core" not in build.config:
+		build.config["core"] = {}
+	if "safari" not in build.config["core"]:
+		build.config["core"]["safari"] = {}
+	if "package_name" not in build.config["core"]["safari"]:
+		build.config["core"]["safari"]["package_name"] = "forge.safari.{package_name}".format(package_name=re.sub("[^a-zA-Z0-9]", "", build.config["name"].lower()) + build.config["uuid"])
+	return build.config["core"]["safari"]["package_name"]

@@ -1,0 +1,58 @@
+[
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.launchimage.config.iphone}}",
+				"dest": "Default~iphone.png"
+			}
+		}
+	},
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.launchimage.config.iphone-retina}}",
+				"dest": "Default@2x~iphone.png"
+			}
+		}
+	},
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.launchimage.config.iphone-retina4}}",
+				"dest": "Default-568h@2x~iphone.png"
+			}
+		}
+	},
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.launchimage.config.ipad}}",
+				"dest": "Default-Portrait~ipad.png"
+			}
+		}
+	},
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.launchimage.config.ipad-landscape}}",
+				"dest": "Default-Landscape~ipad.png"
+			}
+		}
+	},
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.launchimage.config.ipad-retina}}",
+				"dest": "Default-Portrait@2x~ipad.png"
+			}
+		}
+	},
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.launchimage.config.ipad-landscape-retina}}",
+				"dest": "Default-Landscape@2x~ipad.png"
+			}
+		}
+	}
+]

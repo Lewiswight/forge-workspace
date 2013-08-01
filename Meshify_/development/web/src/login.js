@@ -90,76 +90,74 @@
         self = this;
         $("body").addClass('ui-disabled');
         $.mobile.showPageLoadingMsg("a", "Loading", false);
-        return forge.request.ajax({
-          url: Meshable.rooturl + "/api/authentication/login",
-          dataType: "json",
-          type: "POST",
-          data: {
-            UserName: username,
-            Password: pass,
-            RememberMe: true
-          },
-          error: function(e) {
-            $("body").removeClass('ui-disabled');
-            $.mobile.hidePageLoadingMsg();
-            alert("Please Try Again, didn't work");
-            return Meshable.router.navigate("", {
-              trigger: true
-            });
-          },
-          success: function(data) {
-            if (data.IsAuthenticated === true) {
-              $.mobile.changePage($("#mainPage"), {
-                changeHash: false,
-                reverse: false,
-                transition: "fade"
-              });
-              $.mobile.showPageLoadingMsg("a", "Loading", false);
-              return Meshable.router.navigate("gateways", {
+        if (!forge.is.connection.connected()) {
+          forge.notification.alert("Login Failed", "No Internet Connection");
+          $("body").removeClass('ui-disabled');
+          return $.mobile.hidePageLoadingMsg();
+        } else {
+          return forge.request.ajax({
+            url: Meshable.rooturl + "/api/authentication/login",
+            type: "POST",
+            dataType: "json",
+            timeout: "10000",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+              "UserName": $('#un').val(),
+              "Password": $('#pw').val(),
+              "RememberMe": $('#remember-me').prop("checked")
+            }),
+            error: function(e) {
+              $("body").removeClass('ui-disabled');
+              $.mobile.hidePageLoadingMsg();
+              forge.notification.alert("Error", e.message);
+              return Meshable.router.navigate("", {
                 trigger: true
               });
-            } else {
-              alert("Password and Username Combination not Valid... Please Retry");
-              $("body").removeClass('ui-disabled');
-              return $.mobile.hidePageLoadingMsg();
+            },
+            success: function(data) {
+              var error, role, userRole, _i, _len, _ref;
+
+              try {
+                data.company.Name = Meshable.companyName;
+                userRole = 1;
+                _ref = data.roles;
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                  role = _ref[_i];
+                  if (role === "MOBILE_ONLY") {
+                    userRole = 0;
+                  }
+                }
+                Meshable.userRole = userRole;
+                Meshable.companyPhone = data.company.Phone;
+              } catch (_error) {
+                error = _error;
+                Meshable.companyName = "Mistaway";
+                Meshable.userRole = 1;
+                Meshable.companyPhone = "000-000-0000";
+              }
+              if (data.IsAuthenticated === true) {
+                $.mobile.changePage($("#mainPage"), {
+                  changeHash: false,
+                  reverse: false,
+                  transition: "fade"
+                });
+                $.mobile.showPageLoadingMsg("a", "Loading", false);
+                return Meshable.router.navigate("units", {
+                  trigger: true
+                });
+              } else {
+                forge.notification.alert("Login Failed", "Password or Username not valid");
+                $("body").removeClass('ui-disabled');
+                return $.mobile.hidePageLoadingMsg();
+              }
             }
-          }
-        });
+          });
+        }
       },
       blurpassword: function() {
         if ($('#password-input').val() === '') {
           $('#fakepassword-input').val("Password").show();
           return $('#password-input').hide();
-        }
-      },
-      blurusername: function() {
-        var self;
-
-        this.model.updateUsername($('#un').val());
-        if ($('#un').val() === this.model.defaults.username) {
-          return $('#un').addClass('italic');
-        } else {
-          self = this;
-          return window.forge.ajax({
-            url: Meshable.rooturl + "/Account/doesusernameExist",
-            data: {
-              username: this.model.get("username")
-            },
-            dataType: "json",
-            type: "POST",
-            error: function(e) {
-              return self.model.updateMsg("Sorry your username is not found!");
-            },
-            success: function(data) {
-              if (data === false) {
-                self.model.updateMsg("Awesome, we found your username");
-                return $('#pw').focus();
-              } else {
-                self.model.updateMsg("Sorry, your username isn't in the system");
-                return $('#un').focus();
-              }
-            }
-          });
         }
       }
     });
@@ -175,39 +173,62 @@
       var loginView;
 
       $.mobile.showPageLoadingMsg("a", "Loading", false);
-      window.forge.ajax({
-        url: Meshable.rooturl + "/api/authentication",
-        dataType: "json",
-        type: "GET",
-        error: function(e) {
-          $("body").removeClass('ui-disabled');
-          $.mobile.hidePageLoadingMsg();
-          return alert("Please Try Again from authenticate");
-        },
-        success: function(data) {
-          if (data.IsAuthenticated === true) {
-            $("body").addClass('ui-disabled');
-            $.mobile.showPageLoadingMsg("a", "Loading", false);
-            $.mobile.changePage($("#mainPage"), {
-              changeHash: false,
-              reverse: false,
-              transition: "fade"
-            });
-            $.mobile.showPageLoadingMsg("a", "Loading", false);
-            Meshable.router.navigate("gateways", {
-              trigger: true
-            });
+      /*
+      		forge.topbar.hide(
+      		  ->
+      			console.log "hi"
+      		, (e) ->
+      			console.log e
+      		)
+      		forge.tabbar.hide(
+      		  ->
+      			console.log "hi"
+      		, (e) ->
+      			console.log e
+      		)
+      */
+
+      if (!forge.is.connection.connected()) {
+        loginView = new AuthPageView({
+          collection: new collect(new AuthModel)
+        });
+        Meshable.currentpage = "login";
+        loginView.render();
+        $('#login').empty();
+        $('#login').append($(loginView.el));
+        return Meshable.changePage(loginView, false);
+      } else {
+        return forge.request.ajax({
+          url: Meshable.rooturl + "/api/authentication",
+          dataType: "json",
+          type: "GET",
+          timeout: 30000,
+          success: function(data) {
+            if (data.IsAuthenticated === true) {
+              $("body").addClass('ui-disabled');
+              $.mobile.showPageLoadingMsg("a", "Loading", false);
+              $.mobile.changePage($("#mainPage"), {
+                changeHash: false,
+                reverse: false,
+                transition: "fade"
+              });
+              $.mobile.showPageLoadingMsg("a", "Loading", false);
+              Meshable.router.navigate("units", {
+                trigger: true
+              });
+            } else {
+              loginView = new AuthPageView({
+                collection: new collect(new AuthModel)
+              });
+              Meshable.currentpage = "login";
+              loginView.render();
+              $('#login').empty();
+              $('#login').append($(loginView.el));
+              return Meshable.changePage(loginView, false);
+            }
           }
-        }
-      });
-      loginView = new AuthPageView({
-        collection: new collect(new AuthModel)
-      });
-      Meshable.currentpage = "login";
-      loginView.render();
-      $('#login').empty();
-      $('#login').append($(loginView.el));
-      return Meshable.changePage(loginView, false);
+        });
+      }
     });
   });
 

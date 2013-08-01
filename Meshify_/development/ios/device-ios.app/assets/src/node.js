@@ -22,12 +22,75 @@
         return this.template = "#template-" + node.model.attributes.nodetemplate;
       },
       tagName: 'li',
+      onRender: function() {
+        var datasend, select, selectedval, _i, _len, _ref, _results;
+
+        _ref = $(this.el).find("select");
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          select = _ref[_i];
+          datasend = $('option:selected', select).attr('data-send');
+          if (typeof datasend !== 'undefined') {
+            selectedval = this.model.get("channels")[$(select).attr("data-name")].value;
+            _results.push($(select).val($(select).find("[data-send=" + selectedval + "]").val()));
+          } else {
+            if ($(select).attr("data-name")) {
+              selectedval = this.model.get("channels")[$(select).attr("data-name")].value;
+              _results.push($(select).val($(select).find("[value=" + selectedval + "]").val()));
+            } else {
+              _results.push(void 0);
+            }
+          }
+        }
+        return _results;
+      },
       events: {
-        "click .setstatic": "setbutton"
+        "click .setstatic": "setbutton",
+        "slidestop .slider": "sliderSet",
+        "change .select_set": "selectSet"
+      },
+      selectSet: function(e) {
+        var channel, full_name, localobj, mistData, node_type, value;
+
+        $("body").addClass('ui-disabled');
+        $.mobile.showPageLoadingMsg("a", "Loading", false);
+        value = e.currentTarget.value;
+        node_type = $(e.currentTarget).data("nodetype");
+        channel = $(e.currentTarget).data("channel");
+        full_name = node_type + "." + channel;
+        mistData = new Array;
+        localobj = {
+          ChannelId: this.model.attributes.channels[full_name].ChannelId,
+          value: value,
+          techName: this.model.attributes.channels[full_name].techName,
+          name: full_name
+        };
+        mistData[0] = localobj;
+        return this.setChannel(mistData);
+      },
+      sliderSet: function(e) {
+        var channel, full_name, localobj, mistData, node_type, value;
+
+        $("body").addClass('ui-disabled');
+        $.mobile.showPageLoadingMsg("a", "Loading", false);
+        value = e.currentTarget.value;
+        node_type = $(e.currentTarget).data("nodetype");
+        channel = $(e.currentTarget).data("channel");
+        full_name = node_type + "." + channel;
+        mistData = new Array;
+        localobj = {
+          ChannelId: this.model.attributes.channels[full_name].ChannelId,
+          value: value,
+          techName: this.model.attributes.channels[full_name].techName,
+          name: full_name
+        };
+        mistData[0] = localobj;
+        return this.setChannel(mistData);
       },
       setbutton: function(e) {
         var channel, full_name, localobj, mistData, node_type, value;
 
+        $('#mainDiv').removeClass($.mobile.activeBtnClass);
         $("body").addClass('ui-disabled');
         $.mobile.showPageLoadingMsg("a", "Loading", false);
         value = $(e.currentTarget).data("setvalue");
@@ -50,7 +113,7 @@
 
         mac = new Array;
         mac[0] = this.model.attributes.macaddress;
-        return window.forge.ajax({
+        return forge.request.ajax({
           url: Meshable.rooturl + "/api/channel",
           data: JSON.stringify({
             macaddresses: [this.model.attributes.macaddress],
@@ -58,14 +121,21 @@
           }),
           dataType: "json",
           type: "POST",
+          timeout: 15000,
           contentType: 'application/json; charset=utf-8',
           error: function(e) {
             $("body").removeClass('ui-disabled');
-            return $.mobile.hidePageLoadingMsg();
+            $.mobile.hidePageLoadingMsg();
+            forge.notification.alert("Error", e.message);
+            return $(".ui-btn-active").removeClass('ui-btn-active');
           },
           success: function(data) {
+            if (data[0].erroronset !== null) {
+              forge.notification.alert("Error", data[0].erroronset);
+            }
             $("body").removeClass('ui-disabled');
-            return $.mobile.hidePageLoadingMsg();
+            $.mobile.hidePageLoadingMsg();
+            return $(".ui-btn-active").removeClass('ui-btn-active');
           }
         });
       }
@@ -84,7 +154,7 @@
 
       $("body").addClass('ui-disabled');
       $.mobile.showPageLoadingMsg("a", "Loading", false);
-      return window.forge.ajax({
+      return forge.request.ajax({
         url: Meshable.rooturl + "/api/gateway",
         data: {
           macaddress: mac,
@@ -92,8 +162,12 @@
         },
         dataType: "json",
         type: "GET",
+        timeout: 15000,
         error: function(e) {
-          return alert("An error occurred while getting node details... sorry!");
+          forge.notification.alert("Error", e.message);
+          $.mobile.hidePageLoadingMsg();
+          $("body").removeClass('ui-disabled');
+          return window.history.back();
         },
         success: function(data) {
           if (data.isAuthenticated === false) {
@@ -101,7 +175,7 @@
           } else if (data.length === 0) {
             $("body").removeClass('ui-disabled');
             $.mobile.hidePageLoadingMsg();
-            alert("No nodes at this location");
+            forge.notification.alert("No units at this location", "");
             return Backbone.history.navigate("gateways", {
               trigger: false,
               replace: true
@@ -116,8 +190,9 @@
       return displayResults(model);
     });
     return displayResults = function(data) {
-      var nodeCoView, nodeCollection, tempNode;
+      var nodeCoView, nodeCollection, problem, tempNode, _i, _len, _ref;
 
+      data[0].userRole = Meshable.userRole;
       nodeCollection = new nodes;
       tempNode = new node;
       nodeCollection.add(tempNode.parse(data));
@@ -129,10 +204,18 @@
       $('#mainDiv').empty();
       $('#mainDiv').append($(nodeCoView.el));
       $("#mainDiv").trigger('create');
+      if (data[0].problems.length > 0) {
+        _ref = data[0].problems;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          problem = _ref[_i];
+          if (problem.level === "RED") {
+            $("#results_insert").prepend("<li style='background-color: lightcoral;'>" + problem.message + "</li>");
+          }
+          $("#mainDiv").trigger('create');
+        }
+      }
       $.mobile.hidePageLoadingMsg();
-      $("body").removeClass('ui-disabled');
-      $("#mainPage a").removeClass('ui-btn-active');
-      return $("#nodesbtnn").addClass('ui-btn-active');
+      return $("body").removeClass('ui-disabled');
     };
   });
 

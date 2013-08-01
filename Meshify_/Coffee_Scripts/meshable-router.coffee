@@ -6,10 +6,9 @@ define ['jquery','jqm', 'backbone','underscore','marionette', 'Meshable', 'Event
 	
 	
 	Routing = Backbone.Router.extend
-	
-	
+		
 		routes:
-			"unit/:mac/:first/:last": "unitsM"
+			"unit/:mac/:first/:last/:phone1/:city/:state/:street1/:zip": "unitsM"
 			"units": "units"
 			"gateway/:mac": "gateway"
 			"gateway/:mac/:id": "nodeDetails"
@@ -20,13 +19,13 @@ define ['jquery','jqm', 'backbone','underscore','marionette', 'Meshable', 'Event
 			"popupPanel": "popupPanel"
 			"menu_back_btn": "menu_back_btn"
 			"search": "search"
-			"searching/:id": "searchterm"
+			"searching/:id/:resultType": "searchterm"
 			"gateways": "gateways"
 			"page1": "page1"
 			"ref-page": "refPage"
 			"logout": "logout"
 			
-		unitsM: (mac, first, last) ->
+		unitsM: (mac, first, last, phone1, city, state, street1, zip) ->	
 			obj = new Object
 			obj.list = []
 			listObj = new Object
@@ -35,19 +34,36 @@ define ['jquery','jqm', 'backbone','underscore','marionette', 'Meshable', 'Event
 			listObj.gateway.macaddress = mac
 			listObj.person.first = first
 			listObj.person.last = last
+			listObj.person.phone1 = phone1
+			listObj.address = new Object
+			listObj.address.city = city
+			listObj.address.state = state
+			listObj.address.street1 = street1
+			listObj.address.zip = zip
 			obj.list.push(listObj)
 			Meshable.vent.trigger "goto:units", false, obj
 			
 		units: ->
+			$("body").addClass('ui-disabled')
+			$.mobile.showPageLoadingMsg("a", "Loading", false)
 			Meshable.vent.trigger "goto:units", false, ""
 			
 		nodeDetails: (mac, id) ->
+			if not forge.is.connection.connected()
+				forge.notification.alert("Failed to Load", "No Internet Connection")
+				window.history.back()
+				$("body").removeClass('ui-disabled')
+				$.mobile.hidePageLoadingMsg()
+				return
+			
+			Meshable.backplace = "#" + mac
 			Meshable.vent.trigger "goto:nodeRefresh", mac, id
+
 			
 		logout: ->
 			$("body").addClass('ui-disabled') 
 			$.mobile.showPageLoadingMsg("a", "Loading", false)
-			$.mobile.showPageLoadingMsg("a", "Loading", false)
+
 			
 			forge.request.ajax
 				url: Meshable.rooturl + "/api/authentication?logmeoff=true"
@@ -56,12 +72,16 @@ define ['jquery','jqm', 'backbone','underscore','marionette', 'Meshable', 'Event
 				error: (e) ->
 					$("body").removeClass('ui-disabled')
 					$.mobile.hidePageLoadingMsg()
+					Meshable.current_units = ""
+					Meshable.current_gateways = ""
+					Meshable.current_searchTerm = ""
 					Meshable.vent.trigger "goto:login" 
-					alert "error logging out"
+					$('#mainDiv').empty()
 				success: (data) ->
 					
 					Meshable.current_units = ""
 					Meshable.current_gateways = ""
+					Meshable.current_searchTerm = ""
 					$.mobile.hidePageLoadingMsg()
 					$("body").removeClass('ui-disabled')
 					Meshable.vent.trigger "goto:login"
@@ -76,11 +96,25 @@ define ['jquery','jqm', 'backbone','underscore','marionette', 'Meshable', 'Event
 			Meshable.vent.trigger "goto:nodes", macaddress
 				
 		gateways: ->
-			Meshable.vent.trigger "goto:gateways", false, ""	
+			$("body").addClass('ui-disabled')
+			$.mobile.showPageLoadingMsg("a", "Loading", false)
+			Meshable.vent.trigger "showmap"
 		
-		#searchterm: (searchField) -> 
-		#	$.mobile.showPageLoadingMsg()
-		#	Meshable.vent.trigger "search:gateways", searchField		
+		searchterm: (searchField, resultType) ->
+			
+			if searchField == "_"
+				searchField = ""
+			Meshable.current_searchTerm = searchField
+			Meshable.currentMap = null
+			Meshable.current_index = 0
+			Meshable.current_gateways = ""
+			Meshable.refreshUnits = true
+			if resultType == "List"
+				Meshable.vent.trigger "goto:units", true, "" 
+				Meshable.router.navigate "units", trigger : false, replace: true
+			else
+				$.mobile.showPageLoadingMsg("a", "Loading", false)
+				Meshable.vent.trigger "showmap"		
 		
 		search: ->
 			Meshable.vent.trigger "goto:search"

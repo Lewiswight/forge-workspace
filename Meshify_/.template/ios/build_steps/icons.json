@@ -1,0 +1,39 @@
+[
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.icons.config.ios.57}}",
+				"dest": "normal.png"
+			}
+		}
+	},
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.icons.config.ios.72}}",
+				"dest": "ipad.png"
+			}
+		}
+	},
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.icons.config.ios.114}}",
+				"dest": "retina.png"
+			}
+		}
+	},
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.icons.config.ios.144}}",
+				"dest": "ipad-retina.png"
+			}
+		}
+	},
+	{
+		"do": {
+			"icons_handle_prerendered": {}
+		}
+	}
+]

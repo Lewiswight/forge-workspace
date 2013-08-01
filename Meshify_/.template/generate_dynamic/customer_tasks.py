@@ -8,35 +8,155 @@ import shutil
 import sys
 import uuid
 import json
+from copy import copy
 
 import android_tasks
 from build import ConfigurationError
 import firefox_tasks
-import lib
-from lib import task, walk_with_depth, read_file_as_str, cd
+from module_dynamic import lib
+from module_dynamic.lib import walk_with_depth, read_file_as_str, cd
+from lib import task
 import ios_tasks
 import safari_tasks
 import ie_tasks
-import utils
+import osx_tasks
+from module_dynamic import utils
 import hashlib
+import pystache
+from module_dynamic import build_steps_local
 
 from xml.etree import ElementTree
 # Any namespaces must be registered or the parser will rename them
 ElementTree.register_namespace('android', 'http://schemas.android.com/apk/res/android')
 ElementTree.register_namespace('tools', 'http://schemas.android.com/tools')
-	
+
+"""@task
+def migrate_to_v2(build):
+	config = build.config
+	if config['config_version'] == "4":
+		return config
+
+	build.log.debug("Migrating config.json from version %s to version 4" % config['config_version'])
+
+	new_config = {
+		# Required config
+		"uuid": config["uuid"],
+		"config_version": "4",
+		"name": config["name"],
+		"author": config["author"],
+		"platform_version": config["platform_version"],
+		"version": config["version"],
+		# TODO: Do something with existing plugins?
+		#"plugins": config.get("plugins", {}),
+		"modules": {},
+		"core": config.get("requirements", {}),
+		"config_hash": config.get("config_hash", "CONFIG_HASH_HERE"),
+		# TODO: Should this be here?
+		#"logging": config["modules"].get("logging", {}),
+	}
+
+	if "general" not in new_config["core"]:
+		new_config["core"]["general"] = {}
+	if "reload" not in new_config["core"]["general"]:
+		new_config["core"]["general"]["reload"] = False
+	if "trusted_urls" not in new_config["core"]["general"] and "trusted_urls" in config:
+		new_config["core"]["general"]["trusted_urls"] = config["trusted_urls"]
+
+	if "description" in config:
+		new_config["description"] = config["description"]
+	if "homepage" in config:
+		new_config["homepage"] = config["homepage"]
+
+	if "partners" in config and "parse" in config["partners"]:
+		new_config["modules"]["parse"] = {
+			"version": "1.0",
+			"config": config["partners"]["parse"]
+		}
+
+	for module in config["modules"]:
+		# previously setting a module config to false would just enable it with no configuration
+		# preserve backwards compatibility
+		if config["modules"][module] is False:
+			config["modules"][module] = True
+
+		if module == "parameters":
+			# Move paramter settings to old location for compatibility
+			new_config["modules"][module] = config["modules"][module]
+			continue
+
+		if module == "requirements":
+			# These modules are now core and configured under top level core
+			for platform in config["modules"][module]:
+				if platform not in new_config["core"]:
+					new_config["core"][platform] = {}
+				for setting in config["modules"][module][platform]:
+					new_config["core"][platform][setting] = config["modules"][module][platform][setting]
+			continue
+
+		if module == "package_names":
+			for platform in config["modules"]["package_names"]:
+				if platform not in new_config["core"]:
+					new_config["core"][platform] = {}
+				new_config["core"][platform]["package_name"] = config["modules"]["package_names"][platform]
+			continue
+
+		if module == "reload":
+			new_config["core"]["general"]["reload"] = True
+			continue
+
+		if module == "logging":
+			new_config["core"]["general"]["logging"] = config["modules"][module]
+			continue
+
+		if module in ["is", "event", "internal", "message", "tools"]:
+			# These are now core, ignore them
+			continue
+
+		new_config["modules"][module] = {
+			"version": "1.0"
+		}
+		if config["modules"][module] is True:
+			continue
+
+		if module == "activations":
+			new_config["modules"]["activations"]["config"] = {
+				"activations": config["modules"]["activations"]
+			}
+			continue
+
+		new_config["modules"][module]["config"] = config["modules"][module]
+
+	build.config = new_config
+
+	if os.path.isfile(os.path.abspath(os.path.join(os.path.split(__file__)[0], '..', '..', 'configuration', 'schema_for_v2.json'))):
+		import validictory
+		with open(os.path.abspath(os.path.join(os.path.split(__file__)[0], '..', '..', 'configuration', 'schema_for_v2.json'))) as schema_file:
+			validictory.validate(build.config, json.load(schema_file))
+"""
+
 @task
-def add_element_to_xml(build, file, tag, attrib={}, text="", to=None, unless=None):
+def add_element_to_xml(build, file, element, to=None, unless=None):
 	'''add new element to an XML file
 
-	:param build: the current build.Build
 	:param file: filename or file object
-	:param tag: name of the new element's tag
-	:param text: content of the new element
-	:param attrib: dictionary containing the new element's attributes
+	:param element: dict containing tag and optionally attributes, text and children
 	:param to: sub element tag name or path we will append to
 	:param unless: don't add anything if this tag name or path already exists
 	'''
+	def create_element(tag, attributes={}, text=None, children=[]):
+		for attribute in attributes:
+			if isinstance(attributes[attribute], str) or isinstance(attributes[attribute], unicode):
+				attributes[attribute] = pystache.render(attributes[attribute], build.config)
+		element = ElementTree.Element(tag, attributes)
+		if text is not None:
+			if isinstance(text, str) or isinstance(text, unicode):
+				text = pystache.render(text, build.config)
+			element.text = text
+		for child in children:
+			element.append(create_element(**child))
+
+		return element
+
 	xml = ElementTree.ElementTree()
 	xml.parse(file)
 	if to is None:
@@ -44,9 +164,8 @@ def add_element_to_xml(build, file, tag, attrib={}, text="", to=None, unless=Non
 	else:
 		el = xml.find(to, dict((v,k) for k,v in ElementTree._namespace_map.items()))
 	if not unless or xml.find(unless, dict((v,k) for k,v in ElementTree._namespace_map.items())) is None:
-		new_el = ElementTree.Element(tag, attrib)
-		new_el.text = text
-		el.insert(0, new_el)
+		new_el = create_element(**element)
+		el.append(new_el)
 		xml.write(file)
 
 @task
@@ -213,6 +332,19 @@ def find_and_replace(build, *files, **kwargs):
 			_replace_in_file(build, _file, find, replace)
 
 @task
+def write_config(build, filename, content):
+	# We hang various things we shouldn't off config, this is pretty horrible
+	clean_config = copy(build.config)
+	if 'json' in clean_config:
+		clean_config.pop('json')
+	if 'android_sdk_dir' in clean_config:
+		clean_config.pop('android_sdk_dir')
+	content = utils.render_string({'config': json.dumps(clean_config, indent=4, sort_keys=True)}, content)
+
+	with open(filename, 'w') as fileobj:
+		fileobj.write(content)
+
+@task
 def find_and_replace_in_dir(build, root_dir, find, replace, file_suffixes=("html",), template=False, **kw):
 	'For all files ending with one of the suffixes, under the root_dir, replace ``find`` with ``replace``'
 	if template:
@@ -234,7 +366,7 @@ def find_and_replace_in_dir(build, root_dir, find, replace, file_suffixes=("html
 					_replace_in_file(build, path.join(root, file_), find_with_fixed_path, replace_with_fixed_path)
 
 def _replace_in_file(build, filename, find, replace):
-	build.log.debug("replacing {find} with {replace} in {filename}".format(**locals()))
+	build.log.debug(u"replacing {find} with {replace} in {filename}".format(**locals()))
 	
 	tmp_file = uuid.uuid4().hex
 	in_file_contents = read_file_as_str(filename)
@@ -279,7 +411,7 @@ def set_in_biplist(build, filename, key, value):
 	if isinstance(value, str):
 		value = utils.render_string(build.config, value)
 	
-	build.log.debug("setting {key} to {value} in {files}".format(
+	build.log.debug(u"setting {key} to {value} in {files}".format(
 		key=key, value=value, files=filename
 	))
 	
@@ -293,7 +425,7 @@ def set_in_biplist(build, filename, key, value):
 
 @task
 def set_in_info_plist(build, key, value):
-	set_in_biplist(build, "ios/ForgeTemplate/ForgeTemplate/ForgeTemplate-Info.plist", key, value)
+	set_in_biplist(build, "ios/app/ForgeInspector/ForgeInspector-Info.plist", key, value)
 
 @task
 def set_in_json(build, filename, key, value):
@@ -315,6 +447,23 @@ def set_in_json(build, filename, key, value):
 			file_json[key] = value
 		with open(found_file, "w") as opened_file:
 			json.dump(file_json, opened_file, indent=2, sort_keys=True)
+
+@task
+def set_in_config(build, key, value):
+	if isinstance(value, str):
+		value = utils.render_string(build.config, value)
+
+	build.log.debug("Setting {key} to {value} in app_config.json".format(key=key, value=value))
+
+	key = key.split(".")
+	last = key.pop()
+	at = build.config
+	for part in key:
+		if not part in at or not isinstance(at[part], dict):
+			at[part] = {}
+		at = at[part]
+
+	at[last] = value
 
 @task
 def add_to_json_array(build, filename, key, value):
@@ -357,8 +506,10 @@ def wrap_activations(build, location):
 	'''Wrap user activation code to prevent running in frames if required
 	
 	'''
-	if "activations" in build.config['modules']:
-		for activation in build.config['modules']['activations']:
+	if "activations" in build.config['modules'] and \
+	   "config" in build.config['modules']['activations'] and \
+	   "activations" in build.config['modules']['activations']['config']:
+		for activation in build.config['modules']['activations']['config']['activations']:
 			if not 'all_frames' in activation or activation['all_frames'] is False:
 				for script in activation['scripts']:
 					tmp_file = uuid.uuid4().hex
@@ -378,27 +529,19 @@ def populate_icons(build, platform, icon_list):
 	platform is a string platform, eg. "android"
 	icon_list is a list of string dimensions, eg. [36, 48, 72]
 	'''
-	if 'icons' in build.config["modules"]:
-		if not platform in build.config["modules"]['icons']:
-			build.config["modules"]['icons'][platform] = {}
+	if "icons" in build.config["modules"] and "config" in build.config["modules"]["icons"]:
+		if not platform in build.config["modules"]["icons"]["config"]:
+			build.config["modules"]["icons"]["config"][platform] = {}
 		for icon in icon_list:
 			str_icon = str(icon)
-			if not str_icon in build.config["modules"]['icons'][platform]:
+			if not str_icon in build.config["modules"]["icons"]["config"][platform]:
 				try:
-					build.config["modules"]['icons'][platform][str_icon] = \
-						build.config["modules"]['icons'][str_icon]
+					build.config["modules"]["icons"]["config"][platform][str_icon] = \
+						build.config["modules"]["icons"]["config"][str_icon]
 				except KeyError:
 					build.log.warning('missing icon "%s" for platform "%s"' % (str_icon, platform))
 	else:
 		pass #no icons is valid, though it should have been caught priorly.
-
-@task
-def populate_xml_safe_name(build):
-	build.config['xml_safe_name'] = build.config["name"].replace('"', '\\"').replace("'", "\\'")
-
-@task
-def populate_json_safe_name(build):
-	build.config['json_safe_name'] = build.config["name"].replace('"', '\\"')
 
 @task
 def run_hook(build, **kw):
@@ -447,20 +590,38 @@ def remove_files(build, *removes):
 
 @task
 def populate_package_names(build):
-	build.config['package_name'] = re.sub("[^a-zA-Z0-9]", "", build.config["name"].lower()) + build.config["uuid"]
-	if "package_names" not in build.config["modules"]:
-		build.config["modules"]["package_names"] = {}
-	build.config["modules"]["package_names"]["android"] = android_tasks._generate_package_name(build)
-	build.config["modules"]["package_names"]["firefox"] = firefox_tasks._generate_package_name(build)
-	build.config["modules"]["package_names"]["safari"] = safari_tasks._generate_package_name(build)
-	build.config["modules"]["package_names"]["ios"] = ios_tasks._generate_package_name(build)
-	build.config["modules"]["package_names"]["ie"] = ie_tasks._generate_package_name(build)
+	if "core" not in build.config:
+		build.config["core"] = {}
+	if "android" not in build.config["core"]:
+		build.config["core"]["android"] = {}
+	build.config["core"]["android"]["package_name"] = android_tasks._generate_package_name(build)
+	if "firefox" not in build.config["core"]:
+		build.config["core"]["firefox"] = {}
+	build.config["core"]["firefox"]["package_name"] = firefox_tasks._generate_package_name(build)
+	if "safari" not in build.config["core"]:
+		build.config["core"]["safari"] = {}
+	build.config["core"]["safari"]["package_name"] = safari_tasks._generate_package_name(build)
+	if "ios" not in build.config["core"]:
+		build.config["core"]["ios"] = {}
+	build.config["core"]["ios"]["package_name"] = ios_tasks._generate_package_name(build)
+	if "osx" not in build.config["core"]:
+		build.config["core"]["osx"] = {}
+	build.config["core"]["osx"]["package_name"] = osx_tasks._generate_package_name(build)
+	if "ie" not in build.config["core"]:
+		build.config["core"]["ie"] = {}
+	build.config["core"]["ie"]["package_name"] = ie_tasks._generate_package_name(build)
 
-@task	
+@task
 def populate_trigger_domain(build):
-	from forge import build_config
-	config = build_config.load()
-	build.config['trigger_domain'] = config['main']['server'][:-5]
+	try:
+		from forge import build_config
+		config = build_config.load()
+		build.config['trigger_domain'] = config['main']['server'][:-5]
+	except ImportError:
+		build.config['trigger_domain'] = "TRIGGER_DOMAIN_HERE"
+
+	if not "config_hash" in build.config:
+		build.config['config_hash'] = "CONFIG_HASH_HERE"
 
 @task
 def make_dir(build, dir):
@@ -475,7 +636,7 @@ def generate_sha1_manifest(build, input_folder, output_file):
 				filename = os.path.join(root, filename)
 				with open(filename, 'rb') as file:
 					hash = hashlib.sha1(file.read()).hexdigest()
-					manifest[hash]  = filename[len(input_folder)+1:].replace('\\','/')
+					manifest[hash] = filename[len(input_folder)+1:].replace('\\','/')
 		json.dump(manifest, out)
 
 @task
@@ -489,3 +650,23 @@ def check_index_html(build, src='src'):
 
 		if index_html.find("<head>") == -1:
 			raise Exception("index.html does not contain '<head>', this is required to add the Forge javascript library.")
+
+@task
+def run_module_build_steps(build, steps_path, src_path, project_path):
+	if os.path.isdir(steps_path):
+		modules = os.listdir(steps_path)
+		for module in modules:
+			build.log.debug("Running local build steps for: %s" % module)
+			with open(os.path.join(steps_path, module), 'r') as module_steps_file:
+				module_steps = json.load(module_steps_file)
+				for step in module_steps:
+					if "do" in step:
+						for task in step['do']:
+							task_func = getattr(build_steps_local, task, None)
+							if task_func is not None:
+								# XXX: only supports dict of args, could be better?
+								build_params = {}
+								build_params['app_config'] = build.config
+								build_params['project_path'] = project_path
+								build_params['src_path'] = src_path
+								task_func(build_params, **step["do"][task])

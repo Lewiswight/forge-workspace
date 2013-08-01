@@ -63,6 +63,7 @@ require.config({
     paths: {
         
     	"jquery": "vendor/jquery",
+    	"async": "vendor/async",
     	'jqmglobe': 'js/jqm.globals',
     	"jqm": "vendor/jquery.mobile-1.3.1",
     	'backbone': "vendor/backbone",

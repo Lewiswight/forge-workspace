@@ -1,0 +1,63 @@
+{
+	"author": "lewis@meshify.com",
+	"config_version": "2",
+	"description": "An empty app created by default",
+	"modules": {
+		"contact": true,
+		"file": true,
+		"icons": {
+			"android": {
+				"36": "img/img_Meshify/Icon (36x36).png",
+				"48": "img/img_Meshify/Icon (48x48).png",
+				"72": "img/img_Meshify/Icon (72x72).png"
+			},
+			"ios": {
+				"57": "img/mistaway/mistaway-57_x_57.png",
+				"72": "img/mistaway/mistaway-72_x_72.png",
+				"114": "img/mistaway/mistaway-114_x_114.png",
+				"144": "img/mistaway/mistaway-144_x_144.png",
+				"512": "img/mistaway/mistaway-512_x_512.png"
+			}
+		},
+		"is": true,
+		"launchimage": {
+			"android": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
+			"android-landscape": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
+			"ipad": "img/img_Meshify/Icon (512x512).png",
+			"ipad-landscape": "img/mistaway/mistaway-512_x_512.png",
+			"ipad-landscape-retina": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
+			"ipad-retina": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
+			"iphone": "img/mistaway/mistaway-512_x_512.png",
+			"iphone-retina": "img/mistaway/mistaway-512_x_512.png",
+			"iphone-retina4": "img/mistaway/mistaway-512_x_512.png"
+		},
+		"prefs": true,
+		"request": {
+			"permissions": [
+				"http://devbuildinglynx.apphb.com/api/authentication",
+				"http://devbuildinglynx.apphb.com/api/username",
+				"http://devbuildinglynx.apphb.com/api/*"
+			]
+		},
+		"display": {
+			"orientations": {
+				"iphone": "portrait",
+				"ipad": "portrait",
+				"android": "portrait"
+			}
+		},
+		"activations": [
+			{
+				"patterns": [],
+				"scripts": [],
+				"styles": [],
+				"run_at": "start"
+			}
+		],
+		"notification": true,
+		"tabbar": true
+	},
+	"name": "iMistaway",
+	"platform_version": "v2.0.0",
+	"version": "0.2"
+}

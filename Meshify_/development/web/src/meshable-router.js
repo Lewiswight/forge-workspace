@@ -5,7 +5,7 @@
 
     Routing = Backbone.Router.extend({
       routes: {
-        "unit/:mac/:first/:last": "unitsM",
+        "unit/:mac/:first/:last/:phone1/:city/:state/:street1/:zip": "unitsM",
         "units": "units",
         "gateway/:mac": "gateway",
         "gateway/:mac/:id": "nodeDetails",
@@ -16,13 +16,13 @@
         "popupPanel": "popupPanel",
         "menu_back_btn": "menu_back_btn",
         "search": "search",
-        "searching/:id": "searchterm",
+        "searching/:id/:units": "searchterm",
         "gateways": "gateways",
         "page1": "page1",
         "ref-page": "refPage",
         "logout": "logout"
       },
-      unitsM: function(mac, first, last) {
+      unitsM: function(mac, first, last, phone1, city, state, street1, zip) {
         var listObj, obj;
 
         obj = new Object;
@@ -33,32 +33,51 @@
         listObj.gateway.macaddress = mac;
         listObj.person.first = first;
         listObj.person.last = last;
+        listObj.person.phone1 = phone1;
+        listObj.address = new Object;
+        listObj.address.city = city;
+        listObj.address.state = state;
+        listObj.address.street1 = street1;
+        listObj.address.zip = zip;
         obj.list.push(listObj);
         return Meshable.vent.trigger("goto:units", false, obj);
       },
       units: function() {
+        $("body").addClass('ui-disabled');
+        $.mobile.showPageLoadingMsg("a", "Loading", false);
         return Meshable.vent.trigger("goto:units", false, "");
       },
       nodeDetails: function(mac, id) {
+        if (!forge.is.connection.connected()) {
+          forge.notification.alert("Failed to Load", "No Internet Connection");
+          window.history.back();
+          $("body").removeClass('ui-disabled');
+          $.mobile.hidePageLoadingMsg();
+          return;
+        }
+        Meshable.backplace = "#" + mac;
         return Meshable.vent.trigger("goto:nodeRefresh", mac, id);
       },
       logout: function() {
         $("body").addClass('ui-disabled');
         $.mobile.showPageLoadingMsg("a", "Loading", false);
-        $.mobile.showPageLoadingMsg("a", "Loading", false);
-        return window.forge.ajax({
+        return forge.request.ajax({
           url: Meshable.rooturl + "/api/authentication?logmeoff=true",
           dataType: "json",
           type: "GET",
           error: function(e) {
             $("body").removeClass('ui-disabled');
             $.mobile.hidePageLoadingMsg();
+            Meshable.current_units = "";
+            Meshable.current_gateways = "";
+            Meshable.current_searchTerm = "";
             Meshable.vent.trigger("goto:login");
-            return alert("error logging out");
+            return $('#mainDiv').empty();
           },
           success: function(data) {
             Meshable.current_units = "";
             Meshable.current_gateways = "";
+            Meshable.current_searchTerm = "";
             $.mobile.hidePageLoadingMsg();
             $("body").removeClass('ui-disabled');
             Meshable.vent.trigger("goto:login");
@@ -78,7 +97,28 @@
         return Meshable.vent.trigger("goto:nodes", macaddress);
       },
       gateways: function() {
-        return Meshable.vent.trigger("goto:gateways", false, "");
+        $("body").addClass('ui-disabled');
+        $.mobile.showPageLoadingMsg("a", "Loading", false);
+        return Meshable.vent.trigger("showmap");
+      },
+      searchterm: function(searchField, units) {
+        if (searchField === "_") {
+          searchField = "";
+        }
+        Meshable.current_searchTerm = searchField;
+        Meshable.current_index = 0;
+        Meshable.current_gateways = "";
+        Meshable.refreshUnits = true;
+        if (units === "true") {
+          Meshable.vent.trigger("goto:units", true, "");
+          return Meshable.router.navigate("units", {
+            trigger: false,
+            replace: true
+          });
+        } else {
+          $.mobile.showPageLoadingMsg("a", "Loading", false);
+          return Meshable.vent.trigger("goto:gateways", true, searchField);
+        }
       },
       search: function() {
         return Meshable.vent.trigger("goto:search");

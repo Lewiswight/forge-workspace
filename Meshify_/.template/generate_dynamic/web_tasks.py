@@ -15,10 +15,11 @@ from urlparse import urljoin
 
 import requests
 
-import lib
-from lib import cd, task
-import utils
-from utils import run_shell, ShellError
+from module_dynamic import lib
+from module_dynamic.lib import cd
+from lib import task
+from module_dynamic import utils
+from module_dynamic.utils import run_shell, ShellError
 
 
 LOG = logging.getLogger(__name__)
@@ -324,8 +325,6 @@ def _get_app_to_push_to(build, api_key):
 
 	# either create a new heroku app, or choose an already existing app
 	if create_new_heroku_app:
-		# TODO: allow user to specify app name?
-		# have to deal with name already taken
 		LOG.info('Creating new heroku application')
 		response = _heroku_post(api_key, 'apps', data='app[stack]=cedar')
 		chosen_app = json.loads(response.content)['name']
@@ -334,11 +333,9 @@ def _get_app_to_push_to(build, api_key):
 		chosen_n = lib.ask_multichoice(question_text='Choose an existing heroku app to deploy to:', choices=app_names, radio=False)
 		chosen_app = app_names[chosen_n - 1]
 
-	lib.set_dotted_attribute(
-		build,
-		'web.profiles.%s.heroku_app_name' % build.tool_config.profile(),
-		chosen_app
-	)
+	lib.set_dotted_attributes(build, {
+		'web.profile.heroku_app_name': chosen_app
+	})
 	return chosen_app
 
 
@@ -356,13 +353,10 @@ def _get_heroku_api_key(build):
 		api_key = _heroku_get_api_key(heroku_username, heroku_password)
 
 		if api_key is not None:
-			lib.set_dotted_attribute(
-				build,
-				'web.profiles.%s.heroku_api_key' % build.tool_config.profile(),
-				api_key
-			)
+			lib.set_dotted_attributes(build, {
+				'web.profile.heroku_api_key': api_key
+			})
 
-	# TODO: may want to check the api key is actually valid by hitting the api?
 	return api_key
 
 

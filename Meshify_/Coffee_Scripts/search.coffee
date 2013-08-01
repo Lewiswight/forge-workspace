@@ -59,15 +59,20 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 
 			
 		update: ->
+			if not forge.is.connection.connected()
+				forge.notification.alert("Failed to Load", "No Internet Connection")
+				$("body").removeClass('ui-disabled')
+				$.mobile.hidePageLoadingMsg()
+				return
+			
+			includeUnits =  $('#include-units').prop("checked")
+			resultType = $('#flip-3').val()
 			searchField = $('#search-main').val()
-			if searchField.length < 1
-				alert "Please Enter Text"
-			else
-				href = "#searching/" + searchField
-				window.location = href
-				#route = "searching/" + searchField
-				#Backbone.history.navigate route, trigger : true , replace: false, pushState: false
-				#Meshable.vent.trigger "search:gateways", searchField
+			if searchField == ""
+				searchField = "_"
+			route = "#searching/" + searchField + "/" + resultType
+			Backbone.history.navigate route, trigger : true , replace: false, pushState: false
+
 		
 		
 			
@@ -107,8 +112,9 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		$("#mainDiv").trigger('create')
 		#$("#body").trigger("create")
 		#Meshable.changePage search, false
-		$("#mainPage a").removeClass('ui-btn-active')
-		$("#searchbtnn").addClass('ui-btn-active')
+		
+		$.mobile.hidePageLoadingMsg()
+		$("body").removeClass('ui-disabled')
 		
 		
 	

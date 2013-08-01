@@ -53,7 +53,7 @@
         dataType: "json",
         type: "GET",
         error: function(e) {
-          return alert("An error occurred while getting node details... sorry!");
+          return forge.notification.alert("Error", e.message);
         },
         success: function(data) {
           if (data.isAuthenticated === false) {
@@ -61,7 +61,7 @@
           } else if (data.length === 0) {
             $("body").removeClass('ui-disabled');
             $.mobile.hidePageLoadingMsg();
-            alert("No nodes at this location");
+            forge.notification.alert("No units at this location", "");
             return Backbone.history.navigate("gateways", {
               trigger: false,
               replace: true
@@ -103,9 +103,7 @@
       $('#mainDiv').append($(nodeCoView.el));
       $("#mainDiv").trigger('create');
       $("body").removeClass('ui-disabled');
-      $.mobile.hidePageLoadingMsg();
-      $("#mainPage a").removeClass('ui-btn-active');
-      return $("#nodesbtnn").addClass('ui-btn-active');
+      return $.mobile.hidePageLoadingMsg();
     };
   });
 

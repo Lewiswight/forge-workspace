@@ -1,0 +1,26 @@
+[
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.icons.config.android.36}}",
+				"dest": "res/drawable-ldpi/icon.png"
+			}
+		}
+	},
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.icons.config.android.48}}",
+				"dest": "res/drawable-mdpi/icon.png"
+			}
+		}
+	},
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.icons.config.android.72}}",
+				"dest": "res/drawable-hdpi/icon.png"
+			}
+		}
+	}
+]

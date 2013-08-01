@@ -1,204 +1,199 @@
-define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Events'], ($, jqm, Backbone, _, Marionette, Meshable, Events) ->									 
+define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Events', 'async!http://maps.google.com/maps/api/js?sensor=true'], ($, jqm, Backbone, _, Marionette, Meshable, Events ) ->									 
 	
-	make_collection = ->
-		
-		
-		forge.request.ajax
-			url: Meshable.rooturl + "/api/dashboard"
-			dataType: "json"
-			type: "GET"
-			error: (e) -> 
-				alert e.content
-			success: (data) ->
-				
-				
-				
-				nodeCollection = new dashboards
-				for model in data
-					cModel = new dashboard
-					nodeCollection.add cModel.parse(model)
-				
-				return nodeCollection
-				
-				
-				
-		
-		###models = JSON.parse """[{"address":"123 Main Ave","channelname":"energy cost","post":"","pre":"$","status":"The status","trafficlight":"green","value":"1232"},{"address":"123 Main Ave","channelname":"energy cost","post":"","pre":"$","status":"The status","trafficlight":"green","value":"1232"},{"address":"123 Main Ave","channelname":"energy cost","post":"","pre":"$","status":"The status","trafficlight":"green","value":"1232"},{"address":"123 Main Ave","channelname":"energy cost","post":"","pre":"$","status":"The status","trafficlight":"green","value":"1232"},{"address":"123 Main Ave","channelname":"energy cost","post":"","pre":"$","status":"The status","trafficlight":"green","value":"1232"},{"address":"123 Main Ave","channelname":"energy cost","post":"","pre":"$","status":"The status","trafficlight":"green","value":"1232"},{"address":"123 Main Ave","channelname":"energy cost","post":"","pre":"$","status":"The status","trafficlight":"green","value":"1232"},{"address":"123 Main Ave","channelname":"energy cost","post":"","pre":"$","status":"The status","trafficlight":"green","value":"1232"},{"address":"123 Main Ave","channelname":"energy cost","post":"","pre":"$","status":"The status","trafficlight":"green","value":"1232"},{"address":"123 Main Ave","channelname":"energy cost","post":"","pre":"$","status":"The status","trafficlight":"green","value":"1232"}]"""
-		
-		nodeCollection = new dashboards
-		
-		for model in models
-			cModel = new dashboard
-			nodeCollection.add cModel.parse(model)
-		
-		return nodeCollection###
-	
-	gateway = Backbone.Model.extend 
-		initialize: -> 
-				@set
-					trafficlight: "green"		
-			defaults: 				 				
-				trafficlight: "green" 			
-				
-		
-	gateways = Backbone.Collection.extend
-		model: gateway	
-	#	url: ->
-	#		Meshable.rooturl + "/api/dashboard"
-	#	initialize: (dashboards) ->
-	#		@fetch()
-
-
-	gatewayView = Backbone.Marionette.ItemView.extend
-		initialize: (gateway) ->
-			
-			@bindTo @model, "change", @render
-			
-			
-		template: '#gatewayitem-template'
-		tagName: 'li'
-		className: "list_item"
-		id: "gatewayItm"
-		
-
-		
-		
+	Meshable.vent.on "showmap", ->
+		if Meshable.currentMap is null
+			Meshable.locationButton.setActive()
+			bindmap = (center) ->
+				Meshable.vent.trigger 'maps:bind', 
+					mapContainerId: 'mapwrapper'
+					mapOpts: 
+						center: center
+						zoom: 12
+						mapTypeId: google.maps.MapTypeId.ROADMAP 
+					#onMapBound: (mapview) ->
+					#	console.log('on onMapBound callback')
+					#	mainlocationlayoutglobal.listmapRegion.show mapview
+					#	console.log('after onMapBound callback')
+					onMapRendered: () ->
+						console.log('on onMapRendered callback')
+						forge.request.ajax
+							url: Meshable.rooturl + '/api/locations?term=' + Meshable.current_searchTerm 
+							type: "GET"
+							dataType: "json"
+							timeout: "10000"
+							contentType: 'application/json; charset=utf-8'
+							error: (e) -> 
+								$("body").removeClass('ui-disabled')
+								$.mobile.hidePageLoadingMsg()
+								forge.notification.alert("Error", e.message) 
+								Meshable.router.navigate "", trigger : true
+							success: (data) ->
+								Meshable.vent.trigger('maps:addmarkers', { items: data })
+								
+					
 			
 			 
+			forge.geolocation.getCurrentPosition(
+				"enableHighAccuracy": true 
+			,  (position) ->
+				#alert position.coords.latitude
+				#alert position.coords.longitude
+				#alert position.timestamp
+				center = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+				bindmap(center)
+				
+			,  (e) ->
+				center = new google.maps.LatLng(29.7631, -95.3631)
+				bindmap(center)
+					 
+			)
+		else
+			$('#mainDiv').empty()
+			$('#mainDiv').append(Meshable.currentMap)
+			$("mainDiv").trigger('create')
+			$.mobile.hidePageLoadingMsg()
+			$("body").removeClass('ui-disabled')
+			console.log('maps bound')
+			google.maps.event.trigger(map, 'resize')
 			
+
+		
+	locationmaps = null
+	geocoder = null
+	mapOpts = null
+	onMapBound = null
+	onMapRendered = null
+	markers = []
+
+
+	#possible options attributes: onMapBound, onMapRendered, onAddingMarker, containerEl, mapContainerId, mapOpts
+	Meshable.vent.on 'maps:bind', (options) ->
+		console.log('binding maps')
+		mapOpts = options.mapOpts
+		onMapBound = options.onMapBound
+		onMapRendered = options.onMapRendered
+		map = new Map
+		mapView = new MapView
+			model: map
+
+		
+		
+		#mc = new MarkerClusterer(locationmaps)
+		#mapRegion.show(mapView) 
+		
 			
+		if onMapBound != null && onMapBound != undefined
+			onMapBound(mapView)
+		google.maps.event.addListener map, "bounds_changed", ->
+  			bounds = map.getBounds()
+  			google.maps.event.trigger(map, 'resize')
 		
 		
-
-
-	gatewayCompView = Backbone.Marionette.CompositeView.extend
-		itemView: gatewayView
-		template: "#wrapper_ul"
-		itemViewContainer: "ul"
-		#id: "gateway"
-		
-		
-		
-		#events: 
-			
-			#"click #back-btn1": "back"
-			#"click #menu_back_btn": "menu_back"
-
-			
-		#menu_back: ->
-			#$("#popupPanel").popup("close")
-		#back: ->
-			#window.history.back()
-		
-		#popmenu: ->
-			
-			#$("#popupPanel").on popupbeforeposition: ->
-				#h = $(window).height()
-				#$("#popupPanel").css "height", h
-
-			#$("#popupPanel").popup("open")
-			
-		
-		appendHtml: (collectionView, itemView) ->
-			collectionView.$("#placeholder").append(itemView.el) 
-
-	
-	
-	Meshable.vent.on "goto:gateways", (refresh, searchField) ->
-		
-		$("body").addClass('ui-disabled')
-		$.mobile.showPageLoadingMsg("a", "Loading", false)
-		if not refresh and Meshable.current_gateways != ""
-			displayResults Meshable.current_gateways
-			return
-		
-		
-		forge.request.ajax
-			url: Meshable.rooturl + "/api/Locations"
-			data: { term: searchField, systemTypes: "", problemStatuses: "", customGroups: "", pageIndex: 0, pageSize: 10 }
-			dataType: "json"
-			type: "GET"
-			error: (e) -> 
-				alert "An error occurred on search... sorry!"
-				$("body").removeClass('ui-disabled')
-				$.mobile.hidePageLoadingMsg()
-			success: (data) =>
-				dataObj = new Object 
-				dataObj.list = []
-				data = data.CurrentPageListItems
-				for node in data
-					TempObj = node
-					dataObj.list.push(TempObj)
-				Meshable.currentDataObj = dataObj
-				Meshable.refreshUnits = true
-				if data.isAuthenticated == false
-					myvent.trigger "auth:logout"
-					$("body").removeClass('ui-disabled')
-					$.mobile.hidePageLoadingMsg()
-				else if data.length == 0
-					alert "No Results" 
-					$("body").removeClass('ui-disabled')
-					$.mobile.hidePageLoadingMsg()
-				else
-					Meshable.current_gateways = data
-					displayResults data
-					
-	Meshable.vent.on "search:gateways", (sdata) ->
-		$("body").addClass('ui-disabled')
-		$.mobile.showPageLoadingMsg("a", "Loading", false)
-		forge.request.ajax
-			url: Meshable.rooturl + "/api/Locations"
-			data: { term: sdata, systemTypes: "", problemStatuses: "", customGroups: "", pageIndex: 0, pageSize: 10 }
-			dataType: "json"
-			type: "GET"
-			error: (e) -> 
-				alert "An error occurred on search... sorry!"
-			success: (data) =>
-				data = data.CurrentPageListItems
-				if data.isAuthenticated == false
-					myvent.trigger "auth:logout"
-				else if data.length == 0
-					$("body").removeClass('ui-disabled')
-					$.mobile.hidePageLoadingMsg()
-					alert "No Results" 
-					Backbone.history.navigate "search", replace: true, trigger: false
-				else
-					#Backbone.history.navigate "search-gateways", replace: false, trigger: false
-					displayResults data
-
-	
-	
-					
-	displayResults = (data) ->
-		nodeCollection = new gateways
-		for model in data
-			cModel = new gateway
-			nodeCollection.add cModel.parse(model)
-		gateView = new gatewayCompView
-			collection: nodeCollection
-	
-		
-		
-
-
-			
-		Meshable.currentpage = "gateways"
-		gateView.render()
+		mapView.render()
+		Meshable.currentMap = $(mapView.el)
 		$('#mainDiv').empty()
-		$('#mainDiv').append($(gateView.el))
-		$("#mainPage").trigger('create')
+		$('#mainDiv').append($(mapView.el))
+		$("mainDiv").trigger('create')
 		$.mobile.hidePageLoadingMsg()
 		$("body").removeClass('ui-disabled')
-		#$("[data-role=footer]").fixedtoolbar({ fullscreen: true })
-		$("[data-role=footer]").fixedtoolbar({ tapToggle: true })
-		$("[data-role=footer]").fixedtoolbar({ tapToggleBlacklist: "a, button, tap, div, img, input, select, textarea, .ui-header-fixed, .ui-footer-fixed" })
-		$("#mainPage a").removeClass('ui-btn-active')
-		$("#locationbtnn").addClass('ui-btn-active')
-				
-				
-				
+		console.log('maps bound')
+		google.maps.event.trigger(map, 'resize')
+
+
+	Meshable.vent.on 'maps:geocode', (options) ->
+		console.log('geocoding')
+		state = ''
+		if options.address.country && options.address.country.toLowerCase() == 'us' then state = options.address.state
+		fromaddress = [ options.address.street1, ', ', options.address.street2, ', ', options.address.city, ', ', state, ', ', options.address.country, ', ', options.address.zip ].join()
+		geocoderRequest = 
+			address: fromaddress 
+		geocoder = new google.maps.Geocoder()
+		geocoder.geocode(geocoderRequest, options.callback)
+
+	latlngbounds = null;
+
+	Meshable.vent.on 'maps:addmarkers', (obj) ->
+		if obj.beforeAddMarkers != null && obj.beforeAddMarkers != undefined
+			obj.beforeAddMarkers(locationmaps, markers) 
+
+		console.log('adding ' + obj.items.length + ' markers')
+		for i in [0...obj.items.length]
+			Meshable.vent.trigger('maps:addmarker', obj.items[i])
+		#Uncomment to have the map clusters, DOTO: get all grey images for the clusters and set the max zoom and cluster size pretty big
+		#mc = new MarkerClusterer(locationmaps, markers)
+		return
+
+	Meshable.vent.on 'maps:addmarker', (obj) ->
+		console.log('adding marker')
+		console.log(obj)
+		if (obj.address.latitude == 0 || obj.address.longitude == 0)
+			console.log('aborting marker addition, latlng is null')
+			return false
+
+		if obj.nodecolors.statuscolor == "GREEN"
+			thisorigin = new google.maps.Point 4, 290
+		else if obj.nodecolors.statuscolor == "YELLOW"
+			thisorigin = new google.maps.Point 4, 345
+		else if obj.nodecolors.statuscolor == "RED"
+			thisorigin = new google.maps.Point 4, 231
+		#TO DO: implement blue in the sprite
+		else if obj.nodecolors.statuscolor == "BLUE"
+			thisorigin = new google.maps.Point 4, 398
+		else
+			thisorigin = new google.maps.Point 4, 398
+
+		thisicon = new Object
+			url: "https://s3.amazonaws.com/LynxMVC4-Bucket/themes/mistaway/sprite.png"
+			#url: "http://localhost:22164/Content/sprite.png"
+			size: new google.maps.Size 33, 44, "px", "px"
+			origin: thisorigin
+			#scaledSize: new google.maps.Size 450, 450, "px", "px"								
 		
+		position = new google.maps.LatLng(obj.address.latitude, obj.address.longitude)
+		thismarker = new google.maps.Marker
+			map: locationmaps
+			position: position
+			icon: thisicon
+		#console.log(thismarker)
+		markers.push(thismarker)
+		if latlngbounds
+			latlngbounds.extend(position);
+
+		clickfunction = (gmapMouseEvent)->
+			Meshable.vent.trigger 'maps:marker:clicked', obj
+		#clickfunction = ->
+		#	Meshable.vent.trigger "mapclicked", obj.gateway.macaddress
+		google.maps.event.addListener thismarker, "click", clickfunction
+		##locationmapsMarkers.push thismarker
+		console.log('marker added')
+
+
+	Meshable.vent.on 'maps:marker:clicked', (model) ->
+		alert "clicked"
+		#Meshable.vent.trigger 'locationList:showDetail',
+			#model: model
 	
-		
+
+	Map = Backbone.Model.extend
+		defaults:
+			dummy: "dummy"
+
+	MapView = Backbone.Marionette.ItemView.extend
+		initialize: ->
+			console.log('initialize map view')
+		onRender: ->
+			console.log('on MapView render')
+			setTimeout (->
+				mapContainerId = 'mapwrapper'
+				locationmaps = new google.maps.Map(document.getElementById(mapContainerId), mapOpts)
+				latlngbounds = new google.maps.LatLngBounds()
+				if onMapRendered != null && onMapRendered != undefined
+					onMapRendered()
+
+			), 750
+			console.log('after MapView render')
 			
-	
+		addmarker: (obj) ->
+			Meshable.vent.trigger 'maps:addmarker', obj
+		template: maptemplate
+		doGeocoding: (obj, myfunc) ->

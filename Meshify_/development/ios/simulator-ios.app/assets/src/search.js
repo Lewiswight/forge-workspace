@@ -37,15 +37,25 @@
         "click #search-btn": "update"
       },
       update: function() {
-        var href, searchField;
+        var includeUnits, route, searchField;
 
-        searchField = $('#search-main').val();
-        if (searchField.length < 1) {
-          return alert("Please Enter Text");
-        } else {
-          href = "#searching/" + searchField;
-          return window.location = href;
+        if (!forge.is.connection.connected()) {
+          forge.notification.alert("Failed to Load", "No Internet Connection");
+          $("body").removeClass('ui-disabled');
+          $.mobile.hidePageLoadingMsg();
+          return;
         }
+        includeUnits = $('#include-units').prop("checked");
+        searchField = $('#search-main').val();
+        if (searchField === "") {
+          searchField = "_";
+        }
+        route = "#searching/" + searchField + "/" + includeUnits;
+        return Backbone.history.navigate(route, {
+          trigger: true,
+          replace: false,
+          pushState: false
+        });
       }
     });
     searchView = Backbone.Marionette.CompositeView.extend({
@@ -68,8 +78,8 @@
       $('#mainDiv').empty();
       $('#mainDiv').append($(search.el));
       $("#mainDiv").trigger('create');
-      $("#mainPage a").removeClass('ui-btn-active');
-      return $("#searchbtnn").addClass('ui-btn-active');
+      $.mobile.hidePageLoadingMsg();
+      return $("body").removeClass('ui-disabled');
     });
   });
 

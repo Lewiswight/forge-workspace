@@ -1,13 +1,13 @@
 "Tasks that might be run on the customers's machine"
 
-from os import path
 from time import gmtime
 from calendar import timegm
 
 # where the customer code exists inside the apps
-locations = {
+locations_normal = {
 	'android': 'development/android/assets/src',
 	'ios': 'development/ios/*/assets/src',
+	'osx': 'development/osx/Forge.app/Contents/Resources/assets/src',
 	'chrome': 'development/chrome/src',
 	'firefox': 'development/firefox/resources/f/data/src',
 	'safari': 'development/forge.safariextension/src',
@@ -16,6 +16,20 @@ locations = {
 	'wp': 'development/wp/assets/src',
 	'reload': 'development/reload/src',
 }
+
+locations_debug = {
+	'ios': 'ios/app/ForgeInspector/assets/src',
+	'android': 'android/ForgeInspector/assets/src',
+	'osx': 'development/osx/Forge.app/Contents/Resources/assets/src',
+	'chrome': 'development/chrome/src',
+	'firefox': 'development/firefox/resources/f/data/src',
+	'safari': 'development/forge.safariextension/src',
+	'ie': 'development/ie/src',
+	'web': 'development/web/src',
+	'wp': 'development/wp/assets/src',
+	'reload': 'development/reload/src',
+}
+
 
 def validate_user_source(src='src'):
 	'''Check for any issues with the user source, i.e. no where to include all.js'''
@@ -38,10 +52,16 @@ def run_hook(hook=None, dir=None):
 		{'do': {'run_hook': {'hook': hook, 'dir': dir}}},
 	]
 
-def copy_user_source_to_template(ignore_patterns=None, src='src'):
+def copy_user_source_to_template(ignore_patterns=None, src='src', debug=False):
+	if not debug:
+		locations = locations_normal
+	else:
+		locations = locations_debug
+
 	return [
 		{'when': {'platform_is': 'android'}, 'do': {'copy_files': { 'from': src, 'to': locations["android"], 'ignore_patterns': ignore_patterns }}},
 		{'when': {'platform_is': 'ios'}, 'do': {'copy_files': { 'from': src, 'to': locations["ios"], 'ignore_patterns': ignore_patterns }}},
+		{'when': {'platform_is': 'osx'}, 'do': {'copy_files': { 'from': src, 'to': locations["osx"], 'ignore_patterns': ignore_patterns }}},
 		{'when': {'platform_is': 'chrome'}, 'do': {'copy_files': { 'from': src, 'to': locations["chrome"], 'ignore_patterns': ignore_patterns }}},
 		{'when': {'platform_is': 'firefox'}, 'do': {'copy_files': { 'from': src, 'to': locations["firefox"], 'ignore_patterns': ignore_patterns }}},
 		{'when': {'platform_is': 'safari'}, 'do': {'copy_files': { 'from': src, 'to': locations["safari"], 'ignore_patterns': ignore_patterns }}},
@@ -51,47 +71,57 @@ def copy_user_source_to_template(ignore_patterns=None, src='src'):
 		{'do': {'copy_files': { 'from': src, 'to': locations["reload"], 'ignore_patterns': ignore_patterns }}},
 	]
 	
-def include_platform_in_html(server=False):
+def include_platform_in_html(debug=False):
+	if not debug:
+		locations = locations_normal
+	else:
+		locations = locations_debug
+
 	return [
 		{'when': {'platform_is': 'android'}, 'do': {'find_and_replace_in_dir': {
 			"root_dir": locations["android"],
 			"find": "<head>",
-			"replace": "<head><script src='/forge/all.js'></script>"
+			"replace": "<head><script src='%{back_to_parent}%forge/app_config.js'></script><script src='%{back_to_parent}%forge/all.js'></script>"
 		}}},
 		{'when': {'platform_is': 'ios'}, 'do': {'find_and_replace_in_dir': {
 			"root_dir": locations["ios"],
 			"find": "<head>",
-			"replace": "<head><script src='%{back_to_parent}%forge/all.js'></script>"
+			"replace": "<head><script src='%{back_to_parent}%forge/app_config.js'></script><script src='%{back_to_parent}%forge/all.js'></script>"
+		}}},
+		{'when': {'platform_is': 'osx'}, 'do': {'find_and_replace_in_dir': {
+			"root_dir": locations["osx"],
+			"find": "<head>",
+			"replace": "<head><script src='%{back_to_parent}%forge/app_config.js'></script><script src='%{back_to_parent}%forge/all.js'></script>"
 		}}},
 		{'when': {'platform_is': 'firefox'}, 'do': {'find_and_replace_in_dir': {
 			"root_dir": locations["firefox"],
 			"find": "<head>",
-			"replace": "<head><script src='%{back_to_parent}%forge/all.js'></script>"
+			"replace": "<head><script src='%{back_to_parent}%forge/app_config.js'></script><script src='%{back_to_parent}%forge/all.js'></script>"
 		}}},
 		{'when': {'platform_is': 'chrome'}, 'do': {'find_and_replace_in_dir': {
 			"root_dir": locations["chrome"],
 			"find": "<head>",
-			"replace": "<head><script src='/forge/all.js'></script>"
+			"replace": "<head><script src='/forge/app_config.js'></script><script src='/forge/all.js'></script>"
 		}}},
 		{'when': {'platform_is': 'safari'}, 'do': {'find_and_replace_in_dir': {
 			"root_dir": locations["safari"],
 			"find": "<head>",
-			"replace": "<head><script src='%{back_to_parent}%forge/all.js'></script>"
+			"replace": "<head><script src='%{back_to_parent}%forge/app_config.js'></script><script src='%{back_to_parent}%forge/all.js'></script>"
 		}}},
 		{'when': {'platform_is': 'ie'}, 'do': {'find_and_replace_in_dir': {
 			"root_dir": locations["ie"],
 			"find": "<head>",
-			"replace": "<head><script src='%{back_to_parent}%forge/all.js'></script>"
+			"replace": "<head><script src='%{back_to_parent}%forge/app_config.js'></script><script src='%{back_to_parent}%forge/all.js'></script>"
 		}}},
 		{'when': {'platform_is': 'web'}, 'do': {'find_and_replace_in_dir': {
 			"root_dir": locations["web"],
 			"find": "<head>",
-			"replace": "<head><script src='/_forge/all.js'></script>"
+			"replace": "<head><script src='%{back_to_parent}%_forge/app_config.js'></script><script src='%{back_to_parent}%_forge/all.js'></script>"
 		}}},
 		{'when': {'platform_is': 'wp'}, 'do': {'find_and_replace_in_dir': {
 			"root_dir": locations["wp"],
 			"find": "<head>",
-			"replace": "<head><script src='%{back_to_parent}%forge/all.js'></script>"
+			"replace": "<head><script src='%{back_to_parent}%forge/app_config.js'></script><script src='%{back_to_parent}%forge/all.js'></script>"
 		}}},
 		{'when': {'platform_is': 'wp'}, 'do': {'find_and_replace_in_dir': {
 			"root_dir": locations["wp"],
@@ -111,7 +141,7 @@ def include_platform_in_html(server=False):
 		{'do': {'find_and_replace_in_dir': {
 			"root_dir": locations["reload"],
 			"find": "<head>",
-			"replace": "<head><script src='%{back_to_parent}%forge/all.js'></script>"
+			"replace": "<head><script src='%{back_to_parent}%forge/app_config.js'></script><script src='%{back_to_parent}%forge/all.js'></script>"
 		}}},
 		{'do': {'find_and_replace_in_dir': {
 			"root_dir": locations["reload"],
@@ -130,14 +160,16 @@ def include_platform_in_html(server=False):
 		}}},
 	]
 
-def include_name():
+def include_name(build):
+	json_safe_name = build.config["name"].replace('"', '\\"')
+	xml_safe_name = build.config["name"].replace('"', '\\"').replace("'", "\\'")
+
 	return [
-		{'do': {'populate_xml_safe_name': ()}},
-		{'do': {'populate_json_safe_name': ()}},
-		{'when': {'platform_is': 'android'}, 'do': {'set_element_value_xml': {
-			"file": 'development/android/res/values/strings.xml',
-			"element": "string/[@name='app_name']",
-			"value": "${xml_safe_name}"
+		{'when': {'platform_is': 'android'}, 'do': {'set_attribute_value_xml': {
+			"file": 'development/android/AndroidManifest.xml',
+			"element": "application",
+			"attribute": "android:label",
+			"value": xml_safe_name
 		}}},
 		{'when': {'platform_is': 'ios'}, 'do': {'set_in_biplist': {
 			"filename": 'development/ios/*/Info.plist',
@@ -149,27 +181,46 @@ def include_name():
 			"key": "CFBundleDisplayName",
 			"value": "${name}"
 		}}},
+		{'when': {'platform_is': 'osx'}, 'do': {'set_in_biplist': {
+			"filename": 'development/osx/Forge.app/Contents/Info.plist',
+			"key": "CFBundleName",
+			"value": "${name}"
+		}}},
+		{'when': {'platform_is': 'osx'}, 'do': {'set_in_biplist': {
+			"filename": 'development/osx/Forge.app/Contents/Info.plist',
+			"key": "CFBundleDisplayName",
+			"value": "${name}"
+		}}},
 		{'when': {'platform_is': 'chrome'}, 'do': {'find_and_replace': {
 			"in": ('development/chrome/manifest.json',),
-			"find": "APP_NAME_HERE", "replace": "${json_safe_name}"
+			"find": "APP_NAME_HERE", "replace": json_safe_name
 		}}},
 		{'when': {'platform_is': 'firefox'}, 'do': {'find_and_replace': {
 			"in": ('development/firefox/install.rdf',),
-			"find": "APP_NAME_HERE", "replace": "${xml_safe_name}"
+			"find": "APP_NAME_HERE", "replace": xml_safe_name
 		}}},
 		{'when': {'platform_is': 'safari'}, 'do': {'find_and_replace': {
 			"in": ('development/forge.safariextension/Info.plist',),
-			"find": "APP_NAME_HERE", "replace": "${xml_safe_name}"
+			"find": "APP_NAME_HERE", "replace": xml_safe_name
 		}}},
 		{'when': {'platform_is': 'ie'}, 'do': {'find_and_replace': {
 			"in": ('development/ie/manifest.json',
 				'development/ie/dist/setup-x86.nsi',
 				'development/ie/dist/setup-x64.nsi',
-			), "find": "APP_NAME_HERE", "replace": "${json_safe_name}"
+			), "find": "APP_NAME_HERE", "replace": json_safe_name
 		}}},
 		{'when': {'platform_is': 'wp'}, 'do': {'find_and_replace': {
 			"in": ('development/wp/Properties/WMAppManifest.xml',),
-			"find": "APP_NAME_HERE", "replace": "${xml_safe_name}"
+			"find": "APP_NAME_HERE", "replace": xml_safe_name
+		}}},
+	]
+
+def include_requirements():
+	return [
+		{'when': {'platform_is': 'ios', 'config_property_exists': 'core.ios.minimum_version'}, 'do': {'set_in_biplist': {
+			"filename": 'development/ios/*/Info.plist',
+			"key": "MinimumOSVersion",
+			"value": "${core.ios.minimum_version}"
 		}}},
 	]
 
@@ -178,11 +229,7 @@ def include_uuid():
 		{'do': {'populate_package_names': ()}},
 		{'when': {'platform_is': 'android'}, 'do': {'find_and_replace': {
 			"in": ('development/android/AndroidManifest.xml',),
-			"find": "io.trigger.forge.android.template", "replace": "${modules.package_names.android}"
-		}}},
-		{'when': {'platform_is': 'android'}, 'do': {'find_and_replace': {
-			"in": ('development/android/res/values/strings.xml',),
-			"find": "UUID_HERE", "replace": "${uuid}"
+			"find": "io.trigger.forge.android.inspector", "replace": "${core.android.package_name}"
 		}}},
 		{'when': {'platform_is': 'wp'}, 'do': {'find_and_replace': {
 			"in": ('development/wp/Properties/manifest.json',),
@@ -190,19 +237,20 @@ def include_uuid():
 		}}},
 		{'when': {'platform_is': 'firefox'}, 'do': {'find_and_replace': {
 			"in": ('development/firefox/install.rdf','development/firefox/harness-options.json',),
-			"find": "PACKAGE_NAME_HERE", "replace": "${modules.package_names.firefox}"
+			"find": "PACKAGE_NAME_HERE", "replace": "${core.firefox.package_name}"
 		}}},
 		{'when': {'platform_is': 'safari'}, 'do': {'find_and_replace': {
 			"in": ('development/forge.safariextension/Info.plist',),
-			"find": "PACKAGE_NAME_HERE", "replace": "${modules.package_names.safari}"
+			"find": "PACKAGE_NAME_HERE", "replace": "${core.safari.package_name}"
 		}}},
 		{'when': {'platform_is': 'ios'}, 'do': {'set_in_biplist': {
 			"filename": 'development/ios/*/Info.plist',
-			"key": "CFBundleIdentifier", "value": "${modules.package_names.ios}"
+			"key": "CFBundleIdentifier", "value": "${core.ios.package_name}"
 		}}},
-		{'when': {'platform_is': 'ios'}, 'do': {'find_and_replace': {
-			"in": ( 'development/ios/*/app_config.json',),
-			"find": "UUID_HERE", "replace": "${uuid}"
+		{'when': {'platform_is': 'osx'}, 'do': {'set_in_biplist': {
+			"filename": 'development/osx/Forge.app/Contents/Info.plist',
+			"key": "CFBundleIdentifier",
+			"value": "${core.osx.package_name}"
 		}}},
 		{'when': {'platform_is': 'ie'}, 'do': {'find_and_replace': {
 			"in": ('development/ie/manifest.json', 'development/ie/forge/all.js', 'development/ie/forge/all-priv.js',
@@ -211,7 +259,7 @@ def include_uuid():
 		}}},
 		{'when': {'platform_is': 'ie'}, 'do': {'find_and_replace': {
 			"in": ('development/ie/dist/setup-x86.nsi','development/ie/dist/setup-x64.nsi',),
-			"find": "MS_CLSID_HERE", "replace": "${modules.package_names.ie}"
+			"find": "MS_CLSID_HERE", "replace": "${core.ie.package_name}"
 		}}},
 	]
 
@@ -228,6 +276,11 @@ def include_author():
 		{'when': {'platform_is': 'ie'}, 'do': {'find_and_replace': {
 			"in": ('development/ie/manifest.json','development/ie/dist/setup-x86.nsi','development/ie/dist/setup-x64.nsi',),
 			"find": "AUTHOR_HERE", "replace": "${author}"
+		}}},
+		{'when': {'platform_is': 'osx'}, 'do': {'set_in_biplist': {
+			"filename": 'development/osx/Forge.app/Contents/Info.plist',
+			"key": "NSHumanReadableCopyright",
+			"value": "${author}"
 		}}},
 	]
 
@@ -288,18 +341,44 @@ def include_version():
 			"filename": 'development/ios/*/Info.plist',
 			"key": "CFBundleShortVersionString", "value": "${version}"
 		}}},
+		{'when': {'platform_is': 'osx'}, 'do': {'set_in_biplist': {
+			"filename": 'development/osx/Forge.app/Contents/Info.plist',
+			"key": "CFBundleVersion",
+			"value": str(int(timegm(gmtime())))
+		}}},
+		{'when': {'platform_is': 'osx'}, 'do': {'set_in_biplist': {
+			"filename": 'development/osx/Forge.app/Contents/Info.plist',
+			"key": "CFBundleShortVersionString",
+			"value": "${version}"
+		}}},
 	]
 
 def include_reload():
 	return [
 		{'do': {'populate_trigger_domain': ()}},
-		{'when': {'platform_is': 'android'}, 'do': {'find_and_replace': {
-			"in": ('development/android/res/values/strings.xml',),
-			"find": "CONFIG_HASH_HERE", "replace": "${config_hash}"
+		{'do': {'set_in_config': {
+			"key": "trigger_domain",
+			"value": "${trigger_domain}"
 		}}},
-		{'when': {'platform_is': 'android'}, 'do': {'find_and_replace': {
-			"in": ('development/android/res/values/strings.xml',),
-			"find": "TRIGGER_DOMAIN_HERE", "replace": "${trigger_domain}"
+		{'do': {'set_in_config': {
+			"key": "config_hash",
+			"value": "${config_hash}"
+		}}},
+		{'when': {'platform_is': 'android'}, 'do': {'generate_sha1_manifest': {
+			"input_folder": "development/android/assets/src",
+			"output_file": "development/android/assets/hash_to_file.json"
+		}}},
+		{'when': {'platform_is': 'ios'}, 'do': {'generate_sha1_manifest': {
+			"input_folder": "development/ios/device-ios.app/assets/src",
+			"output_file": "development/ios/device-ios.app/assets/hash_to_file.json"
+		}}},
+		{'when': {'platform_is': 'ios'}, 'do': {'generate_sha1_manifest': {
+			"input_folder": "development/ios/simulator-ios.app/assets/src",
+			"output_file": "development/ios/simulator-ios.app/assets/hash_to_file.json"
+		}}},
+		{'when': {'platform_is': 'osx'}, 'do': {'generate_sha1_manifest': {
+			"input_folder": "development/osx/Forge.app/Contents/Resources/assets/src",
+			"output_file": "development/osx/Forge.app/Contents/Resources/assets/hash_to_file.json"
 		}}},
 		{'when': {'platform_is': 'wp'}, 'do': {'find_and_replace': {
 			"in": ('development/wp/Properties/manifest.json',),
@@ -313,26 +392,135 @@ def include_reload():
 			"in": ('development/wp/Properties/manifest.json',),
 			"find": "VERSION_CODE_HERE", "replace": str(int(timegm(gmtime())))
 		}}},
-		{'when': {'platform_is': 'ios'}, 'do': {'find_and_replace': {
-			"in": ('development/ios/*/app_config.json',),
-			"find": "CONFIG_HASH_HERE", "replace": "${config_hash}"
-		}}},
-		{'when': {'platform_is': 'ios'}, 'do': {'find_and_replace': {
-			"in": ('development/ios/*/app_config.json',),
-			"find": "TRIGGER_DOMAIN_HERE", "replace": "${trigger_domain}"
-		}}},
+	]
+
+def include_config(debug=False):
+	if debug:
+		return [
+			{'when': {'platform_is': 'android'}, 'do': {'write_config': {
+				"filename": 'android/ForgeInspector/assets/app_config.json',
+				"content": "${config}"
+			}}},
+			{'when': {'platform_is': 'android'}, 'do': {'write_config': {
+				"filename": 'android/ForgeInspector/assets/forge/app_config.js',
+				"content": "window.forge = {}; window.forge.config = ${config};"
+			}}},
+			{'when': {'platform_is': 'ios'}, 'do': {'write_config': {
+				"filename": 'ios/app/ForgeInspector/assets/app_config.json',
+				"content": "${config}"
+			}}},
+			{'when': {'platform_is': 'ios'}, 'do': {'write_config': {
+				"filename": 'ios/app/ForgeInspector/assets/forge/app_config.js',
+				"content": "window.forge = {}; window.forge.config = ${config};"
+			}}},
+		]
+	else:
+		return [
+			{'when': {'platform_is': 'android'}, 'do': {'write_config': {
+				"filename": 'development/android/assets/app_config.json',
+				"content": "${config}"
+			}}},
+			{'when': {'platform_is': 'android'}, 'do': {'write_config': {
+				"filename": 'development/android/assets/forge/app_config.js',
+				"content": "window.forge = {}; window.forge.config = ${config};"
+			}}},
+			{'when': {'platform_is': 'ios'}, 'do': {'write_config': {
+				"filename": 'development/ios/device-ios.app/assets/app_config.json',
+				"content": "${config}"
+			}}},
+			{'when': {'platform_is': 'ios'}, 'do': {'write_config': {
+				"filename": 'development/ios/simulator-ios.app/assets/app_config.json',
+				"content": "${config}"
+			}}},
+			{'when': {'platform_is': 'ios'}, 'do': {'write_config': {
+				"filename": 'development/ios/device-ios.app/assets/forge/app_config.js',
+				"content": "window.forge = {}; window.forge.config = ${config};"
+			}}},
+			{'when': {'platform_is': 'ios'}, 'do': {'write_config': {
+				"filename": 'development/ios/simulator-ios.app/assets/forge/app_config.js',
+				"content": "window.forge = {}; window.forge.config = ${config};"
+			}}},
+			{'when': {'platform_is': 'osx'}, 'do': {'write_config': {
+				"filename": 'development/osx/Forge.app/Contents/Resources/assets/app_config.json',
+				"content": "${config}"
+			}}},
+			{'when': {'platform_is': 'osx'}, 'do': {'write_config': {
+				"filename": 'development/osx/Forge.app/Contents/Resources/assets/forge/app_config.js',
+				"content": "window.forge = {}; window.forge.config = ${config};"
+			}}},
+			{'when': {'platform_is': 'chrome'}, 'do': {'write_config': {
+				"filename": 'development/chrome/forge/app_config.js',
+				"content": "window.forge = {}; window.forge.config = ${config};"
+			}}},
+			{'when': {'platform_is': 'safari'}, 'do': {'write_config': {
+				"filename": 'development/forge.safariextension/forge/app_config.js',
+				"content": "window.forge = {}; window.forge.config = ${config};"
+			}}},
+			{'when': {'platform_is': 'web'}, 'do': {'write_config': {
+				"filename": 'development/web/forge/app_config.js',
+				"content": "window.forge = {}; window.forge.config = ${config};"
+			}}},
+			{'when': {'platform_is': 'wp'}, 'do': {'write_config': {
+				"filename": 'development/wp/assets/forge/app_config.js',
+				"content": "window.forge = {}; window.forge.config = ${config};"
+			}}},
+			{'when': {'platform_is': 'firefox'}, 'do': {'write_config': {
+				"filename": 'development/firefox/resources/f/data/forge/app_config.js',
+				"content": "window.forge = {}; window.forge.config = ${config};"
+			}}},
+			{'when': {'platform_is': 'ie'}, 'do': {'write_config': {
+				"filename": 'development/ie/forge/app_config.js',
+				"content": "window.forge = {}; window.forge.config = ${config};"
+			}}},
+		]
+
+def run_module_build_steps(build):
+	return [
+		{'when': {'platform_is': 'android'}, 'do': {
+			'run_module_build_steps': {
+				'steps_path': 'development/android/build_steps',
+				'src_path': 'development/android/assets/src',
+				'project_path': 'development/android' 
+			}
+		}},
+		{'when': {'platform_is': 'ios'}, 'do': {
+			'run_module_build_steps': {
+				'steps_path': 'development/ios/build_steps',
+				'src_path': 'development/ios/device-ios.app/assets/src',
+				'project_path': 'development/ios/device-ios.app' 
+			}
+		}},
+		{'when': {'platform_is': 'ios'}, 'do': {
+			'run_module_build_steps': {
+				'steps_path': 'development/ios/build_steps',
+				'src_path': 'development/ios/simulator-ios.app/assets/src',
+				'project_path': 'development/ios/simulator-ios.app' 
+			}
+		}},
+		{'when': {'platform_is': 'osx'}, 'do': {
+			'run_module_build_steps': {
+				'steps_path': 'development/osx/build_steps',
+				'src_path': 'development/osx/Forge.app/Contents/Resources/assets/src',
+				'project_path': 'development/osx/Forge.app' 
+			}
+		}}
+		# Delete build steps folder?
 	]
 
 def resolve_urls():
 	return [
 		{'do': {'resolve_urls': (
-			'modules.activations.[].scripts.[]',
-			'modules.activations.[].styles.[]',
-			'modules.icons.*',
-			'modules.launchimage.*',
-			'modules.button.default_icon',
-			'modules.button.default_popup',
-			'modules.button.default_icons.*'
+			'modules.activations.config.activations.[].scripts.[]',
+			'modules.activations.config.activations.[].styles.[]',
+			'modules.icons.config.chrome.*',
+			'modules.icons.config.safari.*',
+			'modules.icons.config.firefox.*',
+			'modules.icons.config.ie.*',
+			'modules.launchimage.config.android',
+			'modules.launchimage.config.android-landscape',
+			'modules.button.config.default_icon',
+			'modules.button.config.default_popup',
+			'modules.button.config.default_icons.*'
 		)}},
 	]
 
@@ -344,6 +532,11 @@ def run_android_phase(build_type_dir, sdk, device, interactive, purge=False):
 def run_ios_phase(device):
 	return [
 		{'when': {'platform_is': 'ios'}, 'do': {'run_ios': (device,)}},
+	]
+
+def run_osx_phase():
+	return [
+		{'when': {'platform_is': 'osx'}, 'do': {'run_osx': ()}},
 	]
 
 def run_firefox_phase(build_type_dir):
@@ -370,6 +563,7 @@ def package(build_type_dir):
 	return [
 		{'when': {'platform_is': 'android'}, 'do': {'package_android': ()}},
 		{'when': {'platform_is': 'ios'}, 'do': {'package_ios': ()}},
+		{'when': {'platform_is': 'osx'}, 'do': {'package_osx': ()}},
 		{'when': {'platform_is': 'web'}, 'do': {'package_web': ()}},
 		{'when': {'platform_is': 'wp'}, 'do': {'package_wp': ()}},
 		{'when': {'platform_is': 'chrome'}, 'do': {'package_chrome': ()}},
@@ -390,11 +584,6 @@ def check_local_config_schema():
 		{'do': {'check_local_config_schema': ()}},
 	]
 
-def migrate_config():
-	return [
-		{'do': {'migrate_config': ()}},
-	]
-
 def clean_phase():
 	return [
 		{'when': {'platform_is': 'android'}, 'do': {'clean_android': ()}},
@@ -402,3 +591,4 @@ def clean_phase():
 		{'when': {'platform_is': 'web'}, 'do': {'clean_web': ()}},
 		{'when': {'platform_is': 'wp'}, 'do': {'clean_wp': ()}},
 	]
+

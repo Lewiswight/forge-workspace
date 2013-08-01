@@ -1,4 +1,5 @@
 from collections import namedtuple
+from glob import glob
 import logging
 import multiprocessing
 import os
@@ -14,9 +15,10 @@ import tempfile
 import time
 import zipfile
 
-import lib
-from lib import temp_file, task, ProgressBar
-from utils import run_shell, ShellError, ensure_lib_available
+from module_dynamic import lib
+from module_dynamic.lib import temp_file, ProgressBar
+from lib import task, ensure_lib_available
+from module_dynamic.utils import run_shell, ShellError
 
 LOG = logging.getLogger(__name__)
 
@@ -26,6 +28,23 @@ class AndroidError(lib.BASE_EXCEPTION):
 # TODO: put jdk/jre info in here also, as they're often used together?
 # tuple type for passing around information about where android tools are located
 PathInfo = namedtuple('PathInfo', 'android adb aapt sdk')
+
+def _find_aapt(sdk):
+	"""aapt has moved in SDK v22 - look in possible locations"""
+	locations = (
+		path.join(sdk, 'platform-tools', 'aapt'),
+		path.join(sdk, 'build-tools', '*', 'aapt'),
+		path.join(sdk, 'platform-tools', 'aapt.exe'),
+		path.join(sdk, 'build-tools', '*', 'aapt.exe'),
+	)
+	for location in locations:
+		if glob(location):
+			return glob(location)[-1]
+	else:
+		raise AndroidError("Couldn't find 'aapt' tool! "
+			"You may need to update your Android SDK, "
+			"including platform tools.\n\n"
+			"Looked in: {locations}".format(locations="\n".join(locations)))
 
 def _create_path_info_from_sdk(sdk):
 	"""Helper for constructing a PathInfo object from just the android SDK
@@ -37,7 +56,7 @@ def _create_path_info_from_sdk(sdk):
 			'android.bat' if sys.platform.startswith('win') else 'android'
 		)),
 		adb=path.abspath(path.join(sdk, 'platform-tools', 'adb')),
-		aapt=path.abspath(path.join(sdk, 'platform-tools', 'aapt')),
+		aapt=_find_aapt(sdk),
 		sdk=sdk,
 	)
 
@@ -427,7 +446,7 @@ def _create_apk_with_aapt(build, out_apk_name, path_info, package_name, lib_path
 		'-0', '', # Don't compress any assets - Important for content provider access to assets
 		'--rename-manifest-package', package_name, # Package name
 		'-f', # Force overwrite
-		path.join(dev_dir, 'output'), # Location of raw files (app binary)
+		path.join(dev_dir, 'bin'), # Location of raw files (app binary)
 		command_log_level=logging.DEBUG)
 
 def _sign_zipf(lib_path, jre, keystore, storepass, keyalias, keypass, signed_zipf_name, zipf_name):
@@ -463,15 +482,15 @@ def _sign_zipf_debug(lib_path, jre, zipf_name, signed_zipf_name):
 		zipf_name=zipf_name,
 	)
 
-def _sign_zipf_release(lib_path, jre, zipf_name, signed_zipf_name, keystore, storepass, keyalias, keypass):
+def _sign_zipf_release(lib_path, jre, zipf_name, signed_zipf_name, signing_info):
 	LOG.info('Signing APK with your release key')
 	return _sign_zipf(
 		lib_path=lib_path,
 		jre=jre,
-		keystore=keystore,
-		storepass=storepass,
-		keyalias=keyalias,
-		keypass=keypass,
+		keystore=signing_info['android.profile.keystore'],
+		storepass=signing_info['android.profile.storepass'],
+		keyalias=signing_info['android.profile.keyalias'],
+		keypass=signing_info['android.profile.keypass'],
 		signed_zipf_name=signed_zipf_name,
 		zipf_name=zipf_name,
 	)
@@ -483,11 +502,13 @@ def _align_apk(path_info, signed_zipf_name, out_apk_name):
 	run_shell(*args)
 
 def _generate_package_name(build):
-	if "package_names" not in build.config["modules"]:
-		build.config["modules"]["package_names"] = {}
-	if "android" not in build.config["modules"]["package_names"]:
-		build.config["modules"]["package_names"]["android"] = "io.trigger.forge"+build.config["uuid"]
-	return build.config["modules"]["package_names"]["android"]
+	if "core" not in build.config:
+		build.config["core"] = {}
+	if "android" not in build.config["core"]:
+		build.config["core"]["android"] = {}
+	if "package_name" not in build.config["core"]["android"]:
+		build.config["core"]["android"]["package_name"] = "io.trigger.forge"+build.config["uuid"]
+	return build.config["core"]["android"]["package_name"]
 	
 def _follow_log(path_info, chosen_device):
 	LOG.info('Clearing android log')
@@ -607,13 +628,22 @@ def create_apk(build, sdk, output_filename, interactive=True):
 	with temp_file() as zipf_name:
 		# Compile XML files into APK
 		_create_apk_with_aapt(build, zipf_name, path_info, package_name, lib_path, dev_dir)
+
+		with temp_file() as compressed_zipf_name:
+			with zipfile.ZipFile(zipf_name, 'r') as zipf:
+				with zipfile.ZipFile(compressed_zipf_name, 'w') as compressed_zipf:
+					for name in zipf.namelist():
+						compress_type = zipfile.ZIP_STORED
+						if name == 'classes.dex':
+							compress_type = zipfile.ZIP_DEFLATED
+						compressed_zipf.writestr(name, zipf.read(name), compress_type=compress_type)
 		
-		with temp_file() as signed_zipf_name:
-			# Sign APK
-			_sign_zipf_debug(lib_path, jre, zipf_name, signed_zipf_name)
-			
-			# Align APK
-			_align_apk(path_info, signed_zipf_name, output_filename)
+			with temp_file() as signed_zipf_name:
+				# Sign APK
+				_sign_zipf_debug(lib_path, jre, compressed_zipf_name, signed_zipf_name)
+				
+				# Align APK
+				_align_apk(path_info, signed_zipf_name, output_filename)
 
 @task
 def run_android(build, build_type_dir, sdk, device, interactive=True,
@@ -705,65 +735,53 @@ def _generate_path_to_output_apk(build):
 		time=str(int(time.time()))
 	)
 	return path.normpath(path.join('release', 'android', file_name))
-	
+
 def _lookup_or_prompt_for_signing_info(build):
 	"""Obtain the required details for signing an APK, first by checking local_config.json
 	and then asking the user for anything missing.
 	"""
 
 	required_info = {
-		'keystore': {
+		'android.profile.keystore': {
 			'type': 'string',
 			'_filepicker': True,
 			'description': 'The location of your release keystore',
 			'title': 'Keystore',
+			'_order': 1,
 		},
-		'storepass': {
+		'android.profile.storepass': {
 			'type': 'string',
 			'_password': True,
 			'description': 'The password for your release keystore',
 			'title': 'Keystore password',
+			'_order': 2,
 		},
-		'keyalias': {
+		'android.profile.keyalias': {
 			'type': 'string',
 			'description': 'The alias of your release key',
 			'title': 'Key alias',
+			'_order': 3,
 		},
-		'keypass': {
+		'android.profile.keypass': {
 			'type': 'string',
 			'_password': True,
 			'description': 'The password for your release key',
-			'title': 'Key password'
+			'title': 'Key password',
+			'_order': 4,
 		}
 	}
 
-	known_info = {}
-	unknown_info = {}
+	signing_info = lib.get_or_ask_for_local_config(
+		build,
+		required_info,
+		question_title='Enter details for signing your app',
+	)
 
-	# figure out which info we have in local_config.json and which we need to ask for
-	for prop_name in required_info.keys():
-		local_config_value = build.tool_config.get('android.profile.%s' % prop_name)
+	signing_info['android.profile.keystore'] = lib.expand_relative_path(
+		build, signing_info['android.profile.keystore']
+	)
 
-		if local_config_value:
-			known_info[prop_name] = local_config_value
-		else:
-			unknown_info[prop_name] = required_info[prop_name]
-
-	# if there's anything we need to ask for, ask for it
-	if unknown_info:
-		event_id = lib.current_call().emit('question', schema={
-			'title': 'Enter details for signing your app',
-			'properties': unknown_info
-		})
-
-		response = lib.current_call().wait_for_response(event_id)
-		if not response.get('data'):
-			raise AndroidError("User aborted")
-
-		# TODO: save info submitted by user
-		known_info.update(response['data'])
-
-	return known_info
+	return signing_info
 
 @task
 def package_android(build):
@@ -774,9 +792,6 @@ def package_android(build):
 	dev_dir = path.normpath(path.join('development', 'android'))
 	output = path.abspath(_generate_path_to_output_apk(build))
 	signing_info = _lookup_or_prompt_for_signing_info(build)
-	
-	signing_info["keystore"] = lib.expand_relative_path(build,
-			signing_info["keystore"])
 
 	LOG.info('Creating Android .apk file')
 	package_name = _generate_package_name(build)
@@ -784,16 +799,25 @@ def package_android(build):
 	with temp_file() as zipf_name:
 		_create_apk_with_aapt(build, zipf_name, path_info, package_name, lib_path, dev_dir)
 
-		with temp_file() as signed_zipf_name:
-			#sign
-			_sign_zipf_release(lib_path, jre, zipf_name, signed_zipf_name, **signing_info)
+		with temp_file() as compressed_zipf_name:
+			with zipfile.ZipFile(zipf_name, 'r') as zipf:
+				with zipfile.ZipFile(compressed_zipf_name, 'w') as compressed_zipf:
+					for name in zipf.namelist():
+						compress_type = zipfile.ZIP_STORED
+						if name == 'classes.dex':
+							compress_type = zipfile.ZIP_DEFLATED
+						compressed_zipf.writestr(name, zipf.read(name), compress_type=compress_type)
 
-			# create output directory for APK if necessary
-			_create_output_directory(output)
+			with temp_file() as signed_zipf_name:
+				#sign
+				_sign_zipf_release(lib_path, jre, compressed_zipf_name, signed_zipf_name, signing_info)
 
-			#align
-			_align_apk(path_info, signed_zipf_name, output)
-			LOG.debug('removing zipfile and un-aligned APK')
+				# create output directory for APK if necessary
+				_create_output_directory(output)
 
-			LOG.info("created APK: {output}".format(output=output))
-			return output
+				#align
+				_align_apk(path_info, signed_zipf_name, output)
+				LOG.debug('removing zipfile and un-aligned APK')
+
+				LOG.info("created APK: {output}".format(output=output))
+				return output

@@ -12,11 +12,14 @@ import time
 import uuid
 import shutil
 import sys
+import hashlib
 from zipfile import ZipFile, ZIP_DEFLATED
 
-import lib
-from lib import temp_file, task, read_file_as_str
-from utils import run_shell, ensure_lib_available, ProcessGroup
+from module_dynamic import lib
+from module_dynamic.lib import temp_file, read_file_as_str
+from lib import task, ensure_lib_available
+from module_dynamic.utils import run_shell, ProcessGroup
+from module_dynamic.utils import which
 
 LOG = logging.getLogger(__name__)
 
@@ -121,11 +124,10 @@ class IOSRunner(object):
 		ai_from_built_app = self.get_bundled_ai(
 				plist_dict['ApplicationIdentifierPrefix'][0],
 				path_to_ios_build)
-		wildcard_ai = "%s.*" % plist_dict['ApplicationIdentifierPrefix'][0]
 		
 		if ai_from_provisioning_prof == ai_from_built_app:
 			LOG.debug("Application ID in app and provisioning profile match")
-		elif ai_from_provisioning_prof == wildcard_ai:
+		elif ai_from_provisioning_prof.endswith("*") and ai_from_provisioning_prof[:-1] == ai_from_built_app[:len(ai_from_provisioning_prof)-1]:
 			LOG.debug("Provisioning profile has valid wildcard application ID")
 		else:
 			raise IOSError('''Provisioning profile and application ID do not match
@@ -133,13 +135,15 @@ class IOSRunner(object):
 	ID in your provisioning profile: {pp_id}
 	ID in your app:                  {app_id}
 
-You probably want to add something like this to your module configuration:
+You probably want to change the App configuration's package name in the Toolkit, or add something like this to config.json:
 
-	"package_names": {{
-		"ios": "{pp_bundle}"
+	"core": {{
+	    "ios": {{
+	        "package_name": "{pp_bundle}"
+	    }}
 	}}
 
-See "Preparing your apps for app stores" in our docs: http://current-docs.trigger.io/releasing.html#ios'''.format(
+See "Preparing your apps for app stores" in our docs: [https://trigger.io/docs/current/recipes/release/release_mobile.html]'''.format(
 				pp_id=ai_from_provisioning_prof,
 				app_id=ai_from_built_app,
 				pp_bundle=provisioning_profile_bundle,
@@ -202,20 +206,70 @@ See "Preparing your apps for app stores" in our docs: http://current-docs.trigge
 					},
 					more_info="http://current-docs.trigger.io/tools/ios-windows.html"
 				)
-			
+
+			cache_file = None
+			development_certificate = False
+			try:
+				cert_name = subprocess.check_output(['java', '-jar', ensure_lib_available(build, 'p12name.jar'), certificate_path, certificate_password]).strip()
+				if cert_name.startswith('iPhone Developer:'):
+					development_certificate = True
+			except Exception:
+				pass
+
+			if development_certificate:
+				# Development certificate signings can be cached
+				# Hash for Forge binary + signing certificate + profile + info.plist
+				h = hashlib.sha1()
+				with open(path.join(path_to_app, 'Forge'), 'rb') as binary_file:
+					h.update(binary_file.read())
+				with open(path.join(path_to_app, 'Info.plist'), 'rb') as info_plist_file:
+					h.update(info_plist_file.read())
+				with open(certificate_path, 'rb') as certificate_file:
+					h.update(certificate_file.read())
+				with open(path_to_embedded_profile, 'rb') as embedded_file:
+					h.update(embedded_file.read())
+
+				if not path.exists(path.abspath(path.join(self.path_to_ios_build, '..', '.template', 'ios-signing-cache'))):
+					os.makedirs(path.abspath(path.join(self.path_to_ios_build, '..', '.template', 'ios-signing-cache')))
+				cache_file = path.abspath(path.join(self.path_to_ios_build, '..', '.template', 'ios-signing-cache', h.hexdigest()))
+
+			# XXX: Currently cache file is never saved, see below.
+			if cache_file is not None and path.exists(cache_file):
+				with temp_file() as resource_rules_temp:
+					shutil.copy2(path.join(path_to_app, 'ResourceRules.plist'), resource_rules_temp)
+					zip_to_extract = ZipFile(cache_file)
+					zip_to_extract.extractall(path_to_app)
+					zip_to_extract.close()
+					shutil.copy2(resource_rules_temp, path.join(path_to_app, 'ResourceRules.plist'))
+				return
+
 			# Remote
 			LOG.info('Sending app to remote server for codesigning. Uploading may take some time.')
 			
 			# Zip up app
 			with temp_file() as app_zip_file:
-				with ZipFile(app_zip_file, 'w', compression=ZIP_DEFLATED) as app_zip:
-					for root, dirs, files in os.walk(path_to_app, topdown=False):
-						for file in files:
-							app_zip.write(path.join(root, file), path.join(root[len(path_to_app):], file))
-							os.remove(path.join(root, file))
-						for dir in dirs:
-							os.rmdir(path.join(root, dir))
-							
+				if cache_file is None:
+					with ZipFile(app_zip_file, 'w', compression=ZIP_DEFLATED) as app_zip:
+						for root, dirs, files in os.walk(path_to_app, topdown=False):
+							for file in files:
+								app_zip.write(path.join(root, file), path.join(root[len(path_to_app):], file))
+								os.remove(path.join(root, file))
+							for dir in dirs:
+								os.rmdir(path.join(root, dir))
+				else:
+					with ZipFile(app_zip_file, 'w', compression=ZIP_DEFLATED) as app_zip:
+						app_zip.write(path.join(path_to_app, 'Forge'), 'Forge')
+						app_zip.write(path.join(path_to_app, 'Info.plist'), 'Info.plist')
+						app_zip.write(path_to_embedded_profile, 'embedded.mobileprovision')
+						with temp_file() as tweaked_resource_rules:
+							import biplist
+							rules = biplist.readPlist(path.join(path_to_app, 'ResourceRules.plist'))
+							# Don't sign anything
+							rules['rules']['.*'] = False
+							with open(tweaked_resource_rules, 'wb') as tweaked_resource_rules_file:
+								biplist.writePlist(rules, tweaked_resource_rules_file)
+							app_zip.write(tweaked_resource_rules, 'ResourceRules.plist')
+								
 							
 				from poster.encode import multipart_encode
 				from poster.streaminghttp import register_openers
@@ -284,6 +338,10 @@ See "Preparing your apps for app stores" in our docs: http://current-docs.trigge
 					zip_to_extract = ZipFile(signed_zip_file)
 					zip_to_extract.extractall(path_to_app)
 					zip_to_extract.close()
+
+					# XXX: Caching currently disabled as Info.plist changes on every build
+					"""if cache_file is not None:
+						shutil.copy2(signed_zip_file, cache_file)"""
 					LOG.info('Signed app received, continuing with packaging.')
 
 		else:
@@ -305,33 +363,13 @@ See "Preparing your apps for app stores" in our docs: http://current-docs.trigge
 			else:
 				return 'iPhone Developer'
 
-	def _create_entitlements_file(self, build, temp_file_path):
-		# XXX
-		# TODO: refactor _replace_in_file into common utility file
-		def _replace_in_file(filename, find, replace):
-			tmp_file = uuid.uuid4().hex
-			in_file_contents = read_file_as_str(filename)
-			in_file_contents = in_file_contents.replace(find, replace)
-			with codecs.open(tmp_file, 'w', encoding='utf8') as out_file:
-				out_file.write(in_file_contents)
-			os.remove(filename)
-			os.rename(tmp_file, filename)
-	
+	def _create_entitlements_file(self, build, temp_file_path, plist_dict):
 		bundle_id = self._extract_app_id()
-		shutil.copy2(path.join(self._lib_path(), 'template.entitlements'), temp_file_path)
-		
-		_replace_in_file(temp_file_path, 'APP_ID', bundle_id)
-		
-		# XXX
-		# TODO: Better way of defining this
-		# Allow push notifications for Parse
-		if not "partners" in build.config or not "parse" in build.config["partners"]:
-			_replace_in_file(temp_file_path, '<key>aps-environment</key><string>development</string>', '')
-		
-		# Distribution mode specific changes
-		if self._is_distribution_profile():
-			_replace_in_file(temp_file_path, '<key>get-task-allow</key><true/>', '<key>get-task-allow</key><false/>')
-			_replace_in_file(temp_file_path, '<key>aps-environment</key><string>development</string>', '<key>aps-environment</key><string>production</string>')
+
+		entitlements_dict = plist_dict['Entitlements']
+		entitlements_dict['application-identifier'] = bundle_id
+
+		plistlib.writePlist(entitlements_dict, temp_file_path)
 	
 	def create_ipa_from_app(self, build, provisioning_profile, output_path_for_ipa, certificate_to_sign_with=None, relative_path_to_itunes_artwork=None, certificate_path=None, certificate_password=None, output_path_for_manifest=None):
 		"""Create an ipa from an app, with an embedded provisioning profile provided by the user, and
@@ -384,7 +422,7 @@ See "Preparing your apps for app stores" in our docs: http://current-docs.trigge
 				path_to_itunes_artwork = None
 
 			with temp_file() as temp_file_path:
-				self._create_entitlements_file(build, temp_file_path)
+				self._create_entitlements_file(build, temp_file_path, plist_dict)
 				self._sign_app(build=build,
 					provisioning_profile=provisioning_profile,
 					certificate=certificate_to_sign_with,
@@ -398,7 +436,7 @@ See "Preparing your apps for app stores" in our docs: http://current-docs.trigge
 			if path_to_itunes_artwork:
 				shutil.copy2(path_to_itunes_artwork, path.join(temp_dir, 'iTunesArtwork'))
 
-			with ZipFile(output_path_for_ipa, 'w') as out_ipa:
+			with ZipFile(output_path_for_ipa, 'w', compression=ZIP_DEFLATED) as out_ipa:
 				for root, dirs, files in os.walk(temp_dir):
 					for file in files:
 						LOG.debug('adding to IPA: {file}'.format(
@@ -484,9 +522,18 @@ See "Preparing your apps for app stores" in our docs: http://current-docs.trigge
 			logfile = tempfile.mkstemp()[1]
 			process_group = ProcessGroup()
 
+			ios_sim_cmd = [path.join(self._lib_path(), ios_sim_binary), "launch", path_to_app, '--stderr', logfile]
+
+			sdk = build.tool_config.get('ios.simulatorsdk')
+			if sdk is not None:
+				ios_sim_cmd = ios_sim_cmd + ['--sdk', sdk]
+			family = build.tool_config.get('ios.simulatorfamily')
+			if family is not None:
+				ios_sim_cmd = ios_sim_cmd + ['--family', family]
+
 			LOG.info('Starting simulator')
 			process_group.spawn(
-				[path.join(self._lib_path(), ios_sim_binary), "launch", path_to_app, '--stderr', logfile],
+				ios_sim_cmd,
 				fail_if=could_not_start_simulator
 			)
 
@@ -522,7 +569,7 @@ See "Preparing your apps for app stores" in our docs: http://current-docs.trigge
 		
 		if sys.platform.startswith('darwin'):
 			with temp_file() as temp_file_path:
-				self._create_entitlements_file(build, temp_file_path)
+				self._create_entitlements_file(build, temp_file_path, plist_dict)
 				
 				self._sign_app(build=build,
 					provisioning_profile=provisioning_profile,
@@ -539,7 +586,21 @@ See "Preparing your apps for app stores" in our docs: http://current-docs.trigge
 			else:
 				LOG.info('Installing app on device: is it connected?')
 
-			run_shell(*fruitstrap, fail_silently=False, command_log_level=logging.INFO, filter=lambda x: ((x.startswith('[') or x.startswith('-')) and x) or (x.startswith('@') and x[2:-6]), check_for_interrupt=True)
+			partial_line = ['']
+			def filter_and_combine(logline):
+				if logline.startswith('[') or logline.startswith('-'):
+					return logline.rstrip()
+				elif logline.startswith('@'):
+					partial_line[0] += logline[2:-2]
+					if partial_line[0].endswith('\\r\\n'):
+						try:
+							return partial_line[0][:-4]
+						finally:
+							partial_line[0] = ""
+
+				return False
+
+			run_shell(*fruitstrap, fail_silently=False, command_log_level=logging.INFO, filter=filter_and_combine, check_for_interrupt=True)
 		elif sys.platform.startswith('win'):
 			with temp_file() as ipa_path:
 				self.create_ipa_from_app(
@@ -562,6 +623,8 @@ See "Preparing your apps for app stores" in our docs: http://current-docs.trigge
 
 				run_shell(*win_ios_install, fail_silently=False, command_log_level=logging.INFO, check_for_interrupt=True)
 		else:
+			if not which('ideviceinstaller'):
+				raise Exception("Can't find ideviceinstaller - is it installed and on your PATH?")
 			with temp_file() as ipa_path:
 				self.create_ipa_from_app(
 					build=build,
@@ -583,7 +646,9 @@ See "Preparing your apps for app stores" in our docs: http://current-docs.trigge
 				
 				linux_ios_install.append('-i')
 				linux_ios_install.append(ipa_path)
-				run_shell(*linux_ios_install, fail_silently=False, command_log_level=logging.INFO, check_for_interrupt=True)
+				run_shell(*linux_ios_install, fail_silently=False,
+					command_log_level=logging.INFO,
+					check_for_interrupt=True)
 				LOG.info('App installed, you will need to run the app on the device manually.')
 	
 	def _lib_path(self):
@@ -645,7 +710,7 @@ def package_ios(build):
 
 	runner = IOSRunner(path.abspath('development'))
 	try:
-		relative_path_to_itunes_artwork = build.config['modules']['icons']['ios']['512']
+		relative_path_to_itunes_artwork = build.config['modules']['icons']['config']['ios']['512']
 	except KeyError:
 		relative_path_to_itunes_artwork = None
 
@@ -667,8 +732,10 @@ def package_ios(build):
 	)
 
 def _generate_package_name(build):
-	if "package_names" not in build.config["modules"]:
-		build.config["modules"]["package_names"] = {}
-	if "ios" not in build.config["modules"]["package_names"]:
-		build.config["modules"]["package_names"]["ios"] = "io.trigger.forge"+build.config["uuid"]
-	return build.config["modules"]["package_names"]["ios"]
+	if "core" not in build.config:
+		build.config["core"] = {}
+	if "ios" not in build.config["core"]:
+		build.config["core"]["ios"] = {}
+	if "package_name" not in build.config["core"]["ios"]:
+		build.config["core"]["ios"]["package_name"] = "io.trigger.forge"+build.config["uuid"]
+	return build.config["core"]["ios"]["package_name"]

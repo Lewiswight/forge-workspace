@@ -10,19 +10,30 @@
     Meshable.current_units = "";
     Meshable.current_gateways = "";
     Meshable.currentDataObj = "";
+    Meshable.current_searchTerm = "";
+    Meshable.current_index_gw = 0;
+    Meshable.current_index = 0;
+    Meshable.nodeCoView = "";
+    Meshable.backplace = "";
+    Meshable.nodeCollection = "";
     Meshable.refreshUnits = false;
+    Meshable.currentMap = null;
     Meshable.addRegions({
       loginRegion: "#login",
       mainRegion: "#mainR",
       searchRegion: "#searchR",
       menuRegion: "#menuR"
     });
-    $(document).on("click", "#refresh-btn", function() {
-      return window.history.refresh();
-    });
-    $(document).on("click", "#back-btn", function() {
-      return window.history.back();
-    });
+    Meshable.changePage = function(page, direction) {
+      $(page.el).attr("data-role", "page");
+      $(page.el).attr("data-theme", Meshable.theme);
+      $.mobile.changePage($(page.el), {
+        changeHash: true,
+        reverse: direction,
+        transition: "fade"
+      });
+      return $("#locationbtnn").addClass('ui-btn-active');
+    };
     Meshable.on("initialize:after", function(options) {
       $.mobile.autoInitializePage = false;
       $.mobile.pageContainer = $("body");
@@ -38,27 +49,95 @@
         pushState: false
       });
     });
-    Meshable.changePage = function(page, direction) {
-      $(page.el).attr("data-role", "page");
-      $(page.el).attr("data-theme", Meshable.theme);
-      $.mobile.changePage($(page.el), {
-        changeHash: true,
-        reverse: direction,
-        transition: "fade"
-      });
-      return $("#locationbtnn").addClass('ui-btn-active');
-    };
-    Meshable.chooseLight = function(light) {
-      if (light === "green") {
-        return "https://s3.amazonaws.com/LynxMVC4-Bucket/green-light.png";
-      } else if (light === "yellow") {
-        return "https://s3.amazonaws.com/LynxMVC4-Bucket/yellow-light.png";
-      } else if (light === "red") {
-        return "https://s3.amazonaws.com/LynxMVC4-Bucket/red-light.png";
-      } else {
-        return "https://s3.amazonaws.com/LynxMVC4-Bucket/no-light.png";
+    Meshable.refreshButton = forge.topbar.addButton({
+      text: "Refresh",
+      position: "right"
+    }, function() {
+      var route;
+
+      route = Backbone.history.fragment;
+      if (route === "units" || route === "gateways") {
+        if (Meshable.current_index > 0) {
+          Meshable.currentDataObj = "";
+        }
+        Meshable.current_units = "";
+        Meshable.current_gateways = "";
       }
-    };
+      Meshable.router.navigate("nowhere", {
+        trigger: false,
+        replace: true
+      });
+      return Meshable.router.navigate(route, {
+        trigger: true,
+        replace: true
+      });
+    });
+    Meshable.backButton = forge.topbar.addButton({
+      text: "Back",
+      position: "left"
+    }, function() {
+      $("body").addClass('ui-disabled');
+      $.mobile.showPageLoadingMsg("a", "Loading", false);
+      return window.history.back();
+    });
+    forge.tabbar.addButton({
+      text: "Location",
+      icon: "img/compass.png",
+      index: 0
+    }, function(button) {
+      Meshable.locationButton = button;
+      return button.onPressed.addListener(function() {
+        return Meshable.router.navigate("gateways", {
+          trigger: true
+        });
+      });
+    });
+    forge.tabbar.addButton({
+      text: "Units",
+      icon: "img/text-list.png",
+      index: 1
+    }, function(button) {
+      Meshable.unitsButton = button;
+      button.onPressed.addListener(function() {
+        return Meshable.router.navigate("units", {
+          trigger: true
+        });
+      });
+      return button.setActive();
+    });
+    Meshable.searchButton = forge.tabbar.addButton({
+      text: "Search",
+      icon: "img/search.png",
+      index: 2
+    }, function(button) {
+      return button.onPressed.addListener(function() {
+        return Meshable.router.navigate("search", {
+          trigger: true
+        });
+      });
+    });
+    Meshable.ContactButton = forge.tabbar.addButton({
+      text: "Contact",
+      icon: "img/phone.png",
+      index: 3
+    }, function(button) {
+      return button.onPressed.addListener(function() {
+        return Meshable.router.navigate("contact", {
+          trigger: true
+        });
+      });
+    });
+    Meshable.logoutButton = forge.tabbar.addButton({
+      text: "Log Out",
+      icon: "img/power-button.png",
+      index: 4
+    }, function(button) {
+      return button.onPressed.addListener(function() {
+        return Meshable.router.navigate("logout", {
+          trigger: true
+        });
+      });
+    });
     return Meshable;
   });
 

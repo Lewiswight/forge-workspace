@@ -1,46 +1,98 @@
 {
+	"config_version": "4",
+	"name": "iMistaway",
 	"author": "lewis@meshify.com",
-	"config_version": "2",
-	"description": "An empty app created by default",
 	"modules": {
-		"contact": true,
-		"file": true,
-		"icons": {
-			"android": {
-				"36": "img/img_Meshify/Icon (36x36).png",
-				"48": "img/img_Meshify/Icon (48x48).png",
-				"72": "img/img_Meshify/Icon (72x72).png"
-			},
-			"ios": {
-				"57": "img/img_Meshify/Icon (57x57).png",
-				"72": "img/img_Meshify/Icon (72x72).png",
-				"114": "img/img_Meshify/Icon (114x114).png",
-				"144": "img/img_Meshify/Icon (144x144).png",
-				"512": "img/img_Meshify/Icon (512x512).png"
+		"launchimage": {
+			"version": "2.0",
+			"config": {
+				"ipad": "img/img_Meshify/Icon (512x512).png",
+				"ipad-retina": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
+				"android-landscape": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
+				"iphone-retina4": "img/mistaway/mistaway-512_x_512.png",
+				"iphone-retina": "img/mistaway/mistaway-512_x_512.png",
+				"ipad-landscape-retina": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
+				"android": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
+				"ipad-landscape": "img/mistaway/mistaway-512_x_512.png",
+				"iphone": "img/mistaway/mistaway-512_x_512.png"
 			}
 		},
-		"is": true,
-		"launchimage": {
-			"android": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
-			"android-landscape": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
-			"ipad": "img/img_Meshify/Icon (512x512).png",
-			"ipad-landscape": "img/mistaway/mistaway-512_x_512.png",
-			"ipad-landscape-retina": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
-			"ipad-retina": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
-			"iphone": "img/img_Meshify/iPhone 3 Splash Screen (320x480).png",
-			"iphone-retina": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
-			"iphone-retina4": "img/img_Meshify/iPhone 5 Splash Screen (640x1136).png"
+		"file": {
+			"version": "2.0"
 		},
-		"prefs": true,
+		"icons": {
+			"version": "2.0",
+			"config": {
+				"android": {
+					"36": "img/img_Meshify/Icon (36x36).png",
+					"48": "img/img_Meshify/Icon (48x48).png",
+					"72": "img/img_Meshify/Icon (72x72).png"
+				},
+				"ios": {
+					"57": "img/mistaway/mistaway-57_x_57.png",
+					"72": "img/mistaway/mistaway-72_x_72.png",
+					"114": "img/mistaway/mistaway-114_x_114.png",
+					"144": "img/mistaway/mistaway-144_x_144.png",
+					"512": "img/mistaway/mistaway-512_x_512.png"
+				}
+			}
+		},
+		"notification": {
+			"version": "2.0"
+		},
 		"request": {
-			"permissions": [
-				"http://devbuildinglynx.apphb.com/api/authentication",
-				"http://devbuildinglynx.apphb.com/api/username",
-				"http://devbuildinglynx.apphb.com/api/*"
-			]
+			"version": "2.0",
+			"config": {
+				"permissions": [
+					"http://devbuildinglynx.apphb.com/api/authentication",
+					"http://devbuildinglynx.apphb.com/api/username",
+					"http://devbuildinglynx.apphb.com/api/*"
+				]
+			}
+		},
+		"contact": {
+			"version": "2.0"
+		},
+		"topbar": {
+			"version": "2.0"
+		},
+		"tabbar": {
+			"version": "2.0"
+		},
+		"activations": {
+			"version": "2.0",
+			"config": {
+				"activations": [
+					{
+						"styles": [],
+						"patterns": [],
+						"run_at": "start",
+						"scripts": []
+					}
+				]
+			}
+		},
+		"prefs": {
+			"version": "2.0"
+		},
+		"display": {
+			"version": "2.0",
+			"config": {
+				"orientations": {
+					"ipad": "portrait",
+					"android": "portrait",
+					"iphone": "portrait"
+				}
+			}
+		},
+		"geolocation": {
+			"version": "2.0"
 		}
 	},
-	"name": "Meshify",
-	"platform_version": "v1.4.20",
-	"version": "0.2"
+	"platform_version": "v2.0.0",
+	"version": "0.2",
+	"core": {
+		"general": {}
+	},
+	"description": "An empty app created by default"
 }

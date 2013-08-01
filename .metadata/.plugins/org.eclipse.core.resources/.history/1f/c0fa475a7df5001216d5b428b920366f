@@ -1,0 +1,220 @@
+# http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/
+
+# Optional. You will see this name in eg. 'ps' or 'top' command
+
+# Port where we'll run the websocket server
+
+# websocket and http servers
+
+###
+Global variables
+###
+
+# latest 100 messages
+
+# list of currently connected clients (users)
+
+###
+Helper function for escaping input strings
+###
+
+inspect = require("eyes").inspector(maxLength: false)
+
+parseString = require("xml2js").parseString
+
+
+
+
+process.title = "node-chat"
+webSocketsServerPort = 1337
+webSocketServer = require("websocket").server
+http = require("http")
+history = []
+clients = []
+clientDict = new Object 
+# Array with some colors
+colors = ["red", "green", "blue", "magenta", "purple", "plum", "orange"]
+
+# ... in random order
+colors.sort (a, b) ->
+  Math.random() > 0.5
+
+
+###
+HTTP server
+###
+server = http.createServer((request, response) ->
+)
+
+# Not important for us. We're writing WebSocket server, not HTTP server
+server.listen webSocketsServerPort, ->
+  console.log (new Date()) + " Server is listening on port " + webSocketsServerPort
+
+
+###
+WebSocket server
+###
+
+# WebSocket server is tied to a HTTP server. WebSocket request is just
+# an enhanced HTTP request. For more info http://tools.ietf.org/html/rfc6455#page-6
+
+
+
+
+
+wsServer = new webSocketServer(
+	httpServer: server
+	keepalive: true
+	keepaliveInterval: 1000
+	dropConnectionOnKeepaliveTimeout: true
+	keepaliveGracePeriod: 2000
+)
+	
+
+# This callback function is called every time someone
+# tries to connect to the WebSocket server
+wsServer.on "request", (request) ->
+  console.log (new Date()) + " Connection from origin " + request.origin + "."
+  
+  # accept connection - you should check 'request.origin' to make sure that
+  # client is connecting from your website
+  # (http://en.wikipedia.org/wiki/Same_origin_policy)
+  connection = request.accept(null, request.origin)
+  
+  # we need to know client index to remove them on 'close' event
+  index = clients.push(connection) - 1
+  MAC = false
+  userColor = false
+  console.log (new Date()) + " Connection accepted."
+  hbID = false
+  
+  
+  # user sent some message
+  connection.on "message", (message) ->
+    if message.type is "utf8" # accept only text
+      if MAC is false # first message sent by user is their name
+      	try
+      		msgParts = message.utf8Data.split(":")
+      	catch error
+      		connection.sendUTF "not connected"
+      		return
+      	if msgParts[0] == "connect"
+      		#need to add validation on this part to make sure the mac is really a mac address
+      		MAC = msgParts[1]
+      		clientDict[MAC] = connection
+      		clientDict[MAC].response = false
+      		connection.sendUTF "connected"
+      		console.log "connected"
+      		
+      	else
+      		connection.sendUTF "not connected"
+      		return
+  
+        
+      else
+      	if message.utf8Data == "ping"
+      		connection.sendUTF "pong"
+      		return
+      	console.log "hi"
+      	
+      	clientDict[MAC].response = message.utf8Data
+      	
+      	if hbID is false
+      		hbID = setInterval(heartbeat, 5000)	
+      		
+      	
+
+
+  heartbeat = ->
+  	console.log "running heart beat from " + MAC
+      		
+      		  # user disconnected
+  connection.on "close", (connection) ->
+  	console.log "exiting"
+  	if MAC isnt false
+  		#remove client
+  		delete clientDict[MAC]
+  		MAC = false
+  		clearInterval(hbID)
+
+
+
+###
+Restful API for setting channels
+###
+
+#xml = "<sci_request version='1.0'><send_message><targets><device id='00000000-00000000-00409DFF-FF5C1B19'/></targets><rci_request version='1.1'><do_command target='Socket'><data><channel_set name='mc13_[00:13:a2:00:40:9f:29:81]!.r' value='M'/></data></do_command></rci_request></send_message></sci_request>"
+sendData = (xml) ->
+	string = ""
+	parseString xml, (err, result) ->
+	  id = result.sci_request.send_message[0].targets[0].device[0].$.id
+	  id = id.replace("00000000-00000000-","")
+	  id = id.replace("FF-FF","")
+	  for key of result.sci_request.send_message[0].rci_request[0].do_command[0].data[0]
+	  	command = key
+	  	inspect key
+	  	for key2 of result.sci_request.send_message[0].rci_request[0].do_command[0].data[0][key][0].$
+	  		inspect key2
+	  		if key2 == "name"
+	  			name = result.sci_request.send_message[0].rci_request[0].do_command[0].data[0][key][0].$[key2]
+	  		if key2 == "value"
+	  			value = result.sci_request.send_message[0].rci_request[0].do_command[0].data[0][key][0].$[key2]
+	  			
+	  	string += "</data><" + command + " name='" + name + "' value='" + value + "'/></data>"
+	  	console.log string
+	  clientDict[id].response = false
+	  clientDict[id].sendUTF string
+	  return id
+
+respond = (req, res, next) ->
+  keys = []
+  for key of clientDict
+  	console.log key
+  res.send "hello " + clientDict[req.params.name]
+restify = require("restify")
+server = restify.createServer()
+server.use restify.bodyParser(mapParams: false)
+
+#post data here to set channels, it needs to the rci request that we build right now on the server
+server.post "/API/", create = (req, res, next) ->
+  xml = req.body
+  inspect xml
+  try
+  	console.log "trying"
+  	id = sendData xml
+  	console.log id
+  catch error
+  	res.send 201, "Gateway: " + id + " Not Connected or Bad XML"
+  	next()
+  
+  wait()
+  	
+  wait = ->
+  	if clientDict[id].response is false
+  		console.log "waiting"
+  		setTimeout(wait,1000)
+  	else
+  		sendResp clientDict[id].response
+  		
+  		
+  sendResp = (resp) ->
+  	res.send 201, resp
+  	next()
+  
+  res.send 201, Math.random().toString(36).substr(3, 8)
+  next()
+  
+  
+  
+server.get "/hello/:name", respond
+server.head "/hello/:name", respond
+server.listen 8080, ->
+  console.log "%s listening at %s", server.name, server.url
+
+
+
+
+
+
+	
+
