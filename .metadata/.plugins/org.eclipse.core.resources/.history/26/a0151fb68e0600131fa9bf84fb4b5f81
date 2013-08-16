@@ -497,7 +497,7 @@
             
         <div data-theme="a" data-role="footer" data-position="fixed" data-tap-toggle="false" data-update-page-padding="false">  
 				<h3>Version 1.0.1</h3>
-        </div>  
+        </div> 
 		
   
     </script>
