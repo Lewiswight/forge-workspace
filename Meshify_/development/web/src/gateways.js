@@ -4,43 +4,95 @@
     var Map, MapView, geocoder, latlngbounds, locationmaps, mapOpts, markers, onMapBound, onMapRendered;
 
     Meshable.vent.on("showmap", function() {
-      var bindmap, center;
+      var bindmap;
 
-      bindmap = function(center) {
-        return Meshable.vent.trigger('maps:bind', {
-          mapContainerId: 'mapwrapper',
-          mapOpts: {
-            center: center,
-            zoom: 12,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-          },
-          onMapRendered: function() {
-            console.log('on onMapRendered callback');
-            return forge.request.ajax({
-              url: Meshable.rooturl + '/api/locations?term=',
-              type: "GET",
-              dataType: "json",
-              timeout: "10000",
-              contentType: 'application/json; charset=utf-8',
-              error: function(e) {
-                $("body").removeClass('ui-disabled');
-                $.mobile.hidePageLoadingMsg();
-                forge.notification.alert("Error", e.message);
-                return Meshable.router.navigate("", {
-                  trigger: true
-                });
-              },
-              success: function(data) {
-                return Meshable.vent.trigger('maps:addmarkers', {
-                  items: data
-                });
-              }
-            });
-          }
+      Meshable.locationButton.setActive();
+      if (Meshable.currentMap === null) {
+        Meshable.locationButton.setActive();
+        bindmap = function(center) {
+          return Meshable.vent.trigger('maps:bind', {
+            mapContainerId: 'mapwrapper',
+            mapOpts: {
+              center: center,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            },
+            onMapRendered: function() {
+              console.log('on onMapRendered callback');
+              return forge.request.ajax({
+                url: Meshable.rooturl + '/api/locations?term=' + Meshable.current_searchTerm,
+                type: "GET",
+                dataType: "json",
+                timeout: "20000",
+                contentType: 'application/json; charset=utf-8',
+                error: function(e) {
+                  $("body").removeClass('ui-disabled');
+                  $.mobile.hidePageLoadingMsg();
+                  forge.notification.alert("Error", e.message);
+                  return Meshable.router.navigate("", {
+                    trigger: true
+                  });
+                },
+                success: function(data) {
+                  return Meshable.vent.trigger('maps:addmarkers', {
+                    items: data
+                  });
+                }
+              });
+            }
+          });
+        };
+        return forge.geolocation.getCurrentPosition({
+          "enableHighAccuracy": true
+        }, function(position) {
+          var center;
+
+          center = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          return bindmap(center);
+        }, function(e) {
+          var center;
+
+          center = new google.maps.LatLng(29.7631, -95.3631);
+          return bindmap(center);
         });
-      };
-      center = new google.maps.LatLng(59.3426606750, 18.0736160278);
-      return bindmap(center);
+      } else {
+        $('#mainDiv').empty();
+        $('#mainDiv').append(Meshable.currentMap);
+        if (Meshable.mapRefresh === true) {
+          $.mobile.showPageLoadingMsg();
+          Meshable.mapRefresh = false;
+          Meshable.vent.trigger("clear:markers");
+          forge.request.ajax({
+            url: Meshable.rooturl + '/api/locations?term=' + Meshable.current_searchTerm,
+            type: "GET",
+            dataType: "json",
+            timeout: "20000",
+            contentType: 'application/json; charset=utf-8',
+            error: function(e) {
+              $("body").removeClass('ui-disabled');
+              $.mobile.hidePageLoadingMsg();
+              forge.notification.alert("Error", e.message);
+              return Meshable.router.navigate("", {
+                trigger: true
+              });
+            },
+            success: function(data) {
+              var item, _i, _len, _results;
+
+              _results = [];
+              for (_i = 0, _len = data.length; _i < _len; _i++) {
+                item = data[_i];
+                _results.push(Meshable.vent.trigger('maps:addmarker', item));
+              }
+              return _results;
+            }
+          });
+        }
+        $("mainDiv").trigger('create');
+        $.mobile.hidePageLoadingMsg();
+        $("body").removeClass('ui-disabled');
+        console.log('maps bound');
+        return google.maps.event.trigger(locationmaps, 'resize');
+      }
     });
     locationmaps = null;
     geocoder = null;
@@ -62,20 +114,15 @@
       if (onMapBound !== null && onMapBound !== void 0) {
         onMapBound(mapView);
       }
-      google.maps.event.addListener(map, "bounds_changed", function() {
-        var bounds;
-
-        bounds = map.getBounds();
-        return google.maps.event.trigger(map, 'resize');
-      });
       mapView.render();
+      Meshable.currentMap = $(mapView.el);
       $('#mainDiv').empty();
-      $('#map_canvas').append($(mapView.el));
-      $("map_canvas").trigger('create');
+      $('#mainDiv').append($(mapView.el));
+      $("mainDiv").trigger('create');
       $.mobile.hidePageLoadingMsg();
       $("body").removeClass('ui-disabled');
       console.log('maps bound');
-      return google.maps.event.trigger(map, 'resize');
+      return google.maps.event.trigger(locationmaps, 'resize');
     });
     Meshable.vent.on('maps:geocode', function(options) {
       var fromaddress, geocoderRequest, state;
@@ -103,6 +150,7 @@
       for (i = _i = 0, _ref = obj.items.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
         Meshable.vent.trigger('maps:addmarker', obj.items[i]);
       }
+      locationmaps.fitBounds(latlngbounds);
     });
     Meshable.vent.on('maps:addmarker', function(obj) {
       var clickfunction, position, thisicon, thismarker, thisorigin;
@@ -114,19 +162,19 @@
         return false;
       }
       if (obj.nodecolors.statuscolor === "GREEN") {
-        thisorigin = new google.maps.Point(0, 245);
+        thisorigin = new google.maps.Point(4, 290);
       } else if (obj.nodecolors.statuscolor === "YELLOW") {
-        thisorigin = new google.maps.Point(0, 298);
+        thisorigin = new google.maps.Point(4, 345);
       } else if (obj.nodecolors.statuscolor === "RED") {
-        thisorigin = new google.maps.Point(0, 187);
+        thisorigin = new google.maps.Point(4, 231);
       } else if (obj.nodecolors.statuscolor === "BLUE") {
-        thisorigin = new google.maps.Point(0, 351);
+        thisorigin = new google.maps.Point(4, 398);
       } else {
-        thisorigin = new google.maps.Point(0, 351);
+        thisorigin = new google.maps.Point(4, 398);
       }
       thisicon = new Object({
         url: "https://s3.amazonaws.com/LynxMVC4-Bucket/themes/mistaway/sprite.png",
-        size: new google.maps.Size(30, 40, "px", "px"),
+        size: new google.maps.Size(33, 44, "px", "px"),
         origin: thisorigin
       });
       position = new google.maps.LatLng(obj.address.latitude, obj.address.longitude);
@@ -145,8 +193,70 @@
       google.maps.event.addListener(thismarker, "click", clickfunction);
       return console.log('marker added');
     });
-    Meshable.vent.on('maps:marker:clicked', function(model) {
-      return alert("clicked");
+    Meshable.vent.on('zoom:location', function() {
+      return forge.geolocation.getCurrentPosition({
+        "enableHighAccuracy": true
+      }, function(position) {
+        var center;
+
+        center = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        locationmaps.setCenter(center);
+        locationmaps.setCenter(center);
+        locationmaps.setZoom(14);
+        return locationmaps.panTo(center);
+      }, function(e) {
+        var center;
+
+        center = new google.maps.LatLng(29.7631, -95.3631);
+        locationmaps.setCenter(center);
+        locationmaps.setZoom(14);
+        return locationmaps.panTo(center);
+      });
+    });
+    Meshable.vent.on('clear:markers', function() {
+      var marker, _i, _len;
+
+      for (_i = 0, _len = markers.length; _i < _len; _i++) {
+        marker = markers[_i];
+        marker.setMap(null);
+      }
+      return markers = [];
+    });
+    Meshable.vent.on('maps:marker:clicked', function(node) {
+      var navPath;
+
+      if (node.person.first === "") {
+        node.person.first = "Unknown";
+      }
+      if (node.person.last === "") {
+        node.person.last = "Unknown";
+      }
+      if (node.person.phone1 === "") {
+        node.person.phone1 = "000-000-0000";
+      }
+      if (node.address.city === "") {
+        node.address.city = "Unknown";
+      }
+      if (node.address.state === "") {
+        node.address.state = "Unknown";
+      }
+      if (node.address.street1 === "") {
+        node.address.street1 = "unknown";
+      }
+      if (node.address.zip === "") {
+        node.address.zip = "unknown";
+      }
+      Meshable.location.first = node.person.first;
+      Meshable.location.last = node.person.last;
+      Meshable.location.phone = node.person.phone1;
+      Meshable.location.city = node.person.city;
+      Meshable.location.state = node.person.state;
+      Meshable.location.street = node.person.street1;
+      Meshable.location.zip = node.person.zip;
+      navPath = "/unit" + "/" + node.gateway.macaddress + "/" + node.person.first + "/" + node.person.last + "/" + node.person.phone1 + "/" + node.address.city + "/" + node.address.state + "/" + node.address.street1 + "/" + node.address.zip;
+      return Meshable.router.navigate(navPath, {
+        trigger: true
+      });
     });
     Map = Backbone.Model.extend({
       defaults: {

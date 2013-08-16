@@ -1,20 +1,24 @@
 {
 	"config_version": "4",
-	"name": "iMistaway",
+	"description": "iMistAway",
 	"author": "lewis@meshify.com",
 	"modules": {
+		"geolocation": {
+			"version": "2.0"
+		},
 		"launchimage": {
 			"version": "2.0",
 			"config": {
-				"ipad": "img/img_Meshify/Icon (512x512).png",
-				"ipad-retina": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
-				"android-landscape": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
-				"iphone-retina4": "img/mistaway/mistaway-512_x_512.png",
-				"iphone-retina": "img/mistaway/mistaway-512_x_512.png",
-				"ipad-landscape-retina": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
-				"android": "img/img_Meshify/iPhone 4 Splashscreen (640x960).png",
-				"ipad-landscape": "img/mistaway/mistaway-512_x_512.png",
-				"iphone": "img/mistaway/mistaway-512_x_512.png"
+				"ipad": "img/mistaway/iMistAwayLogo-1136x640.png",
+				"ipad-retina": "img/mistaway/iMistAwayLogo-1136x640.png",
+				"background-color": "#FFFFFF",
+				"android-landscape": "img/mistaway/iMistAwayLogo-960x640.png",
+				"iphone-retina4": "img/mistaway/iMistAwayLogo-1136x640.png",
+				"iphone-retina": "img/mistaway/iMistAwayLogo-960x640.png",
+				"iphone": "img/mistaway/iMistAwayLogo-480x320.png",
+				"android": "img/mistaway/iMistAwayLogo-960x640.png",
+				"ipad-landscape": "img/mistaway/iMistAwayLogo-1136x640.png",
+				"ipad-landscape-retina": "img/mistaway/iMistAwayLogo-1136x640.png"
 			}
 		},
 		"file": {
@@ -24,20 +28,23 @@
 			"version": "2.0",
 			"config": {
 				"android": {
-					"36": "img/img_Meshify/Icon (36x36).png",
-					"48": "img/img_Meshify/Icon (48x48).png",
-					"72": "img/img_Meshify/Icon (72x72).png"
+					"36": "img/mistaway/imist-logo-bl-36.png",
+					"48": "img/mistaway/imist-logo-bl-48.png",
+					"72": "img/mistaway/imist-logo-bl-1024_72.png"
 				},
 				"ios": {
-					"57": "img/mistaway/mistaway-57_x_57.png",
-					"72": "img/mistaway/mistaway-72_x_72.png",
-					"114": "img/mistaway/mistaway-114_x_114.png",
-					"144": "img/mistaway/mistaway-144_x_144.png",
-					"512": "img/mistaway/mistaway-512_x_512.png"
+					"57": "img/mistaway/imist-logo-bl-1024_57.png",
+					"72": "img/mistaway/imist-logo-bl-1024_72.png",
+					"114": "img/mistaway/imist-logo-bl-1024_114.png",
+					"144": "img/mistaway/imist-logo-bl-1024_144.png",
+					"512": "img/mistaway/imist-logo-bl-1024_512.png"
 				}
 			}
 		},
 		"notification": {
+			"version": "2.1"
+		},
+		"topbar": {
 			"version": "2.0"
 		},
 		"request": {
@@ -46,15 +53,20 @@
 				"permissions": [
 					"http://devbuildinglynx.apphb.com/api/authentication",
 					"http://devbuildinglynx.apphb.com/api/username",
-					"http://devbuildinglynx.apphb.com/api/*"
+					"http://devbuildinglynx.apphb.com/api/*",
+					"http://imistawy.com/api/*"
 				]
 			}
 		},
-		"contact": {
-			"version": "2.0"
+		"flurry": {
+			"version": "2.2",
+			"config": {
+				"ios_api_key": "8N5NKVCZBN8QH5TQ24KK",
+				"android_api_key": "ZNBVBZRP2DP5MZM9HGKY"
+			}
 		},
-		"topbar": {
-			"version": "2.0"
+		"contact": {
+			"version": "2.1"
 		},
 		"tabbar": {
 			"version": "2.0"
@@ -62,14 +74,7 @@
 		"activations": {
 			"version": "2.0",
 			"config": {
-				"activations": [
-					{
-						"styles": [],
-						"patterns": [],
-						"run_at": "start",
-						"scripts": []
-					}
-				]
+				"activations": []
 			}
 		},
 		"prefs": {
@@ -84,15 +89,22 @@
 					"iphone": "portrait"
 				}
 			}
-		},
-		"geolocation": {
-			"version": "2.0"
 		}
 	},
 	"platform_version": "v2.0.0",
-	"version": "0.2",
+	"version": "1.0.1",
 	"core": {
-		"general": {}
+		"android": {
+			"minimum_version": "5"
+		},
+		"ios": {
+			"device_family": "iphone",
+			"minimum_version": "5.1",
+			"package_name": "com.meshify.imistaway2"
+		},
+		"general": {
+			"reload": true
+		}
 	},
-	"description": "An empty app created by default"
+	"name": "iMistAway"
 }

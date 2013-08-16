@@ -2,24 +2,27 @@
 	"android": {
 		"profiles": {
 			"DEFAULT": {
-				"keystore": "/Users/lewiswight/meshifyKey",
-				"keypass": "123",
-				"keyalias": "MeshifyKey",
-				"storepass": "123"
+				"keystore": "/Users/lewiswight/imistawayapp",
+				"keypass": "12345678",
+				"keyalias": "imistawayapp",
+				"storepass": "12345678"
 			}
-		}
-	},
-	"general": {
-		"reload": {}
+		},
+		"purge": true
 	},
 	"ios": {
 		"simulatorsdk": "6.1",
 		"simulatorfamily": "iphone",
 		"profiles": {
 			"DEFAULT": {
-				"provisioning_profile": "/Users/lewiswight/Library/MobileDevice/Provisioning Profiles/619F1422-52A9-4C38-B083-3C3AB01098D0.mobileprovision"
+				"developer_certificate_path": "/Users/lewiswight/forge-workspace/Certificates1.p12",
+				"developer_certificate_password": "12345678",
+				"provisioning_profile": "/Users/lewiswight/Library/MobileDevice/Provisioning Profiles/67706E9F-534D-425F-B17C-EC89A95424F1.mobileprovision"
 			}
 		},
 		"device": "simulator"
+	},
+	"general": {
+		"reload": {}
 	}
 }

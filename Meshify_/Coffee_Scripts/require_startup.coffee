@@ -10,7 +10,7 @@ require ["jquery", "async", "backbone"], ( $, Backbone, async) ->
 	
 		
 			
-require [ 'jqmglobe', 'jqm',  "underscore", "marionette", "Meshable", "Router", "Events", "login", 'dashboard', 'search', 'animate', 'slide', 'menu', 'gateways', 'nodes', 'node', 'units'], ( jqmglobe, jqm, _, Marionette, Meshable, Router, Events, login, dashboard, search, animate, slide, menu, gateways, nodes, node, units) ->
+require [ 'jqmglobe', 'jqm',  "underscore", "marionette", "Meshable", "Router", "Events", "login", 'dashboard', 'search', 'animate', 'slide', 'menu', 'gateways', 'nodes', 'node', 'units', 'contact'], ( jqmglobe, jqm, _, Marionette, Meshable, Router, Events, login, dashboard, search, animate, slide, menu, gateways, nodes, node, units, contact) ->
   
   # The "app" dependency is passed in as "Meshable"
 
@@ -21,6 +21,8 @@ require [ 'jqmglobe', 'jqm',  "underscore", "marionette", "Meshable", "Router", 
 		
 			
 	$(document).ready ->
+		
+		
 
 		Meshable.events = Events
 		Meshable.router = new Router()

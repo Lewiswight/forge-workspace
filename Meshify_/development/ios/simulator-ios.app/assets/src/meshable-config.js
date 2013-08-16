@@ -81,7 +81,8 @@ require.config({
         'gateways': 'gateways',
         'units': 'units',
         'nodes': 'nodes',
-        'node': 'node'
+        'node': 'node',
+        'contact': 'contact'
         	
         
 

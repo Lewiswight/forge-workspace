@@ -2,37 +2,37 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="263" key="DIALOG_WIDTH"/>
-		<item value="356" key="DIALOG_Y_ORIGIN"/>
+		<item value="248" key="DIALOG_Y_ORIGIN"/>
+		<item value="0" key="DIALOG_X_ORIGIN"/>
 		<item value="395" key="DIALOG_HEIGHT"/>
-		<item value="934" key="DIALOG_X_ORIGIN"/>
 		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="wrap"/>
-		<item value="false" key="isRegEx"/>
 		<item value="false" key="casesensitive"/>
+		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="search" key="selection"/>
+		<item value="auth" key="selection"/>
 		<list key="findhistory">
-			<item value="search"/>
-			<item value="value"/>
-			<item value="Meshify"/>
-			<item value="results_insert"/>
-			<item value="body"/>
-			<item value="background"/>
-			<item value="Meshable.current_gateways"/>
-			<item value="currentDataObj"/>
+			<item value="auth"/>
+			<item value="create"/>
+			<item value="refresh"/>
+			<item value="theme"/>
+			<item value="$(&quot;body&quot;).removeClass(&apos;ui-disabled&apos;)"/>
+			<item value="margin-bottom: 50px"/>
+			<item value="hidemargin-bottom: 50px"/>
+			<item value="hide"/>
 		</list>
 		<list key="replacehistory">
-			<item value="iMistaway"/>
-			<item value=""/>
-			<item value="modelList"/>
-			<item value="current_units"/>
-			<item value="Meshable.Current_units"/>
-			<item value="forge.request.ajax"/>
-			<item value="#"/>
-			<item value="$.mobile.showPageLoadingMsg(&quot;a&quot;, &quot;Loading&quot;, false)"/>
+			<item value="Last Refilled"/>
+			<item value="val()"/>
+			<item value="mc13z"/>
+			<item value="mc3"/>
+			<item value="mc3z"/>
+			<item value="window.forge"/>
+			<item value="Meshable.vent"/>
+			<item value="not_connected"/>
 		</list>
 	</section>
 </section>

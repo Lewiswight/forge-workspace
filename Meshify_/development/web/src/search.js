@@ -37,7 +37,7 @@
         "click #search-btn": "update"
       },
       update: function() {
-        var includeUnits, route, searchField;
+        var includeUnits, resultType, route, searchField;
 
         if (!forge.is.connection.connected()) {
           forge.notification.alert("Failed to Load", "No Internet Connection");
@@ -46,11 +46,12 @@
           return;
         }
         includeUnits = $('#include-units').prop("checked");
+        resultType = $('#flip-3').val();
         searchField = $('#search-main').val();
         if (searchField === "") {
           searchField = "_";
         }
-        route = "#searching/" + searchField + "/" + includeUnits;
+        route = "#searching/" + searchField + "/" + resultType;
         return Backbone.history.navigate(route, {
           trigger: true,
           replace: false,
@@ -70,6 +71,7 @@
     return Meshable.vent.on("goto:search", function() {
       var search;
 
+      Meshable.searchButton.setActive();
       search = new searchView({
         collection: make_collection()
       });

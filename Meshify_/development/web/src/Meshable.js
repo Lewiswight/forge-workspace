@@ -4,8 +4,11 @@
     var Meshable, search;
 
     Meshable = new Backbone.Marionette.Application();
+    Meshable.company = new Object;
+    Meshable.user = new Object;
+    Meshable.location = new Object;
     Meshable.theme = "a";
-    Meshable.rooturl = "http://imistaway.com";
+    Meshable.rooturl = "http://devbuildinglynx.apphb.com/";
     Meshable.current - (search = null);
     Meshable.current_units = "";
     Meshable.current_gateways = "";
@@ -17,6 +20,8 @@
     Meshable.backplace = "";
     Meshable.nodeCollection = "";
     Meshable.refreshUnits = false;
+    Meshable.currentMap = null;
+    Meshable.mapRefresh = false;
     Meshable.addRegions({
       loginRegion: "#login",
       mainRegion: "#mainR",
@@ -48,18 +53,24 @@
         pushState: false
       });
     });
-    /*	
+    /*
     	
-    	Meshable.refreshButton = forge.topbar.addButton(
+    	forge.topbar.addButton(
     	  text: "Refresh"
     	  position: "right"
     	,  ->
     		route = Backbone.history.fragment
-    		if route == "units" or route == "gateways"
+    		if route == "units" 
     			if Meshable.current_index > 0
     				Meshable.currentDataObj = ""
     			Meshable.current_units = ""
-    			Meshable.current_gateways = ""
+    		else if route == "gateways"
+    			#Meshable.vent.trigger 'zoom:location'
+    			#return
+    			Meshable.mapRefresh = true
+    		else if route.substring(0, 10) == "searching/"
+    			Meshable.mapRefresh = true
+    			
     		Meshable.router.navigate "nowhere", trigger : false, replace: true
     		Meshable.router.navigate route, trigger : true, replace: true
      		#window.location.reload(false) 
@@ -67,7 +78,7 @@
     	
     	
     	)
-    	Meshable.backButton = forge.topbar.addButton(
+    	forge.topbar.addButton(
     	  text: "Back"
     	  position: "left"
     	,  ->
@@ -81,16 +92,16 @@
     	
     
     	
-    	Meshable.locationButton = forge.tabbar.addButton(
-    	  text: "Location"
+    	forge.tabbar.addButton(
+    	  text: "Map"
     	  icon: "img/compass.png"
     	  index: 0
     	, (button) ->
+    	  Meshable.locationButton = button
     	  button.onPressed.addListener ->
     	    Meshable.router.navigate "gateways", trigger : true
-    	  
-    
     	)
+    	 
     	forge.tabbar.addButton(
     	  text: "Units"
     	  icon: "img/text-list.png"
@@ -101,26 +112,28 @@
     	    Meshable.router.navigate "units", trigger : true
     	  button.setActive()
     	)
-    	Meshable.searchButton = forge.tabbar.addButton(
+    	forge.tabbar.addButton(
     	  text: "Search"
     	  icon: "img/search.png"
     	  index: 2
     	, (button) ->
+    	  Meshable.searchButton = button
     	  button.onPressed.addListener ->
     	    Meshable.router.navigate "search", trigger : true
     
     	)	
     	
-    	Meshable.ContactButton = forge.tabbar.addButton(
+    	forge.tabbar.addButton(
     	  text: "Contact"
     	  icon: "img/phone.png"
     	  index: 3
     	, (button) ->
+    	  Meshable.contactButton = button
     	  button.onPressed.addListener ->
     	    Meshable.router.navigate "contact", trigger : true
     
     	)
-    	Meshable.logoutButton = forge.tabbar.addButton(
+    	forge.tabbar.addButton(
     	  text: "Log Out"
     	  icon: "img/power-button.png"
     	  index: 4

@@ -4,6 +4,9 @@
     var Meshable, search;
 
     Meshable = new Backbone.Marionette.Application();
+    Meshable.company = new Object;
+    Meshable.user = new Object;
+    Meshable.location = new Object;
     Meshable.theme = "a";
     Meshable.rooturl = "http://imistaway.com";
     Meshable.current - (search = null);
@@ -17,11 +20,17 @@
     Meshable.backplace = "";
     Meshable.nodeCollection = "";
     Meshable.refreshUnits = false;
+    Meshable.currentMap = null;
+    Meshable.mapRefresh = false;
+    Meshable.loading = false;
     Meshable.addRegions({
       loginRegion: "#login",
       mainRegion: "#mainR",
       searchRegion: "#searchR",
       menuRegion: "#menuR"
+    });
+    $(document).on("click", "#newPas", function() {
+      return Meshable.vent.trigger("new:password");
     });
     Meshable.changePage = function(page, direction) {
       $(page.el).attr("data-role", "page");
@@ -48,19 +57,25 @@
         pushState: false
       });
     });
-    Meshable.refreshButton = forge.topbar.addButton({
+    forge.topbar.addButton({
       text: "Refresh",
       position: "right"
     }, function() {
+      return Meshable.vent.trigger("goto:refresh");
+    });
+    Meshable.vent.on("goto:refresh", function() {
       var route;
 
       route = Backbone.history.fragment;
-      if (route === "units" || route === "gateways") {
+      if (route === "units") {
         if (Meshable.current_index > 0) {
           Meshable.currentDataObj = "";
         }
         Meshable.current_units = "";
-        Meshable.current_gateways = "";
+      } else if (route === "gateways") {
+        Meshable.mapRefresh = true;
+      } else if (route.substring(0, 10) === "searching/") {
+        Meshable.mapRefresh = true;
       }
       Meshable.router.navigate("nowhere", {
         trigger: false,
@@ -71,7 +86,7 @@
         replace: true
       });
     });
-    Meshable.backButton = forge.topbar.addButton({
+    forge.topbar.addButton({
       text: "Back",
       position: "left"
     }, function() {
@@ -79,15 +94,18 @@
       $.mobile.showPageLoadingMsg("a", "Loading", false);
       return window.history.back();
     });
-    Meshable.locationButton = forge.tabbar.addButton({
-      text: "Location",
+    forge.tabbar.addButton({
+      text: "Map",
       icon: "img/compass.png",
       index: 0
     }, function(button) {
+      Meshable.locationButton = button;
       return button.onPressed.addListener(function() {
-        return Meshable.router.navigate("gateways", {
-          trigger: true
-        });
+        if (Meshable.loading === false) {
+          return Meshable.router.navigate("gateways", {
+            trigger: true
+          });
+        }
       });
     });
     forge.tabbar.addButton({
@@ -97,35 +115,43 @@
     }, function(button) {
       Meshable.unitsButton = button;
       button.onPressed.addListener(function() {
-        return Meshable.router.navigate("units", {
-          trigger: true
-        });
+        if (Meshable.loading === false) {
+          return Meshable.router.navigate("units", {
+            trigger: true
+          });
+        }
       });
       return button.setActive();
     });
-    Meshable.searchButton = forge.tabbar.addButton({
+    forge.tabbar.addButton({
       text: "Search",
       icon: "img/search.png",
       index: 2
     }, function(button) {
+      Meshable.searchButton = button;
       return button.onPressed.addListener(function() {
-        return Meshable.router.navigate("search", {
-          trigger: true
-        });
+        if (Meshable.loading === false) {
+          return Meshable.router.navigate("search", {
+            trigger: true
+          });
+        }
       });
     });
-    Meshable.ContactButton = forge.tabbar.addButton({
+    forge.tabbar.addButton({
       text: "Contact",
       icon: "img/phone.png",
       index: 3
     }, function(button) {
+      Meshable.contactButton = button;
       return button.onPressed.addListener(function() {
-        return Meshable.router.navigate("contact", {
-          trigger: true
-        });
+        if (Meshable.loading === false) {
+          return Meshable.router.navigate("contact", {
+            trigger: true
+          });
+        }
       });
     });
-    Meshable.logoutButton = forge.tabbar.addButton({
+    forge.tabbar.addButton({
       text: "Log Out",
       icon: "img/power-button.png",
       index: 4

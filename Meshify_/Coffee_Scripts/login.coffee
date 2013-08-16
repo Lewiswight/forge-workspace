@@ -67,14 +67,22 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			$("#login").trigger('create')
 			#@passwordcheck()
 			
-			
+
 			
 		events:
 			"click #auth-submit-btn": "submitauth"
-			#"focus #username-input": "focususername"
+			"click #getnewpass": "openPopup"
+			"click #newPas": "newPassword"
 			#"blur #un": "blurusername"
 			#"blur #password-input": "blurpassword"
 			#"focus #fakepassword-input": "focusfakepassword"
+			
+		openPopup: ->
+			$("#popupBasic").popup('open')
+
+			
+		 
+			
 		focusfakepassword: -> 
 			$('#fakepassword-input').hide()
 			$('#password-input').show()	
@@ -99,11 +107,39 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			username = $('#un').val()
 			remember = $('#remember-me').prop("checked")
 			forge.prefs.set "remember", remember
-			
+			forge.prefs.set "username", username
 			if remember is true
 				forge.prefs.set "password", pass
-				forge.prefs.set "username", username
 				
+			demoGraph = new Object {
+				user_id: username
+			}
+						
+			forge.flurry.setDemographics(
+				demoGraph
+			, ->
+				console.log "demographics sent"
+			, (e) ->
+				console.log e
+			)
+			
+			
+			param = new Object {
+				login: username
+				
+			}
+			forge.flurry.customEvent(
+				"start up"
+				param
+			, ->
+				console.log "startup sent to flury"
+			, (e) ->
+				console.log e
+			)
+			
+			
+			forge.geolocation.getCurrentPosition (position) ->
+				forge.flurry.setLocation position.coords
 			
 				
 			self = @  
@@ -122,7 +158,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 					dataType: "json"
 					timeout: "10000"
 					contentType: 'application/json; charset=utf-8'
-					data: JSON.stringify({ "UserName" : $('#un').val(), "Password" : $('#pw').val(), "RememberMe" : $('#remember-me').prop("checked")})
+					data: JSON.stringify({ "UserName" : $('#un').val(), "Password" : $('#pw').val(), "RememberMe" : $('#remember-me').prop("checked"), "AppType" : "mobile"})
 					
 					error: (e) -> 
 						$("body").removeClass('ui-disabled')
@@ -131,20 +167,51 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 						Meshable.router.navigate "", trigger : true
 						#self.model.updateMsg "An error occurred on authentication... sorry!"
 					success: (data) ->
-						try
-							data.company.Name = Meshable.companyName
-							userRole = 1
-							for role in data.roles
-								if role == "MOBILE_ONLY"
-									userRole = 0
-							Meshable.userRole = userRole
-							Meshable.companyPhone = data.company.Phone
-						catch error
-							Meshable.companyName = "Mistaway"
-							Meshable.userRole = 1
-							Meshable.companyPhone = "000-000-0000"
+						
 						#data.company.Name Name to display on Units company.logoUrl path to S3 image for role in data.roles {ADMIN, SUPER_ADMIN DEALER CUSTOMER MOBILE_ONLY}
 						if data.IsAuthenticated == true
+							Meshable.company.zip = data.company.Address.zip
+							Meshable.company.city = data.company.Address.city
+							Meshable.company.state = data.company.Address.state
+							Meshable.company.street = data.company.Address.street1
+							Meshable.company.name = data.company.Name 
+							Meshable.company.email = data.company.email
+							Meshable.company.phone = data.company.phone
+							Meshable.company.image = data.company.mobileLogoUrl
+							Meshable.user.FirstName = data.person.first
+							Meshable.user.LastName = data.person.last
+							Meshable.user.Phone = data.person.phone1
+							Meshable.user.Email = data.person.UserObj.Username
+							for itm of Meshable.company
+								if Meshable.company[itm] == null
+									Meshable.company[itm] = ""
+							try
+								
+								Meshable.userRole = 1
+								for role in data.roles
+									if role == "MOBILE_ONLY"
+										Meshable.userRole = 0
+										
+								if Meshable.userRole == 1
+									usrR = "Dealer/Admin"
+								else
+									usrR = "Mobile Only"
+									
+								param = new Object {
+									UserType: usrR
+									
+								}
+								forge.flurry.customEvent(
+									"start up"
+									param
+								, ->
+									console.log "set sent to flury"
+								, (e) ->
+									console.log e
+								)
+							
+							catch error
+								Meshable.userRole = 1
 							$.mobile.changePage $("#mainPage"), changeHash: false, reverse: false, transition: "fade"
 							$.mobile.showPageLoadingMsg("a", "Loading", false)
 							Meshable.router.navigate "units", trigger : true
@@ -171,12 +238,40 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		appendHtml: (collectionView, itemView) ->
 			collectionView.$("#login_page").append(itemView.el) 
 			
-			
+	
+	Meshable.vent.on "new:password", ->
+		forge.request.ajax
+			url: Meshable.rooturl + "/api/authentication/username"
+			data:  {username: $('#unNew').val() } 
+			dataType: "json"
+			type: "GET"
+			error: (e) -> 
+				$("body").removeClass('ui-disabled')
+				$.mobile.hidePageLoadingMsg()
+				forge.notification.alert("Error", "email address doesn't match your account") 
+			success: (data) ->
+				forge.request.ajax
+					url: Meshable.rooturl + "/api/authentication/sendEmail"
+					data:  {UserName: $('#unNew').val() } 
+					dataType: "json"
+					type: "POST"
+					error: (e) -> 
+						$("body").removeClass('ui-disabled')
+						$.mobile.hidePageLoadingMsg()
+						forge.notification.alert("Error", e.message) 
+					success: (data) ->
+						forge.notification.alert("Success", "Check you inbox for instructions on how to retrieve your password")
+						$("#popupBasic").popup('close')
+				
+				
+				
 			
 	Meshable.vent.on "goto:login", ->
 		$.mobile.showPageLoadingMsg("a", "Loading", false)
 		
 		
+  			
+  			
 		forge.topbar.hide(
 		  ->
 			console.log "hi"
@@ -208,7 +303,70 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 				timeout: 30000
 	
 				success: (data) ->	
+					
 					if data.IsAuthenticated == true
+						Meshable.company.zip = data.company.Address.zip
+						Meshable.company.city = data.company.Address.city
+						Meshable.company.state = data.company.Address.state
+						Meshable.company.street = data.company.Address.street1
+						Meshable.company.name = data.company.Name 
+						Meshable.company.email = data.company.email
+						Meshable.company.phone = data.company.phone
+						Meshable.company.image = data.company.mobileLogoUrl
+						Meshable.user.FirstName = data.person.first
+						Meshable.user.LastName = data.person.last
+						Meshable.user.Phone = data.person.phone1
+						Meshable.user.Email = data.person.UserObj.Username
+						for itm of Meshable.company
+							if Meshable.company[itm] == null
+								Meshable.company[itm] = ""
+						try
+							
+							Meshable.userRole = 1
+							for role in data.roles
+								if role == "MOBILE_ONLY"
+									Meshable.userRole = 0
+									
+							if Meshable.userRole == 1
+								usrR = "Dealer/Admin"
+							else
+								usrR = "Mobile Only"
+								
+							param = new Object {
+								UserType: usrR
+								
+							}
+							forge.flurry.customEvent(
+								"start up"
+								param
+							, ->
+								console.log "set sent to flury"
+							, (e) ->
+								console.log e
+							)
+							
+						catch error
+							Meshable.userRole = 1
+						#send user's location for analytics 
+						forge.prefs.get "username", (value) ->
+							username = value
+							
+							param = new Object {
+								login: username
+								
+							}
+							forge.flurry.customEvent(
+								"start up"
+								param
+							, ->
+								console.log "startup sent to flury"
+							, (e) ->
+								console.log e
+							)
+						
+						forge.geolocation.getCurrentPosition (position) ->
+							forge.flurry.setLocation position.coords
+						
 						#Meshable.vent.trigger "goto:menu"
 						$("body").addClass('ui-disabled') 
 						$.mobile.showPageLoadingMsg("a", "Loading", false)

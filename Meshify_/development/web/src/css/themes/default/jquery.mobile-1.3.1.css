@@ -2935,9 +2935,9 @@ div.ui-slider-switch.ui-mini {
 }
 .ui-table th,
 .ui-table td {
-  line-height: 1.5em;
+  line-height: 1em;
   text-align: left;
-  padding: .4em .5em;
+  padding: .8em .05em .05em .05em;
   vertical-align:top;
 }
 .ui-table th .ui-btn,

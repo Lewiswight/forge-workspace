@@ -43,6 +43,7 @@
           forge.notification.alert("Failed to Load", "No Internet Connection");
           $("body").removeClass('ui-disabled');
           $.mobile.hidePageLoadingMsg();
+          Meshable.loading = false;
           return;
         }
         Meshable.current_index += 1;
@@ -77,6 +78,7 @@
       }));
       $("body").addClass('ui-disabled');
       $.mobile.showPageLoadingMsg("a", "Loading", false);
+      Meshable.loading = true;
       if (routerObj !== "") {
         displayResults(routerObj);
         return;
@@ -92,6 +94,7 @@
         forge.notification.alert("Failed to Load", "No Internet Connection");
         $("body").removeClass('ui-disabled');
         $.mobile.hidePageLoadingMsg();
+        Meshable.loading = false;
         window.history.back();
         return;
       }
@@ -112,7 +115,7 @@
           forge.notification.alert("Error", e.message);
           $("body").removeClass('ui-disabled');
           $.mobile.hidePageLoadingMsg();
-          return window.history.back();
+          Meshable.loading = false;
         },
         success: function(data) {
           var TempObj, dataObj, node, _i, _len;
@@ -124,19 +127,19 @@
             node = data[_i];
             node.person.userRole = Meshable.userRole;
             if (node.person.first === "") {
-              node.person.first = "Unknown";
+              node.person.first = "unknown";
             }
             if (node.person.last === "") {
-              node.person.last = "Unknown";
+              node.person.last = "unknown";
             }
             if (node.person.phone1 === "") {
               node.person.phone1 = "000-000-0000";
             }
             if (node.address.city === "") {
-              node.address.city = "Unknown";
+              node.address.city = "unknown";
             }
             if (node.address.state === "") {
-              node.address.state = "Unknown";
+              node.address.state = "unknown";
             }
             if (node.address.street1 === "") {
               node.address.street1 = "unknown";
@@ -157,7 +160,8 @@
           } else if (data.length === 0) {
             forge.notification.alert("No Results", "");
             $.mobile.hidePageLoadingMsg();
-            return $("body").removeClass('ui-disabled');
+            $("body").removeClass('ui-disabled');
+            return Meshable.loading = false;
           } else {
             return displayResults(dataObj);
           }
@@ -175,6 +179,7 @@
         forge.notification.alert("Failed to Load", "No Internet Connection");
         $("body").removeClass('ui-disabled');
         $.mobile.hidePageLoadingMsg();
+        Meshable.loading = false;
         return;
       }
       _ref = dataObj.list;
@@ -215,6 +220,10 @@
                 });
               } else {
                 tempNode = new nodea({
+                  zip: obj.address.zip,
+                  state: obj.address.state,
+                  address: obj.address.street1,
+                  city: obj.address.city,
                   first: obj.person.first,
                   nodetemplate: "header",
                   last: obj.person.last,
@@ -251,12 +260,30 @@
       return _results;
     };
     showResults = function(temp) {
-      var hi;
+      var city, first, hi, last, mac, nodeId, phone, route, state, street, zip;
 
       hi = temp;
       Meshable.nodeCoView = new nodeCompView({
         collection: Meshable.current_units
       });
+      if (Meshable.current_units.size() === 2) {
+        mac = Meshable.current_units.at(1).attributes.macaddress;
+        nodeId = Meshable.current_units.at(1).attributes.node.NodeId;
+        first = Meshable.current_units.at(1).attributes.person.first;
+        last = Meshable.current_units.at(1).attributes.person.last;
+        phone = Meshable.current_units.at(1).attributes.person.phone1;
+        city = Meshable.current_units.at(1).attributes.address.city;
+        state = Meshable.current_units.at(1).attributes.address.state;
+        street = Meshable.current_units.at(1).attributes.address.street1;
+        zip = Meshable.current_units.at(1).attributes.address.zip;
+        route = "/gateway/" + mac + "/" + nodeId + "/" + first + "/" + last + "/" + phone + "/" + city + "/" + state + "/" + street + "/" + zip;
+        Meshable.router.navigate(route, {
+          trigger: true,
+          replace: true
+        });
+        Meshable.unitsButton.setActive();
+        return;
+      }
       Meshable.currentpage = "units";
       Meshable.nodeCoView.render();
       $('#mainDiv').empty();
@@ -264,6 +291,7 @@
       $("#mainDiv").trigger('create');
       $.mobile.hidePageLoadingMsg();
       $("body").removeClass('ui-disabled');
+      Meshable.loading = false;
       Meshable.unitsButton.setActive();
       if (Meshable.backplace !== "") {
         $('html, body').animate({
@@ -275,6 +303,7 @@
     LoadTenMore = function(index, searchTerm) {
       var _this = this;
 
+      Meshable.loading = true;
       $("body").addClass('ui-disabled');
       $.mobile.showPageLoadingMsg("a", "Loading", false);
       Meshable.current_searchTerm = searchTerm;
@@ -295,7 +324,8 @@
         error: function(e) {
           forge.notification.alert("Error", e.message);
           $("body").removeClass('ui-disabled');
-          return $.mobile.hidePageLoadingMsg();
+          $.mobile.hidePageLoadingMsg();
+          return Meshable.loading = false;
         },
         success: function(data) {
           var TempObj, count, dataObj, listlen, modelList, node, obj, _i, _j, _len, _len1, _ref, _results;
@@ -307,19 +337,19 @@
             node = data[_i];
             node.person.userRole = Meshable.userRole;
             if (node.person.first === "") {
-              node.person.first = "Unknown";
+              node.person.first = "unknown";
             }
             if (node.person.last === "") {
-              node.person.last = "Unknown";
+              node.person.last = "unknown";
             }
             if (node.person.phone1 === "") {
               node.person.phone1 = "000-000-0000";
             }
             if (node.address.city === "") {
-              node.address.city = "Unknown";
+              node.address.city = "unknown";
             }
             if (node.address.state === "") {
-              node.address.state = "Unknown";
+              node.address.state = "unknown";
             }
             if (node.address.street1 === "") {
               node.address.street1 = "unknown";
@@ -340,7 +370,8 @@
           } else if (data.length === 0) {
             forge.notification.alert("No More Results", "");
             $.mobile.hidePageLoadingMsg();
-            return $("body").removeClass('ui-disabled');
+            $("body").removeClass('ui-disabled');
+            return Meshable.loading = false;
           } else {
             Meshable.refreshUnits = false;
             listlen = dataObj.list.length;
@@ -388,6 +419,10 @@
                       });
                     } else {
                       tempNode = new nodea({
+                        zip: obj.address.zip,
+                        state: obj.address.state,
+                        address: obj.address.street1,
+                        city: obj.address.city,
                         first: obj.person.first,
                         nodetemplate: "header",
                         last: obj.person.last,
@@ -439,7 +474,8 @@
       $('#mainDiv').append($(Meshable.nodeCoView.el));
       $("#mainDiv").trigger('create');
       $.mobile.hidePageLoadingMsg();
-      return $("body").removeClass('ui-disabled');
+      $("body").removeClass('ui-disabled');
+      return Meshable.loading = false;
     };
   });
 

@@ -50,8 +50,16 @@
         "change .select_set": "selectSet"
       },
       selectSet: function(e) {
-        var channel, full_name, localobj, mistData, node_type, value;
+        var channel, full_name, localobj, mistData, node_type, param, value;
 
+        param = new Object({
+          set: ($(e.currentTarget).data)("channel" + "-" + e.currentTarget.value)
+        });
+        forge.flurry.customEvent("start up", param, function() {
+          return console.log("set sent to flury");
+        }, function(e) {
+          return console.log(e);
+        });
         $("body").addClass('ui-disabled');
         $.mobile.showPageLoadingMsg("a", "Loading", false);
         value = e.currentTarget.value;
@@ -69,8 +77,16 @@
         return this.setChannel(mistData);
       },
       sliderSet: function(e) {
-        var channel, full_name, localobj, mistData, node_type, value;
+        var channel, full_name, localobj, mistData, node_type, param, value;
 
+        param = new Object({
+          set: ($(e.currentTarget).data("channel")) + "-" + e.currentTarget.value
+        });
+        forge.flurry.customEvent("start up", param, function() {
+          return console.log("set sent to flury");
+        }, function(e) {
+          return console.log(e);
+        });
         $("body").addClass('ui-disabled');
         $.mobile.showPageLoadingMsg("a", "Loading", false);
         value = e.currentTarget.value;
@@ -88,8 +104,16 @@
         return this.setChannel(mistData);
       },
       setbutton: function(e) {
-        var channel, full_name, localobj, mistData, node_type, value;
+        var channel, full_name, localobj, mistData, node_type, param, value;
 
+        param = new Object({
+          set: ($(e.currentTarget).data("channel")) + "-" + ($(e.currentTarget).data("setvalue"))
+        });
+        forge.flurry.customEvent("start up", param, function() {
+          return console.log("set sent to flury");
+        }, function(e) {
+          return console.log(e);
+        });
         $('#mainDiv').removeClass($.mobile.activeBtnClass);
         $("body").addClass('ui-disabled');
         $.mobile.showPageLoadingMsg("a", "Loading", false);
@@ -124,6 +148,7 @@
           timeout: 15000,
           contentType: 'application/json; charset=utf-8',
           error: function(e) {
+            Meshable.loading = false;
             $("body").removeClass('ui-disabled');
             $.mobile.hidePageLoadingMsg();
             forge.notification.alert("Error", e.message);
@@ -135,7 +160,9 @@
             }
             $("body").removeClass('ui-disabled');
             $.mobile.hidePageLoadingMsg();
-            return $(".ui-btn-active").removeClass('ui-btn-active');
+            $(".ui-btn-active").removeClass('ui-btn-active');
+            Meshable.loading = false;
+            return Meshable.vent.trigger("goto:refresh");
           }
         });
       }
@@ -149,7 +176,7 @@
         return collectionView.$("#placeholder").append(itemView.el);
       }
     });
-    Meshable.vent.on("goto:nodeRefresh", function(mac, idn) {
+    Meshable.vent.on("goto:nodeRefresh", function(mac, idn, first, last, phone1, city, state, street1, zip) {
       var _this = this;
 
       $("body").addClass('ui-disabled');
@@ -167,12 +194,14 @@
           forge.notification.alert("Error", e.message);
           $.mobile.hidePageLoadingMsg();
           $("body").removeClass('ui-disabled');
+          Meshable.loading = false;
           return window.history.back();
         },
         success: function(data) {
           if (data.isAuthenticated === false) {
             return alert("auth:logout");
           } else if (data.length === 0) {
+            Meshable.loading = false;
             $("body").removeClass('ui-disabled');
             $.mobile.hidePageLoadingMsg();
             forge.notification.alert("No units at this location", "");
@@ -181,6 +210,25 @@
               replace: true
             });
           } else {
+            data[0].person = new Object({
+              first: first,
+              last: last,
+              phone: phone1,
+              city: city,
+              state: state,
+              street: street1,
+              zip: zip
+            });
+            data[0].company = new Object({
+              name: Meshable.company.name,
+              zip: Meshable.company.zip,
+              city: Meshable.company.city,
+              state: Meshable.company.state,
+              street: Meshable.company.street,
+              email: Meshable.company.email,
+              phone: Meshable.company.phone,
+              image: Meshable.company.image
+            });
             return displayResults(data);
           }
         }
@@ -210,12 +258,17 @@
           problem = _ref[_i];
           if (problem.level === "RED") {
             $("#results_insert").prepend("<li style='background-color: lightcoral;'>" + problem.message + "</li>");
+          } else if (Meshable.userRole === 1 && problem.level === "YELLOW") {
+            $("#results_insert").prepend("<li style='background-color: lightyellow;'>" + problem.message + "</li>");
+          } else if (Meshable.userRole === 1 && problem.level === "BLUE") {
+            $("#results_insert").prepend("<li style='background-color: lightblue;'>" + problem.message + "</li>");
           }
           $("#mainDiv").trigger('create');
         }
       }
       $.mobile.hidePageLoadingMsg();
-      return $("body").removeClass('ui-disabled');
+      $("body").removeClass('ui-disabled');
+      return Meshable.loading = false;
     };
   });
 

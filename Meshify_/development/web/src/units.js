@@ -225,6 +225,10 @@
                 });
               } else {
                 tempNode = new nodea({
+                  zip: obj.address.zip,
+                  state: obj.address.state,
+                  address: obj.address.street1,
+                  city: obj.address.city,
                   first: obj.person.first,
                   nodetemplate: "header",
                   last: obj.person.last,
@@ -261,12 +265,29 @@
       return _results;
     };
     showResults = function(temp) {
-      var hi;
+      var city, first, hi, last, mac, nodeId, phone, route, state, street, zip;
 
       hi = temp;
       Meshable.nodeCoView = new nodeCompView({
         collection: Meshable.current_units
       });
+      if (Meshable.current_units.size() === 2) {
+        mac = Meshable.current_units.at(1).attributes.macaddress;
+        nodeId = Meshable.current_units.at(1).attributes.node.NodeId;
+        first = Meshable.current_units.at(1).attributes.person.first;
+        last = Meshable.current_units.at(1).attributes.person.last;
+        phone = Meshable.current_units.at(1).attributes.person.phone1;
+        city = Meshable.current_units.at(1).attributes.address.city;
+        state = Meshable.current_units.at(1).attributes.address.state;
+        street = Meshable.current_units.at(1).attributes.address.street1;
+        zip = Meshable.current_units.at(1).attributes.address.zip;
+        route = "/gateway/" + mac + "/" + nodeId + "/" + first + "/" + last + "/" + phone + "/" + city + "/" + state + "/" + street + "/" + zip;
+        Meshable.router.navigate(route, {
+          trigger: true,
+          replace: true
+        });
+        return;
+      }
       Meshable.currentpage = "units";
       Meshable.nodeCoView.render();
       $('#mainDiv').empty();
@@ -397,6 +418,10 @@
                       });
                     } else {
                       tempNode = new nodea({
+                        zip: obj.address.zip,
+                        state: obj.address.state,
+                        address: obj.address.street1,
+                        city: obj.address.city,
                         first: obj.person.first,
                         nodetemplate: "header",
                         last: obj.person.last,

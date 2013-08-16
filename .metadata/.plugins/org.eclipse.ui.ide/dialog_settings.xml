@@ -20,6 +20,10 @@
 		<item value="org.eclipse.xtext.xbase:2.3.1.v201208210947"/>
 		<item value="org.eclipse.xtext.xtext.ui:2.3.1.v201208210947"/>
 	</list>
+	<section name="ChooseWorkspaceDialogSettings">
+		<item value="254" key="DIALOG_Y_ORIGIN"/>
+		<item value="422" key="DIALOG_X_ORIGIN"/>
+	</section>
 	<section name="ResourceNavigator">
 		<item value="" key="ResourceWorkingSetFilter.STORE_WORKING_SET"/>
 		<item value="1" key="ResourceViewer.STORE_SORT_TYPE"/>
@@ -28,7 +32,7 @@
 		<item value="525" key="DIALOG_WIDTH"/>
 		<item value="22" key="DIALOG_Y_ORIGIN"/>
 		<item value="458" key="DIALOG_X_ORIGIN"/>
-		<item value="443" key="DIALOG_HEIGHT"/>
+		<item value="245" key="DIALOG_HEIGHT"/>
 		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
 	</section>
 </section>

@@ -8,7 +8,7 @@
         "unit/:mac/:first/:last/:phone1/:city/:state/:street1/:zip": "unitsM",
         "units": "units",
         "gateway/:mac": "gateway",
-        "gateway/:mac/:id": "nodeDetails",
+        "gateway/:mac/:id/:first/:last/:phone1/:city/:state/:street1/:zip": "nodeDetails",
         "": "home",
         "dashboard": "dashboard",
         "menu": "menu",
@@ -16,11 +16,15 @@
         "popupPanel": "popupPanel",
         "menu_back_btn": "menu_back_btn",
         "search": "search",
-        "searching/:id/:units": "searchterm",
+        "searching/:id/:resultType": "searchterm",
         "gateways": "gateways",
         "page1": "page1",
         "ref-page": "refPage",
-        "logout": "logout"
+        "logout": "logout",
+        "contact": "contact"
+      },
+      contact: function() {
+        return Meshable.vent.trigger("goto:contact");
       },
       unitsM: function(mac, first, last, phone1, city, state, street1, zip) {
         var listObj, obj;
@@ -31,6 +35,7 @@
         listObj.person = new Object;
         listObj.gateway = new Object;
         listObj.gateway.macaddress = mac;
+        listObj.person.userRole = Meshable.userRole;
         listObj.person.first = first;
         listObj.person.last = last;
         listObj.person.phone1 = phone1;
@@ -47,7 +52,7 @@
         $.mobile.showPageLoadingMsg("a", "Loading", false);
         return Meshable.vent.trigger("goto:units", false, "");
       },
-      nodeDetails: function(mac, id) {
+      nodeDetails: function(mac, id, first, last, phone1, city, state, street1, zip) {
         if (!forge.is.connection.connected()) {
           forge.notification.alert("Failed to Load", "No Internet Connection");
           window.history.back();
@@ -56,7 +61,7 @@
           return;
         }
         Meshable.backplace = "#" + mac;
-        return Meshable.vent.trigger("goto:nodeRefresh", mac, id);
+        return Meshable.vent.trigger("goto:nodeRefresh", mac, id, first, last, phone1, city, state, street1, zip);
       },
       logout: function() {
         $("body").addClass('ui-disabled');
@@ -72,9 +77,11 @@
             Meshable.current_gateways = "";
             Meshable.current_searchTerm = "";
             Meshable.vent.trigger("goto:login");
+            Meshable.currentMap = null;
             return $('#mainDiv').empty();
           },
           success: function(data) {
+            Meshable.currentMap = null;
             Meshable.current_units = "";
             Meshable.current_gateways = "";
             Meshable.current_searchTerm = "";
@@ -101,15 +108,30 @@
         $.mobile.showPageLoadingMsg("a", "Loading", false);
         return Meshable.vent.trigger("showmap");
       },
-      searchterm: function(searchField, units) {
+      searchterm: function(searchField, resultType) {
         if (searchField === "_") {
           searchField = "";
         }
+        if (searchField === Meshable.current_searchTerm) {
+          if (resultType === "List") {
+            Meshable.vent.trigger("goto:units", true, "");
+            Meshable.router.navigate("units", {
+              trigger: false,
+              replace: true
+            });
+            return;
+          } else {
+            $.mobile.showPageLoadingMsg("a", "Loading", false);
+            Meshable.vent.trigger("showmap");
+            return;
+          }
+        }
         Meshable.current_searchTerm = searchField;
+        Meshable.currentMap = null;
         Meshable.current_index = 0;
         Meshable.current_gateways = "";
         Meshable.refreshUnits = true;
-        if (units === "true") {
+        if (resultType === "List") {
           Meshable.vent.trigger("goto:units", true, "");
           return Meshable.router.navigate("units", {
             trigger: false,
@@ -117,7 +139,7 @@
           });
         } else {
           $.mobile.showPageLoadingMsg("a", "Loading", false);
-          return Meshable.vent.trigger("goto:gateways", true, searchField);
+          return Meshable.vent.trigger("showmap");
         }
       },
       search: function() {

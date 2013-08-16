@@ -1,14 +1,15 @@
 define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Events', 'async!http://maps.google.com/maps/api/js?sensor=true'], ($, jqm, Backbone, _, Marionette, Meshable, Events ) ->									 
 	
 	Meshable.vent.on "showmap", ->
+		Meshable.loading = true
+		Meshable.locationButton.setActive()
 		if Meshable.currentMap is null
 			Meshable.locationButton.setActive()
 			bindmap = (center) ->
 				Meshable.vent.trigger 'maps:bind', 
 					mapContainerId: 'mapwrapper'
-					mapOpts: 
-						center: center
-						zoom: 12
+					mapOpts:
+						center: center 
 						mapTypeId: google.maps.MapTypeId.ROADMAP 
 					#onMapBound: (mapview) ->
 					#	console.log('on onMapBound callback')
@@ -20,11 +21,12 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 							url: Meshable.rooturl + '/api/locations?term=' + Meshable.current_searchTerm 
 							type: "GET"
 							dataType: "json"
-							timeout: "10000"
+							timeout: "20000"
 							contentType: 'application/json; charset=utf-8'
 							error: (e) -> 
 								$("body").removeClass('ui-disabled')
 								$.mobile.hidePageLoadingMsg()
+								Meshable.loading = false
 								forge.notification.alert("Error", e.message) 
 								Meshable.router.navigate "", trigger : true
 							success: (data) ->
@@ -50,11 +52,33 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		else
 			$('#mainDiv').empty()
 			$('#mainDiv').append(Meshable.currentMap)
+			if Meshable.mapRefresh == true
+				$.mobile.showPageLoadingMsg()
+				Meshable.mapRefresh = false
+				Meshable.vent.trigger("clear:markers")
+				forge.request.ajax
+					url: Meshable.rooturl + '/api/locations?term=' + Meshable.current_searchTerm 
+					type: "GET"
+					dataType: "json"
+					timeout: "20000"
+					contentType: 'application/json; charset=utf-8'
+					error: (e) -> 
+						$("body").removeClass('ui-disabled')
+						$.mobile.hidePageLoadingMsg()
+						Meshable.loading = false
+						forge.notification.alert("Error", e.message) 
+						Meshable.router.navigate "", trigger : true
+					success: (data) ->
+						for item in data
+							Meshable.vent.trigger('maps:addmarker', item)		
 			$("mainDiv").trigger('create')
 			$.mobile.hidePageLoadingMsg()
 			$("body").removeClass('ui-disabled')
+			Meshable.loading = false
 			console.log('maps bound')
-			google.maps.event.trigger(map, 'resize')
+			google.maps.event.trigger(locationmaps, 'resize')
+			Meshable.locationButton.setActive()
+			#google.maps.event.trigger(map, 'resize')
 			
 
 		
@@ -64,6 +88,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 	onMapBound = null
 	onMapRendered = null
 	markers = []
+	
 
 
 	#possible options attributes: onMapBound, onMapRendered, onAddingMarker, containerEl, mapContainerId, mapOpts
@@ -84,9 +109,9 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			
 		if onMapBound != null && onMapBound != undefined
 			onMapBound(mapView)
-		google.maps.event.addListener map, "bounds_changed", ->
-  			bounds = map.getBounds()
-  			google.maps.event.trigger(map, 'resize')
+		#google.maps.event.addListener locationmaps, "bounds_changed", ->
+  		#	bounds = map.getBounds()
+  	#		google.maps.event.trigger(locationmaps, 'resize')
 		
 		
 		mapView.render()
@@ -97,7 +122,9 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		$.mobile.hidePageLoadingMsg()
 		$("body").removeClass('ui-disabled')
 		console.log('maps bound')
-		google.maps.event.trigger(map, 'resize')
+		Meshable.loading = false
+		google.maps.event.trigger(locationmaps, 'resize')
+		Meshable.locationButton.setActive()
 
 
 	Meshable.vent.on 'maps:geocode', (options) ->
@@ -121,6 +148,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			Meshable.vent.trigger('maps:addmarker', obj.items[i])
 		#Uncomment to have the map clusters, DOTO: get all grey images for the clusters and set the max zoom and cluster size pretty big
 		#mc = new MarkerClusterer(locationmaps, markers)
+		locationmaps.fitBounds latlngbounds
 		return
 
 	Meshable.vent.on 'maps:addmarker', (obj) ->
@@ -154,6 +182,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			map: locationmaps
 			position: position
 			icon: thisicon
+			
 		#console.log(thismarker)
 		markers.push(thismarker)
 		if latlngbounds
@@ -167,9 +196,58 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		##locationmapsMarkers.push thismarker
 		console.log('marker added')
 
-
-	Meshable.vent.on 'maps:marker:clicked', (model) ->
-		alert "clicked"
+	Meshable.vent.on 'zoom:location', ->
+		forge.geolocation.getCurrentPosition(
+				"enableHighAccuracy": true 
+			,  (position) ->
+				#alert position.coords.latitude
+				#alert position.coords.longitude
+				#alert position.timestamp
+				center = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+				locationmaps.setCenter(center)
+				locationmaps.setCenter(center)
+				locationmaps.setZoom(14)
+				locationmaps.panTo(center)
+			,  (e) ->
+				center = new google.maps.LatLng(29.7631, -95.3631)
+				locationmaps.setCenter(center)
+				locationmaps.setZoom(14)
+				locationmaps.panTo(center)
+					 
+			)
+	Meshable.vent.on 'clear:markers', ->
+		for marker in markers
+			marker.setMap(null)
+		markers = []
+		
+		
+		
+	Meshable.vent.on 'maps:marker:clicked', (node) ->
+		if node.person.first == ""
+			node.person.first = "unknown" 
+		if node.person.last == ""
+			node.person.last = "unknown"
+		if node.person.phone1 == ""
+			node.person.phone1 = "000-000-0000"
+		if node.address.city == ""
+			node.address.city = "unknown"
+		if node.address.state == ""
+			node.address.state = "unknown"
+		if node.address.street1 == ""
+			node.address.street1 = "unknown"
+		if node.address.zip == ""
+			node.address.zip = "unknown"
+			
+		Meshable.location.first = node.person.first
+		Meshable.location.last = node.person.last
+		Meshable.location.phone = node.person.phone1
+		Meshable.location.city = node.person.city
+		Meshable.location.state = node.person.state
+		Meshable.location.street = node.person.street1
+		Meshable.location.zip = node.person.zip
+		navPath = "/unit" + "/" + node.gateway.macaddress + "/" + node.person.first + "/" + node.person.last + "/" + node.person.phone1 + "/" + node.address.city + "/" +  node.address.state + "/" + node.address.street1 + "/" + node.address.zip  
+		
+		Meshable.router.navigate navPath, trigger : true
 		#Meshable.vent.trigger 'locationList:showDetail',
 			#model: model
 	

@@ -50,8 +50,16 @@
         "change .select_set": "selectSet"
       },
       selectSet: function(e) {
-        var channel, full_name, localobj, mistData, node_type, value;
+        var channel, full_name, localobj, mistData, node_type, param, value;
 
+        param = new Object({
+          set: $(e.currentTarget).data("channel" + "-" + $(e.currentTarget).value)
+        });
+        forge.flurry.customEvent("start up", param, function() {
+          return console.log("set sent to flury");
+        }, function(e) {
+          return console.log(e);
+        });
         $("body").addClass('ui-disabled');
         $.mobile.showPageLoadingMsg("a", "Loading", false);
         value = e.currentTarget.value;
@@ -69,8 +77,16 @@
         return this.setChannel(mistData);
       },
       sliderSet: function(e) {
-        var channel, full_name, localobj, mistData, node_type, value;
+        var channel, full_name, localobj, mistData, node_type, param, value;
 
+        param = new Object({
+          set: $(e.currentTarget).data("channel" + "-" + $(e.currentTarget).value)
+        });
+        forge.flurry.customEvent("start up", param, function() {
+          return console.log("set sent to flury");
+        }, function(e) {
+          return console.log(e);
+        });
         $("body").addClass('ui-disabled');
         $.mobile.showPageLoadingMsg("a", "Loading", false);
         value = e.currentTarget.value;
@@ -88,8 +104,16 @@
         return this.setChannel(mistData);
       },
       setbutton: function(e) {
-        var channel, full_name, localobj, mistData, node_type, value;
+        var channel, full_name, localobj, mistData, node_type, param, value;
 
+        param = new Object({
+          set: $(e.currentTarget).data("channel" + "-" + $(e.currentTarget).data("setvalue"))
+        });
+        forge.flurry.customEvent("start up", param, function() {
+          return console.log("set sent to flury");
+        }, function(e) {
+          return console.log(e);
+        });
         $('#mainDiv').removeClass($.mobile.activeBtnClass);
         $("body").addClass('ui-disabled');
         $.mobile.showPageLoadingMsg("a", "Loading", false);
@@ -149,7 +173,7 @@
         return collectionView.$("#placeholder").append(itemView.el);
       }
     });
-    Meshable.vent.on("goto:nodeRefresh", function(mac, idn) {
+    Meshable.vent.on("goto:nodeRefresh", function(mac, idn, first, last, phone1, city, state, street1, zip) {
       var _this = this;
 
       $("body").addClass('ui-disabled');
@@ -181,6 +205,25 @@
               replace: true
             });
           } else {
+            data[0].person = new Object({
+              first: first,
+              last: last,
+              phone: phone1,
+              city: city,
+              state: state,
+              street: street1,
+              zip: zip
+            });
+            data[0].company = new Object({
+              name: Meshable.company.name,
+              zip: Meshable.company.zip,
+              city: Meshable.company.city,
+              state: Meshable.company.state,
+              street: Meshable.company.street,
+              email: Meshable.company.email,
+              phone: Meshable.company.phone,
+              image: Meshable.company.image
+            });
             return displayResults(data);
           }
         }

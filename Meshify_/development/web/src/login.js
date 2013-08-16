@@ -83,10 +83,42 @@
         username = $('#un').val();
         remember = $('#remember-me').prop("checked");
         forge.prefs.set("remember", remember);
+        forge.prefs.set("username", username);
         if (remember === true) {
           forge.prefs.set("password", pass);
-          forge.prefs.set("username", username);
         }
+        /*	
+        			demoGraph = new Object {
+        				user_id: username
+        			}
+        						
+        			forge.flurry.setDemographics(
+        				demoGraph
+        			, ->
+        				console.log "demographics sent"
+        			, (e) ->
+        				console.log e
+        			)
+        			
+        			
+        			param = new Object {
+        				login: username
+        				
+        			}
+        			forge.flurry.customEvent(
+        				"start up"
+        				param
+        			, ->
+        				console.log "startup sent to flury"
+        			, (e) ->
+        				console.log e
+        			)
+        			
+        			
+        			forge.geolocation.getCurrentPosition (position) ->
+        				forge.flurry.setLocation position.coords
+        */
+
         self = this;
         $("body").addClass('ui-disabled');
         $.mobile.showPageLoadingMsg("a", "Loading", false);
@@ -117,8 +149,19 @@
             success: function(data) {
               var error, role, userRole, _i, _len, _ref;
 
+              Meshable.company.zip = data.company.Address.zip;
+              Meshable.company.city = data.company.Address.city;
+              Meshable.company.state = data.company.Address.state;
+              Meshable.company.street = data.company.Address.street1;
+              Meshable.company.name = data.company.Name;
+              Meshable.company.email = data.company.email;
+              Meshable.company.phone = data.company.phone;
+              Meshable.company.image = data.company.mobileLogoUrl;
+              Meshable.user.FirstName = data.person.first;
+              Meshable.user.LastName = data.person.last;
+              Meshable.user.Phone = data.person.phone1;
+              Meshable.user.Email = data.person.UserObj.Username;
               try {
-                data.company.Name = Meshable.companyName;
                 userRole = 1;
                 _ref = data.roles;
                 for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -173,21 +216,6 @@
       var loginView;
 
       $.mobile.showPageLoadingMsg("a", "Loading", false);
-      /*
-      		forge.topbar.hide(
-      		  ->
-      			console.log "hi"
-      		, (e) ->
-      			console.log e
-      		)
-      		forge.tabbar.hide(
-      		  ->
-      			console.log "hi"
-      		, (e) ->
-      			console.log e
-      		)
-      */
-
       if (!forge.is.connection.connected()) {
         loginView = new AuthPageView({
           collection: new collect(new AuthModel)
@@ -204,7 +232,54 @@
           type: "GET",
           timeout: 30000,
           success: function(data) {
+            var error, role, userRole, _i, _len, _ref;
+
+            try {
+              Meshable.company.zip = data.company.Address.zip;
+              Meshable.company.city = data.company.Address.city;
+              Meshable.company.state = data.company.Address.state;
+              Meshable.company.street = data.company.Address.street1;
+              Meshable.company.name = data.company.Name;
+              Meshable.company.email = data.company.email;
+              Meshable.company.phone = data.company.phone;
+              Meshable.company.image = data.company.mobileLogoUrl;
+              Meshable.user.FirstName = data.person.first;
+              Meshable.user.LastName = data.person.last;
+              Meshable.user.Phone = data.person.phone1;
+              Meshable.user.Email = data.person.UserObj.Username;
+              userRole = 0;
+              _ref = data.roles;
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                role = _ref[_i];
+                if (role === "MOBILE_ONLY") {
+                  userRole = 0;
+                }
+              }
+              Meshable.userRole = userRole;
+              Meshable.companyPhone = data.company.Phone;
+            } catch (_error) {
+              error = _error;
+              Meshable.companyName = "Mistaway";
+              Meshable.userRole = 0;
+              Meshable.companyPhone = "000-000-0000";
+            }
             if (data.IsAuthenticated === true) {
+              forge.prefs.get("username", function(value) {
+                var param, username;
+
+                username = value;
+                param = new Object({
+                  login: username
+                });
+                return forge.flurry.customEvent("start up", param, function() {
+                  return console.log("startup sent to flury");
+                }, function(e) {
+                  return console.log(e);
+                });
+              });
+              forge.geolocation.getCurrentPosition(function(position) {
+                return forge.flurry.setLocation(position.coords);
+              });
               $("body").addClass('ui-disabled');
               $.mobile.showPageLoadingMsg("a", "Loading", false);
               $.mobile.changePage($("#mainPage"), {

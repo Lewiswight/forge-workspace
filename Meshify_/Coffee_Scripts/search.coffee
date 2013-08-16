@@ -68,6 +68,21 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			includeUnits =  $('#include-units').prop("checked")
 			resultType = $('#flip-3').val()
 			searchField = $('#search-main').val()
+			
+			param = new Object {
+				search: searchField
+				
+			}
+			forge.flurry.customEvent(
+				"start up"
+				param
+			, ->
+				console.log "set sent to flury"
+			, (e) ->
+				console.log e
+			)
+			
+			
 			if searchField == ""
 				searchField = "_"
 			route = "#searching/" + searchField + "/" + resultType
@@ -98,7 +113,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 	Meshable.vent.on "goto:search", ->
 		
 		
-	
+		Meshable.searchButton.setActive()
 		search = new searchView
 			collection: make_collection()
 			
