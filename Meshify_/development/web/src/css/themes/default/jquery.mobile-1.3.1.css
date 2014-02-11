@@ -2631,7 +2631,7 @@ html >/**/body .ui-rangeslider.ui-mini .ui-rangeslider-sliders .ui-slider-track:
 		left: 0;
 	}
 }
-.ui-listview { margin: 0; margin-bottom: 50px }
+.ui-listview { margin: 0; margin-bottom: 0px }
 ol.ui-listview, ol.ui-listview .ui-li-divider { counter-reset: listnumbering; }
 .ui-content .ui-listview, .ui-panel-inner > .ui-listview { margin: -15px; }
 .ui-collapsible-content > .ui-listview { margin: -10px -15px; }

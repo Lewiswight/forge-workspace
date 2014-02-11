@@ -4,8 +4,14 @@
     var Map, MapView, geocoder, latlngbounds, locationmaps, mapOpts, markers, onMapBound, onMapRendered;
 
     Meshable.vent.on("showmap", function() {
-      var bindmap;
+      var bindmap, searchTer;
 
+      if (Meshable.current_searchTerm.length > 1) {
+        searchTer = Meshable.current_searchTerm.replace(/\ /g, "+");
+      } else {
+        searchTer = Meshable.current_searchTerm;
+      }
+      Meshable.loading = true;
       Meshable.locationButton.setActive();
       if (Meshable.currentMap === null) {
         Meshable.locationButton.setActive();
@@ -13,13 +19,13 @@
           return Meshable.vent.trigger('maps:bind', {
             mapContainerId: 'mapwrapper',
             mapOpts: {
-              center: center,
+              zoom: 6,
               mapTypeId: google.maps.MapTypeId.ROADMAP
             },
             onMapRendered: function() {
               console.log('on onMapRendered callback');
               return forge.request.ajax({
-                url: Meshable.rooturl + '/api/locations?term=' + Meshable.current_searchTerm,
+                url: Meshable.rooturl + '/api/locations?term=' + searchTer,
                 type: "GET",
                 dataType: "json",
                 timeout: "20000",
@@ -27,6 +33,7 @@
                 error: function(e) {
                   $("body").removeClass('ui-disabled');
                   $.mobile.hidePageLoadingMsg();
+                  Meshable.loading = false;
                   forge.notification.alert("Error", e.message);
                   return Meshable.router.navigate("", {
                     trigger: true
@@ -70,6 +77,7 @@
             error: function(e) {
               $("body").removeClass('ui-disabled');
               $.mobile.hidePageLoadingMsg();
+              Meshable.loading = false;
               forge.notification.alert("Error", e.message);
               return Meshable.router.navigate("", {
                 trigger: true
@@ -90,8 +98,10 @@
         $("mainDiv").trigger('create');
         $.mobile.hidePageLoadingMsg();
         $("body").removeClass('ui-disabled');
+        Meshable.loading = false;
         console.log('maps bound');
-        return google.maps.event.trigger(locationmaps, 'resize');
+        google.maps.event.trigger(locationmaps, 'resize');
+        return Meshable.locationButton.setActive();
       }
     });
     locationmaps = null;
@@ -122,7 +132,9 @@
       $.mobile.hidePageLoadingMsg();
       $("body").removeClass('ui-disabled');
       console.log('maps bound');
-      return google.maps.event.trigger(locationmaps, 'resize');
+      Meshable.loading = false;
+      google.maps.event.trigger(locationmaps, 'resize');
+      return Meshable.locationButton.setActive();
     });
     Meshable.vent.on('maps:geocode', function(options) {
       var fromaddress, geocoderRequest, state;
@@ -151,6 +163,9 @@
         Meshable.vent.trigger('maps:addmarker', obj.items[i]);
       }
       locationmaps.fitBounds(latlngbounds);
+      if (obj.items.length === 1) {
+        locationmaps.setZoom(10);
+      }
     });
     Meshable.vent.on('maps:addmarker', function(obj) {
       var clickfunction, position, thisicon, thismarker, thisorigin;
@@ -226,19 +241,19 @@
       var navPath;
 
       if (node.person.first === "") {
-        node.person.first = "Unknown";
+        node.person.first = "unknown";
       }
       if (node.person.last === "") {
-        node.person.last = "Unknown";
+        node.person.last = "unknown";
       }
       if (node.person.phone1 === "") {
         node.person.phone1 = "000-000-0000";
       }
       if (node.address.city === "") {
-        node.address.city = "Unknown";
+        node.address.city = "unknown";
       }
       if (node.address.state === "") {
-        node.address.state = "Unknown";
+        node.address.state = "unknown";
       }
       if (node.address.street1 === "") {
         node.address.street1 = "unknown";

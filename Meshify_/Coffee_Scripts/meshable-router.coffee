@@ -136,6 +136,7 @@ define ['jquery','jqm', 'backbone','underscore','marionette', 'Meshable', 'Event
 					$.mobile.showPageLoadingMsg("a", "Loading", false)
 					Meshable.vent.trigger "showmap"
 					return
+			
 			Meshable.current_searchTerm = searchField
 			Meshable.currentMap = null
 			Meshable.current_index = 0

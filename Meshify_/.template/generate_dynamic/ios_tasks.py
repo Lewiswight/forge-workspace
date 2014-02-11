@@ -1,4 +1,3 @@
-import codecs
 import datetime
 from glob import glob
 import logging
@@ -9,14 +8,14 @@ import re
 import subprocess
 import tempfile
 import time
-import uuid
 import shutil
 import sys
 import hashlib
 from zipfile import ZipFile, ZIP_DEFLATED
+from copy import deepcopy
 
 from module_dynamic import lib
-from module_dynamic.lib import temp_file, read_file_as_str
+from module_dynamic.lib import temp_file
 from lib import task, ensure_lib_available
 from module_dynamic.utils import run_shell, ProcessGroup
 from module_dynamic.utils import which
@@ -44,7 +43,7 @@ class IOSRunner(object):
 			examples={
 				"ios.profiles.DEFAULT.provisioning_profile": os.path.abspath("/path/to/embedded.profile")
 			},
-			more_info="http://current-docs.trigger.io/command-line.html#local-conf-ios"
+			more_info="https://trigger.io/docs/current/tools/local_config.html"
 		)
 
 	def _grab_plist_from_binary_mess(self, build, file_path):
@@ -193,7 +192,7 @@ See "Preparing your apps for app stores" in our docs: [https://trigger.io/docs/c
 					examples={
 						"ios.profiles.DEFAULT.developer_certificate_path": path.abspath("/Users/Bob/certificate.pfx")
 					},
-					more_info="http://current-docs.trigger.io/tools/ios-windows.html"
+					more_info="https://trigger.io/docs/current/tools/local_config.html"
 				)
 
 			if not certificate_password:
@@ -204,7 +203,7 @@ See "Preparing your apps for app stores" in our docs: [https://trigger.io/docs/c
 					examples={
 						"ios.profiles.DEFAULT.developer_certificate_password": "mypassword"
 					},
-					more_info="http://current-docs.trigger.io/tools/ios-windows.html"
+					more_info="https://trigger.io/docs/current/tools/local_config.html"
 				)
 
 			cache_file = None
@@ -368,8 +367,15 @@ See "Preparing your apps for app stores" in our docs: [https://trigger.io/docs/c
 
 		entitlements_dict = plist_dict['Entitlements']
 		entitlements_dict['application-identifier'] = bundle_id
+		
+		# Remove iCloud keys as they need configuring rather than just copying from the provisioning profile
+		if 'com.apple.developer.ubiquity-container-identifiers' in entitlements_dict:
+			entitlements_dict.pop('com.apple.developer.ubiquity-container-identifiers')
+		if 'com.apple.developer.ubiquity-kvstore-identifier' in entitlements_dict:
+			entitlements_dict.pop('com.apple.developer.ubiquity-kvstore-identifier')
 
-		plistlib.writePlist(entitlements_dict, temp_file_path)
+		with open(temp_file_path, 'wb') as temp_file:
+			plistlib.writePlist(entitlements_dict, temp_file)
 	
 	def create_ipa_from_app(self, build, provisioning_profile, output_path_for_ipa, certificate_to_sign_with=None, relative_path_to_itunes_artwork=None, certificate_path=None, certificate_password=None, output_path_for_manifest=None):
 		"""Create an ipa from an app, with an embedded provisioning profile provided by the user, and
@@ -469,7 +475,8 @@ See "Preparing your apps for app stores" in our docs: [https://trigger.io/docs/c
 					"title": build.config['name']
 				}
 			}]}
-			plistlib.writePlist(manifest, output_path_for_manifest)
+			with open(output_path_for_manifest, 'wb') as manifest_file:
+				plistlib.writePlist(manifest, manifest_file)
 			
 		return output_path_for_ipa
 
@@ -490,7 +497,7 @@ See "Preparing your apps for app stores" in our docs: [https://trigger.io/docs/c
 				examples={
 					"ios.device": "device",
 				},
-				more_info="http://current-docs.trigger.io/tools/local-config.html#ios"
+				more_info="https://trigger.io/docs/current/tools/local_config.html"
 			)
 	
 		possible_app_location = '{0}/ios/simulator-*/'.format(self.path_to_ios_build)
@@ -577,7 +584,7 @@ See "Preparing your apps for app stores" in our docs: [https://trigger.io/docs/c
 					entitlements_file=temp_file_path,
 				)
 			
-			fruitstrap = [ensure_lib_available(build, 'fruitstrap'), '-d', '-u', '-t', '10', '-g', '-i mi -q', '-b', path_to_app]
+			fruitstrap = [ensure_lib_available(build, 'fruitstrap'), '-d', '-u', '-t', '10', '-b', path_to_app]
 			if device and device.lower() != 'device':
 				# pacific device given
 				fruitstrap.append('-i')
@@ -586,21 +593,15 @@ See "Preparing your apps for app stores" in our docs: [https://trigger.io/docs/c
 			else:
 				LOG.info('Installing app on device: is it connected?')
 
-			partial_line = ['']
 			def filter_and_combine(logline):
-				if logline.startswith('[') or logline.startswith('-'):
-					return logline.rstrip()
-				elif logline.startswith('@'):
-					partial_line[0] += logline[2:-2]
-					if partial_line[0].endswith('\\r\\n'):
-						try:
-							return partial_line[0][:-4]
-						finally:
-							partial_line[0] = ""
+				return logline.rstrip()
 
-				return False
+			ensure_lib_available(build, 'lldb_framework.zip', extract=True)
 
-			run_shell(*fruitstrap, fail_silently=False, command_log_level=logging.INFO, filter=filter_and_combine, check_for_interrupt=True)
+			env = deepcopy(os.environ)
+			env['PATH'] = os.path.dirname(ensure_lib_available(build, 'lldb'))+":"+env['PATH']
+
+			run_shell(*fruitstrap, fail_silently=False, command_log_level=logging.INFO, filter=filter_and_combine, check_for_interrupt=True, env=env)
 		elif sys.platform.startswith('win'):
 			with temp_file() as ipa_path:
 				self.create_ipa_from_app(
@@ -677,7 +678,7 @@ def run_ios(build, device):
 				examples={
 					"ios.profiles.DEFAULT.provisioning_profile": os.path.abspath("/path/to/embedded.profile")
 				},
-				more_info="http://current-docs.trigger.io/command-line.html#local-conf-ios"
+				more_info="https://trigger.io/docs/current/tools/local_config.html"
 			)
 
 		certificate_path = build.tool_config.get('ios.profile.developer_certificate_path')
@@ -701,9 +702,8 @@ def package_ios(build):
 			examples={
 				"ios.profiles.DEFAULT.provisioning_profile": os.path.abspath("/path/to/embedded.profile")
 			},
-			more_info="http://current-docs.trigger.io/tools/local-config.html#ios"
+			more_info="https://trigger.io/docs/current/tools/local_config.html"
 		)
-		# raise IOSError("see http://current-docs.trigger.io/tools/local-config.html#ios")
 	certificate_to_sign_with = build.tool_config.get('ios.profile.developer_certificate')
 	certificate_path = build.tool_config.get('ios.profile.developer_certificate_path', '')
 	certificate_password = build.tool_config.get('ios.profile.developer_certificate_password', '')

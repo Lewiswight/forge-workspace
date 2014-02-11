@@ -1,0 +1,47 @@
+<script type="text/template" id="template-apgus">
+	<div class="ui-grid-a">
+		<div class="ui-block-a">
+			<div data-chart="gauge" data-min="0" data-max="1000" data-value="<%= channels["apgus.raw"].value %>" data-name="tank1" data-valueid="chart1" data-label="Tank1" data-duration="2000" data-width="100" data-height="300" data-redfrom="0" data-redto="100" data-yellowto="200" data-yellowfrom="100" data-greento="0" data-greenfrom="0" data-majorticks="2" data-minorticks="3">k </div>
+		</div>
+		<div class="ui-block-b">
+			<table class="ui-responsive table-stroke ui-table table-stripe ui-table-reflow" id="my-table" data-role="table"  data-mode="reflow">
+				<thead>
+    				<tr>
+      				<th></th>
+    				</tr>
+  				</thead>
+  			<tbody>
+				<tr>
+   			 		<td><p style="font-size:12px"><b>Level: 95%</b></p></td>
+   			 	</tr>
+   			 	<tr>
+   			 		<td><p style="font-size:12px"><b>System Status:  OK</b></p></td>
+   			 	</tr>
+				<tr>
+   			 		<td><p style="font-size:12px"><b>Trend: -5% per day</b></p></td>
+   			 	</tr>
+			</table>
+		</div>
+	</div>
+
+	<div id="chart1" data-chart="chart" data-nodename="apgus.raw" data-daysofhistory="2" data-datalabel="<%= node.vanityname %>" data-chartlabel="Level History" data-xlabel="Date"> </div>
+	
+	<div class="ui-grid-a">
+		<div class="ui-block-a">
+			<label for="fromDate">From:</label> 
+			<input id="fromDate" type="date" data-role="datebox" data-daysofhistory="30" value=""/>
+		</div>
+		<div class="ui-block-b">
+			<label for="toDate">To:</label> 
+			<input id="toDate" type="date" data-role="datebox"  value=""/>		
+		</div>	   
+	</div>
+	<div class="ui-grid-solo">
+		<div class="ui-block-a"><button id="chart-update" type="v" data-theme="b">Update Chart</button></div>
+	</div>
+ 	
+	
+ 	
+
+
+    </script>

@@ -32,7 +32,7 @@ http = require("http")
 history = []
 clients = []
 clientDict = new Object 
-responceDict = new Object
+responceDict = new Object   
 # Array with some colors
 colors = ["red", "green", "blue", "magenta", "purple", "plum", "orange"]
 

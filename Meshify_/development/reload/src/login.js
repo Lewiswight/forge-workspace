@@ -46,7 +46,8 @@
               return $('#pw').val(value);
             });
             forge.prefs.get("username", function(value) {
-              return $('#un').val(value);
+              $('#un').val(value);
+              return $('#unNew').val(value);
             });
           }
           return hi = 1;
@@ -129,7 +130,7 @@
               "UserName": $('#un').val(),
               "Password": $('#pw').val(),
               "RememberMe": $('#remember-me').prop("checked"),
-              "AppType": "mobile"
+              "AppType": "web"
             }),
             error: function(e) {
               $("body").removeClass('ui-disabled');
@@ -140,9 +141,80 @@
               });
             },
             success: function(data) {
-              var error, itm, role, usrR, _i, _len, _ref;
+              var channelName, error, itm, role, usrR, _i, _len, _ref;
 
               if (data.IsAuthenticated === true) {
+                /*addTemplate = (file) ->
+                								forge.file.string file, (string) ->
+                										$('body').append(string)
+                									 
+                							checkCachedTemplate = (templateName) ->
+                								forge.prefs.get templateName, (file) ->
+                									if file == null
+                										cacheTemplate()
+                										return
+                									
+                									forge.file.isFile file, (isFile) ->
+                								    	
+                							            if isFile == false
+                							            	
+                							                #msg = "File no longer available"
+                							                #forge.notification.alert("Message", msg)  
+                							                cacheTemplate()
+                							            else
+                							                #msg = "Template available Locally"
+                							                #forge.notification.alert("Message", msg) 
+                							                addTemplate file
+                							
+                							cacheTemplate = ->
+                								forge.file.cacheURL "https://s3.amazonaws.com/LynxMVC4-Bucket/template-apgus.html", (file) ->
+                									#alert "template cached"
+                									
+                									#$('body').append(forge.file.sting(file))
+                							    	# File cached save the file object for later
+                									forge.prefs.set "template-apgus1", file, ->
+                							      		#alert "templated saved" 
+                							      		addTemplate file
+                							    							      		
+                							checkCachedTemplate "template-apgus1"
+                */
+
+                forge.parse.push.subscribedChannels((function(channels) {
+                  var channel, _i, _len, _results;
+
+                  _results = [];
+                  for (_i = 0, _len = channels.length; _i < _len; _i++) {
+                    channel = channels[_i];
+                    _results.push(forge.parse.push.unsubscribe(channel, (function() {
+                      return forge.logging.info("no more notifications from: " + channel);
+                    }), function(err) {
+                      return forge.logging.error("couldn't unsubscribe from beta-tester notifications: " + JSON.stringify(err));
+                    }));
+                  }
+                  return _results;
+                }), function(err) {
+                  return forge.logging.error("couldn't retreive subscribed channels: " + JSON.stringify(err));
+                });
+                channelName = $('#un').val();
+                channelName = channelName.replace("@", "");
+                channelName = channelName.replace(/\./g, '');
+                channelName = channelName.toLowerCase();
+                forge.event.messagePushed.addListener(function(msg) {
+                  return forge.notification.alert("Message", msg.alert);
+                });
+                forge.parse.push.subscribe(channelName, (function() {}, forge.logging.info("subscribed to: " + channelName)), function(err) {
+                  return forge.logging.error("error subscribing to : " + JSON.stringify(err));
+                });
+                forge.parse.push.subscribe("company" + JSON.stringify(data.company.CompanyId), (function() {
+                  return forge.logging.info("subscribed to: " + channelName);
+                }), function(err) {
+                  return forge.logging.error("error subscribing to : " + JSON.stringify(err));
+                });
+                forge.parse.push.subscribe("parent" + JSON.stringify(data.company.Parent_CompanyId), (function() {
+                  return forge.logging.info("subscribed to: " + channelName);
+                }), function(err) {
+                  return forge.logging.error("error subscribing to : " + JSON.stringify(err));
+                });
                 Meshable.company.zip = data.company.Address.zip;
                 Meshable.company.city = data.company.Address.city;
                 Meshable.company.state = data.company.Address.state;
@@ -236,7 +308,7 @@
           return forge.request.ajax({
             url: Meshable.rooturl + "/api/authentication/sendEmail",
             data: {
-              UserName: $('#unNew').val()
+              UserName: "lewis@meshify.com"
             },
             dataType: "json",
             type: "POST",
@@ -282,6 +354,42 @@
             var error, itm, param, role, usrR, _i, _len, _ref;
 
             if (data.IsAuthenticated === true) {
+              /*addTemplate = (file) ->
+              								forge.file.string file, (string) ->
+              										$('body').append(string)
+              									 
+              							checkCachedTemplate = (templateName) ->
+              								forge.prefs.get templateName, (file) ->
+              									if file == null
+              										cacheTemplate()
+              										return
+              									
+              									forge.file.isFile file, (isFile) ->
+              								    	
+              							            if isFile == false
+              							            	
+              							                #msg = "File no longer available"
+              							                #forge.notification.alert("Message", msg)  
+              							                cacheTemplate()
+              							            else
+              							                #msg = "Template available Locally"
+              							                #forge.notification.alert("Message", msg) 
+              							                addTemplate file
+              							
+              							cacheTemplate = ->
+              								forge.file.cacheURL "https://s3.amazonaws.com/LynxMVC4-Bucket/template-apgus.html", (file) ->
+              									#alert "template cached"
+              									
+              									#$('body').append(forge.file.sting(file))
+              							    	# File cached save the file object for later
+              									forge.prefs.set "template-apgus1", file, ->
+              							      		#alert "templated saved" 
+              							      		addTemplate file
+              							    
+              							      		
+              							checkCachedTemplate "template-apgus1"
+              */
+
               Meshable.company.zip = data.company.Address.zip;
               Meshable.company.city = data.company.Address.city;
               Meshable.company.state = data.company.Address.state;

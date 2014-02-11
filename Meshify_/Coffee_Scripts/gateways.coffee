@@ -1,6 +1,11 @@
 define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Events', 'async!http://maps.google.com/maps/api/js?sensor=true'], ($, jqm, Backbone, _, Marionette, Meshable, Events ) ->									 
 	
 	Meshable.vent.on "showmap", ->
+		if Meshable.current_searchTerm.length > 1
+			searchTer = Meshable.current_searchTerm.replace(/\ /g, "+")
+		else
+			searchTer = Meshable.current_searchTerm
+		#alert searchTer
 		Meshable.loading = true
 		Meshable.locationButton.setActive()
 		if Meshable.currentMap is null
@@ -9,16 +14,17 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 				Meshable.vent.trigger 'maps:bind', 
 					mapContainerId: 'mapwrapper'
 					mapOpts:
-						center: center 
+						zoom: 6 
 						mapTypeId: google.maps.MapTypeId.ROADMAP 
 					#onMapBound: (mapview) ->
 					#	console.log('on onMapBound callback')
 					#	mainlocationlayoutglobal.listmapRegion.show mapview
 					#	console.log('after onMapBound callback')
+					
 					onMapRendered: () ->
 						console.log('on onMapRendered callback')
 						forge.request.ajax
-							url: Meshable.rooturl + '/api/locations?term=' + Meshable.current_searchTerm 
+							url: Meshable.rooturl + '/api/locations?term=' + searchTer 
 							type: "GET"
 							dataType: "json"
 							timeout: "20000"
@@ -149,6 +155,8 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		#Uncomment to have the map clusters, DOTO: get all grey images for the clusters and set the max zoom and cluster size pretty big
 		#mc = new MarkerClusterer(locationmaps, markers)
 		locationmaps.fitBounds latlngbounds
+		if obj.items.length == 1
+			locationmaps.setZoom(10)
 		return
 
 	Meshable.vent.on 'maps:addmarker', (obj) ->

@@ -55,8 +55,39 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		events: 
 			
 			"click #search-btn": "update"
+			"click #view-all": "viewAll"
 			#"click #menu_back_btn": "menu_back"
 
+		
+		viewAll: ->
+			if not forge.is.connection.connected()
+				forge.notification.alert("Failed to Load", "No Internet Connection")
+				$("body").removeClass('ui-disabled')
+				$.mobile.hidePageLoadingMsg()
+				return
+			
+			includeUnits =  $('#include-units').prop("checked")
+			resultType = $('#flip-3').val()
+			searchField = ""
+			
+			param = new Object {
+				search: searchField
+				
+			}
+			forge.flurry.customEvent(
+				"start up"
+				param
+			, ->
+				console.log "set sent to flury"
+			, (e) ->
+				console.log e
+			)
+			
+			
+			if searchField == ""
+				searchField = "_"
+			route = "#searching/" + searchField + "/" + resultType
+			Backbone.history.navigate route, trigger : true , replace: false, pushState: false
 			
 		update: ->
 			if not forge.is.connection.connected()

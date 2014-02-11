@@ -1,3 +1,11 @@
-#Wed Nov 14 17:03:38 CST 2012
-eclipse.preferences.version=1
+#Fri Sep 20 17:44:03 CDT 2013
+org.eclipse.wst.jsdt.core.compiler.problem.finallyBlockNotCompletingNormally=ignore
+org.eclipse.wst.jsdt.core.compiler.problem.noEffectAssignment=ignore
+org.eclipse.wst.jsdt.core.compiler.problem.uninitializedLocalVariable=ignore
+org.eclipse.wst.jsdt.core.compiler.taskCaseSensitive=enabled
+org.eclipse.wst.jsdt.core.compiler.taskTags=TODO,FIXME,XXX
 org.eclipse.wst.jsdt.core.codeComplete.visibilityCheck=enabled
+org.eclipse.wst.jsdt.core.compiler.problem.unusedLocal=ignore
+eclipse.preferences.version=1
+org.eclipse.wst.jsdt.core.compiler.taskPriorities=NORMAL,HIGH,NORMAL
+org.eclipse.wst.jsdt.core.compiler.problem.optionalSemicolon=ignore

@@ -1,54 +1,63 @@
 {
 	"config_version": "4",
-	"description": "iMistAway",
+	"description": "Meshify",
 	"author": "lewis@meshify.com",
 	"modules": {
 		"geolocation": {
 			"version": "2.0"
 		},
 		"launchimage": {
-			"version": "2.0",
+			"version": "2.2",
 			"config": {
-				"ipad": "img/mistaway/iMistAwayLogo-1136x640.png",
-				"ipad-retina": "img/mistaway/iMistAwayLogo-1136x640.png",
 				"background-color": "#FFFFFF",
-				"android-landscape": "img/mistaway/iMistAwayLogo-960x640.png",
-				"iphone-retina4": "img/mistaway/iMistAwayLogo-1136x640.png",
-				"iphone-retina": "img/mistaway/iMistAwayLogo-960x640.png",
-				"iphone": "img/mistaway/iMistAwayLogo-480x320.png",
-				"android": "img/mistaway/iMistAwayLogo-960x640.png",
-				"ipad-landscape": "img/mistaway/iMistAwayLogo-1136x640.png",
-				"ipad-landscape-retina": "img/mistaway/iMistAwayLogo-1136x640.png"
+				"android-landscape": "img/surge/640x960.png",
+				"android": "img/surge/640x960.png",
+				"ios": {
+					"1536x2048": "img/mistaway/iMistAwayLogo-1536x2048.png",
+					"320x480": "img/surge/320x480.png",
+					"640x1136": "img/surge/640x1136.png",
+					"2048x1536": "img/mistaway/iMistAwayLogo-2048x1536.png",
+					"1536x2008": "img/mistaway/iMistAwayLogo-1536x2008.png",
+					"1024x768": "img/mistaway/iMistAwayLogo-1024x768.png",
+					"2048x1496": "img/mistaway/iMistAwayLogo-2048x1496.png",
+					"1024x748": "img/mistaway/iMistAwayLogo-1024x748.png",
+					"640x960": "img/surge/640x960.png",
+					"768x1004": "img/mistaway/iMistAwayLogo-768x1004.png",
+					"768x1024": "iMistAwayLogo-768x1024.png"
+				}
 			}
 		},
 		"file": {
-			"version": "2.0"
+			"version": "2.2"
 		},
 		"icons": {
-			"version": "2.0",
+			"version": "2.1",
 			"config": {
 				"android": {
-					"36": "img/mistaway/imist-logo-bl-36.png",
-					"48": "img/mistaway/imist-logo-bl-48.png",
-					"72": "img/mistaway/imist-logo-bl-1024_72.png"
+					"36": "img/surge/36.png",
+					"48": "img/surge/48.png",
+					"72": "img/surge/72.png"
 				},
 				"ios": {
-					"57": "img/mistaway/imist-logo-bl-1024_57.png",
-					"72": "img/mistaway/imist-logo-bl-1024_72.png",
-					"114": "img/mistaway/imist-logo-bl-1024_114.png",
-					"144": "img/mistaway/imist-logo-bl-1024_144.png",
-					"512": "img/mistaway/imist-logo-bl-1024_512.png"
+					"57": "img/surge/36.png",
+					"72": "img/surge/72.png",
+					"76": "img/surge/76.png",
+					"114": "img/surge/114.png",
+					"120": "img/surge/120.png",
+					"144": "img/surge/144.png",
+					"152": "img/surge/152.png",
+					"512": "img/surge/512.png"
 				}
 			}
 		},
 		"notification": {
-			"version": "2.1"
+			"version": "2.2"
 		},
 		"topbar": {
-			"version": "2.0"
+			"version": "2.3"
 		},
 		"request": {
-			"version": "2.0",
+			"version": "2.3",
 			"config": {
 				"permissions": [
 					"http://devbuildinglynx.apphb.com/api/authentication",
@@ -59,17 +68,17 @@
 			}
 		},
 		"flurry": {
-			"version": "2.2",
+			"version": "2.3",
 			"config": {
 				"ios_api_key": "8N5NKVCZBN8QH5TQ24KK",
 				"android_api_key": "ZNBVBZRP2DP5MZM9HGKY"
 			}
 		},
 		"contact": {
-			"version": "2.1"
+			"version": "2.2"
 		},
 		"tabbar": {
-			"version": "2.0"
+			"version": "2.2"
 		},
 		"activations": {
 			"version": "2.0",
@@ -81,7 +90,7 @@
 			"version": "2.0"
 		},
 		"display": {
-			"version": "2.0",
+			"version": "2.2",
 			"config": {
 				"orientations": {
 					"ipad": "portrait",
@@ -89,10 +98,17 @@
 					"iphone": "portrait"
 				}
 			}
+		},
+		"parse": {
+			"version": "2.0",
+			"config": {
+				"clientKey": "XaxBngOvMuaGrxP2rydBpSgeXSE9Io3xOuGXw9lZ",
+				"applicationId": "LeVB7rSqRSP55SfXlvlYTidxYzSsDJPr8BfxA4f2"
+			}
 		}
 	},
-	"platform_version": "v2.0.0",
-	"version": "1.0.1",
+	"platform_version": "v2.0.4",
+	"version": "1.0.6",
 	"core": {
 		"android": {
 			"minimum_version": "5"
@@ -102,9 +118,8 @@
 			"minimum_version": "5.1",
 			"package_name": "com.meshify.imistaway2"
 		},
-		"general": {
-			"reload": true
-		}
+		"general": {}
 	},
-	"name": "iMistAway"
+	"name": "Meshify",
+	"homepage": "imistaway.com"
 }

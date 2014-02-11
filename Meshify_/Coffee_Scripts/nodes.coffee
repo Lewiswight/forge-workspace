@@ -90,7 +90,9 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 	displayResults = (data) ->
 		nodeCollection = new nodes
 		# here I check to see if you only have one unit at your location
-		if data.length < 3
+		alert "at the spot"
+		alert data.length()
+		if data.length < 2
 			for obj in data
 				if obj.nodetemplate != "mainMistaway"
 					$("body").addClass('ui-disabled')

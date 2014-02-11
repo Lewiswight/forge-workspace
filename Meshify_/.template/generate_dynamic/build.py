@@ -254,6 +254,10 @@ class Build(object):
 		super(Build, self).__init__()
 		self.script = []
 		self.log = log if log is not None else logging.getLogger(__name__)
+
+		if config is not None and "android_sdk_root" in config:
+			config["android_sdk_dir"] = os.path.join(config['android_sdk_root'], '22.0.4')
+			config.pop("android_sdk_root")
 		self.config = config
 		self.source_dir = path.abspath(source_dir)
 		self.output_dir = path.abspath(output_dir)

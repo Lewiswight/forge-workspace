@@ -76,7 +76,9 @@
       var nodeCoView, nodeCollection, obj, tempNode, _i, _j, _len, _len1;
 
       nodeCollection = new nodes;
-      if (data.length < 3) {
+      alert("at the spot");
+      alert(data.length());
+      if (data.length < 2) {
         for (_i = 0, _len = data.length; _i < _len; _i++) {
           obj = data[_i];
           if (obj.nodetemplate !== "mainMistaway") {

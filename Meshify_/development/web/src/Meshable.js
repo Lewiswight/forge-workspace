@@ -8,7 +8,7 @@
     Meshable.user = new Object;
     Meshable.location = new Object;
     Meshable.theme = "a";
-    Meshable.rooturl = "http://devbuildinglynx.apphb.com/";
+    Meshable.rooturl = "http://imistaway.com";
     Meshable.current - (search = null);
     Meshable.current_units = "";
     Meshable.current_gateways = "";
@@ -22,11 +22,15 @@
     Meshable.refreshUnits = false;
     Meshable.currentMap = null;
     Meshable.mapRefresh = false;
+    Meshable.loading = false;
     Meshable.addRegions({
       loginRegion: "#login",
       mainRegion: "#mainR",
       searchRegion: "#searchR",
       menuRegion: "#menuR"
+    });
+    $(document).on("click", "#newPas", function() {
+      return Meshable.vent.trigger("new:password");
     });
     Meshable.changePage = function(page, direction) {
       $(page.el).attr("data-role", "page");
@@ -54,11 +58,19 @@
       });
     });
     /*
-    	
     	forge.topbar.addButton(
     	  text: "Refresh"
     	  position: "right"
     	,  ->
+    		Meshable.vent.trigger "goto:refresh"
+    		
+    	
+    	
+    	
+    	)
+    	
+    	
+    	Meshable.vent.on "goto:refresh", ->
     		route = Backbone.history.fragment
     		if route == "units" 
     			if Meshable.current_index > 0
@@ -74,10 +86,7 @@
     		Meshable.router.navigate "nowhere", trigger : false, replace: true
     		Meshable.router.navigate route, trigger : true, replace: true
      		#window.location.reload(false) 
-    	
-    	
-    	
-    	)
+     		
     	forge.topbar.addButton(
     	  text: "Back"
     	  position: "left"
@@ -99,7 +108,8 @@
     	, (button) ->
     	  Meshable.locationButton = button
     	  button.onPressed.addListener ->
-    	    Meshable.router.navigate "gateways", trigger : true
+    	  	if Meshable.loading == false
+    	    	Meshable.router.navigate "gateways", trigger : true
     	)
     	 
     	forge.tabbar.addButton(
@@ -109,7 +119,8 @@
     	, (button) ->
     	  Meshable.unitsButton = button
     	  button.onPressed.addListener ->
-    	    Meshable.router.navigate "units", trigger : true
+    	  	if Meshable.loading == false
+    	    	Meshable.router.navigate "units", trigger : true
     	  button.setActive()
     	)
     	forge.tabbar.addButton(
@@ -119,7 +130,8 @@
     	, (button) ->
     	  Meshable.searchButton = button
     	  button.onPressed.addListener ->
-    	    Meshable.router.navigate "search", trigger : true
+    	  	if Meshable.loading == false
+    	    	Meshable.router.navigate "search", trigger : true
     
     	)	
     	
@@ -130,7 +142,8 @@
     	, (button) ->
     	  Meshable.contactButton = button
     	  button.onPressed.addListener ->
-    	    Meshable.router.navigate "contact", trigger : true
+    	  	if Meshable.loading == false
+    	    	Meshable.router.navigate "contact", trigger : true
     
     	)
     	forge.tabbar.addButton(

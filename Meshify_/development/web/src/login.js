@@ -46,7 +46,8 @@
               return $('#pw').val(value);
             });
             forge.prefs.get("username", function(value) {
-              return $('#un').val(value);
+              $('#un').val(value);
+              return $('#unNew').val(value);
             });
           }
           return hi = 1;
@@ -54,7 +55,12 @@
         return $("#login").trigger('create');
       },
       events: {
-        "click #auth-submit-btn": "submitauth"
+        "click #auth-submit-btn": "submitauth",
+        "click #getnewpass": "openPopup",
+        "click #newPas": "newPassword"
+      },
+      openPopup: function() {
+        return $("#popupBasic").popup('open');
       },
       focusfakepassword: function() {
         $('#fakepassword-input').hide();
@@ -77,7 +83,7 @@
         }
       },
       submitauth: function() {
-        var pass, remember, self, username;
+        var demoGraph, pass, remember, self, username;
 
         pass = $('#pw').val();
         username = $('#un').val();
@@ -87,11 +93,10 @@
         if (remember === true) {
           forge.prefs.set("password", pass);
         }
-        /*	
-        			demoGraph = new Object {
-        				user_id: username
-        			}
-        						
+        demoGraph = new Object({
+          user_id: username
+        });
+        /*			
         			forge.flurry.setDemographics(
         				demoGraph
         			, ->
@@ -136,7 +141,8 @@
             data: JSON.stringify({
               "UserName": $('#un').val(),
               "Password": $('#pw').val(),
-              "RememberMe": $('#remember-me').prop("checked")
+              "RememberMe": $('#remember-me').prop("checked"),
+              "AppType": "mobile"
             }),
             error: function(e) {
               $("body").removeClass('ui-disabled');
@@ -147,38 +153,52 @@
               });
             },
             success: function(data) {
-              var error, role, userRole, _i, _len, _ref;
+              var error, itm, param, role, usrR, _i, _len, _ref;
 
-              Meshable.company.zip = data.company.Address.zip;
-              Meshable.company.city = data.company.Address.city;
-              Meshable.company.state = data.company.Address.state;
-              Meshable.company.street = data.company.Address.street1;
-              Meshable.company.name = data.company.Name;
-              Meshable.company.email = data.company.email;
-              Meshable.company.phone = data.company.phone;
-              Meshable.company.image = data.company.mobileLogoUrl;
-              Meshable.user.FirstName = data.person.first;
-              Meshable.user.LastName = data.person.last;
-              Meshable.user.Phone = data.person.phone1;
-              Meshable.user.Email = data.person.UserObj.Username;
-              try {
-                userRole = 1;
-                _ref = data.roles;
-                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                  role = _ref[_i];
-                  if (role === "MOBILE_ONLY") {
-                    userRole = 0;
+              if (data.IsAuthenticated === true) {
+                Meshable.company.zip = data.company.Address.zip;
+                Meshable.company.city = data.company.Address.city;
+                Meshable.company.state = data.company.Address.state;
+                Meshable.company.street = data.company.Address.street1;
+                Meshable.company.name = data.company.Name;
+                Meshable.company.email = data.company.email;
+                Meshable.company.phone = data.company.phone;
+                Meshable.company.image = data.company.mobileLogoUrl;
+                Meshable.user.FirstName = data.person.first;
+                Meshable.user.LastName = data.person.last;
+                Meshable.user.Phone = data.person.phone1;
+                Meshable.user.Email = data.person.UserObj.Username;
+                for (itm in Meshable.company) {
+                  if (Meshable.company[itm] === null) {
+                    Meshable.company[itm] = "";
                   }
                 }
-                Meshable.userRole = userRole;
-                Meshable.companyPhone = data.company.Phone;
-              } catch (_error) {
-                error = _error;
-                Meshable.companyName = "Mistaway";
-                Meshable.userRole = 1;
-                Meshable.companyPhone = "000-000-0000";
-              }
-              if (data.IsAuthenticated === true) {
+                try {
+                  Meshable.userRole = 1;
+                  _ref = data.roles;
+                  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    role = _ref[_i];
+                    if (role === "MOBILE_ONLY") {
+                      Meshable.userRole = 0;
+                    }
+                  }
+                  if (Meshable.userRole === 1) {
+                    usrR = "Dealer/Admin";
+                  } else {
+                    usrR = "Mobile Only";
+                  }
+                  param = new Object({
+                    UserType: usrR
+                  });
+                  forge.flurry.customEvent("start up", param, function() {
+                    return console.log("set sent to flury");
+                  }, function(e) {
+                    return console.log(e);
+                  });
+                } catch (_error) {
+                  error = _error;
+                  Meshable.userRole = 1;
+                }
                 $.mobile.changePage($("#mainPage"), {
                   changeHash: false,
                   reverse: false,
@@ -212,10 +232,59 @@
         return collectionView.$("#login_page").append(itemView.el);
       }
     });
+    Meshable.vent.on("new:password", function() {
+      return forge.request.ajax({
+        url: Meshable.rooturl + "/api/authentication/username",
+        data: {
+          username: $('#unNew').val()
+        },
+        dataType: "json",
+        type: "GET",
+        error: function(e) {
+          $("body").removeClass('ui-disabled');
+          $.mobile.hidePageLoadingMsg();
+          return forge.notification.alert("Error", "email address doesn't match your account");
+        },
+        success: function(data) {
+          return forge.request.ajax({
+            url: Meshable.rooturl + "/api/authentication/sendEmail",
+            data: {
+              UserName: "lewis@meshify.com"
+            },
+            dataType: "json",
+            type: "POST",
+            error: function(e) {
+              $("body").removeClass('ui-disabled');
+              $.mobile.hidePageLoadingMsg();
+              return forge.notification.alert("Error", e.message);
+            },
+            success: function(data) {
+              forge.notification.alert("Success", "Check you inbox for instructions on how to retrieve your password");
+              return $("#popupBasic").popup('close');
+            }
+          });
+        }
+      });
+    });
     return Meshable.vent.on("goto:login", function() {
       var loginView;
 
       $.mobile.showPageLoadingMsg("a", "Loading", false);
+      /*
+      		forge.topbar.hide(
+      		  ->
+      			console.log "hi"
+      		, (e) ->
+      			console.log e
+      		)
+      		forge.tabbar.hide(
+      		  ->
+      			console.log "hi"
+      		, (e) ->
+      			console.log e
+      		)
+      */
+
       if (!forge.is.connection.connected()) {
         loginView = new AuthPageView({
           collection: new collect(new AuthModel)
@@ -232,9 +301,9 @@
           type: "GET",
           timeout: 30000,
           success: function(data) {
-            var error, role, userRole, _i, _len, _ref;
+            var error, itm, param, role, usrR, _i, _len, _ref;
 
-            try {
+            if (data.IsAuthenticated === true) {
               Meshable.company.zip = data.company.Address.zip;
               Meshable.company.city = data.company.Address.city;
               Meshable.company.state = data.company.Address.state;
@@ -247,25 +316,39 @@
               Meshable.user.LastName = data.person.last;
               Meshable.user.Phone = data.person.phone1;
               Meshable.user.Email = data.person.UserObj.Username;
-              userRole = 0;
-              _ref = data.roles;
-              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                role = _ref[_i];
-                if (role === "MOBILE_ONLY") {
-                  userRole = 0;
+              for (itm in Meshable.company) {
+                if (Meshable.company[itm] === null) {
+                  Meshable.company[itm] = "";
                 }
               }
-              Meshable.userRole = userRole;
-              Meshable.companyPhone = data.company.Phone;
-            } catch (_error) {
-              error = _error;
-              Meshable.companyName = "Mistaway";
-              Meshable.userRole = 0;
-              Meshable.companyPhone = "000-000-0000";
-            }
-            if (data.IsAuthenticated === true) {
+              try {
+                Meshable.userRole = 1;
+                _ref = data.roles;
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                  role = _ref[_i];
+                  if (role === "MOBILE_ONLY") {
+                    Meshable.userRole = 0;
+                  }
+                }
+                if (Meshable.userRole === 1) {
+                  usrR = "Dealer/Admin";
+                } else {
+                  usrR = "Mobile Only";
+                }
+                param = new Object({
+                  UserType: usrR
+                });
+                forge.flurry.customEvent("start up", param, function() {
+                  return console.log("set sent to flury");
+                }, function(e) {
+                  return console.log(e);
+                });
+              } catch (_error) {
+                error = _error;
+                Meshable.userRole = 1;
+              }
               forge.prefs.get("username", function(value) {
-                var param, username;
+                var username;
 
                 username = value;
                 param = new Object({

@@ -1,11 +1,11 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" package="io.trigger.forge36e5a4702df411e2b5de12313d31f141" android:installLocation="auto" android:versionCode="1376667541" android:versionName="1.0.1">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" package="io.trigger.forge36e5a4702df411e2b5de12313d31f141" android:installLocation="auto" android:versionCode="1391643327" android:versionName="1.0.6">
     
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="15" />
     
-    <application android:icon="@drawable/icon" android:label="iMistAway" android:name="io.trigger.forge.android.core.ForgeApp">
+    <application android:icon="@drawable/icon" android:label="Meshify" android:name="io.trigger.forge.android.core.ForgeApp">
         <activity android:configChanges="mcc|mnc|locale|touchscreen|keyboardHidden|navigation|orientation|screenLayout|uiMode|fontScale|screenSize" android:launchMode="singleTask" android:name="io.trigger.forge.android.core.ForgeActivity" android:stateNotNeeded="true" android:theme="@android:style/Theme.Black.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -14,5 +14,5 @@
         </activity>
         
         <provider android:authorities="io.trigger.forge36e5a4702df411e2b5de12313d31f141" android:exported="true" android:name="io.trigger.forge.android.core.ForgeContentProvider" tools:ignore="ExportedContentProvider" />
-    </application>
-<uses-permission android:name="android.permission.ACCESS_GPS" /><uses-permission android:name="android.permission.ACCESS_ASSISTED_GPS" /><uses-permission android:name="android.permission.ACCESS_LOCATION" /><uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /><uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /><uses-permission android:name="android.permission.VIBRATE" /><uses-permission android:name="android.permission.READ_CONTACTS" /><uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /></manifest>
+    <service android:name="com.parse.PushService" /><receiver android:name="com.parse.ParseBroadcastReceiver"><intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /><action android:name="android.intent.action.USER_PRESENT" /></intent-filter></receiver></application>
+<uses-permission android:name="android.permission.ACCESS_GPS" /><uses-permission android:name="android.permission.ACCESS_ASSISTED_GPS" /><uses-permission android:name="android.permission.ACCESS_LOCATION" /><uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /><uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /><uses-permission android:name="android.permission.VIBRATE" /><uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /><uses-permission android:name="android.permission.READ_CONTACTS" /><uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /></manifest>

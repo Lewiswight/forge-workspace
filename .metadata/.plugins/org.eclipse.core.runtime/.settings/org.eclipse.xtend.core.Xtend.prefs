@@ -1,0 +1,8 @@
+#Fri Sep 20 17:46:50 CDT 2013
+outlet.DEFAULT_OUTPUT.installDslAsPrimarySource=true
+outlet.DEFAULT_OUTPUT.createDirectory=false
+eclipse.preferences.version=1
+outlet.DEFAULT_OUTPUT.derived=false
+outlet.DEFAULT_OUTPUT.override=false
+outlet.DEFAULT_OUTPUT.cleanupDerived=false
+autobuilding=false

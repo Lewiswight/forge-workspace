@@ -6,6 +6,8 @@ import json
 import hashlib
 import urlparse
 import stat
+import zipfile
+import subprocess
 
 from module_dynamic.lib import PopenWithoutNewConsole
 import build
@@ -34,7 +36,7 @@ def path_to_lib():
 		'lib',
 	))
 
-def ensure_lib_available(build, file):
+def ensure_lib_available(build, file, extract=False):
 	# In case of forge-generate check for file
 	server_path = path.abspath(path.join(path.split(path.abspath(__file__))[0], '..', '..', 'generate', 'lib', file))
 	if path.isfile(server_path):
@@ -85,6 +87,13 @@ def ensure_lib_available(build, file):
 		file=file
 	)
 	remote._get_file(url, file_path)
+
+	if extract:
+		if sys.platform == 'win32':
+			with zipfile.ZipFile(file_path) as zipf:
+				zipf.extractall(lib_dir)
+		else:
+			subprocess.check_call(['unzip', '-o', file_path, '-d', lib_dir])
 	
 	# Make file executable.
 	os.chmod(file_path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IWGRP | stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)

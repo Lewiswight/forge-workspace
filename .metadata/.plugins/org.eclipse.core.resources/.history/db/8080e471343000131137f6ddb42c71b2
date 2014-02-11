@@ -1,0 +1,13 @@
+forever = require("forever-monitor") 
+child = new Array
+for i in [0..20]
+	child[i] = new (forever.Monitor)("start.js",
+	  max: 50
+	  silent: true
+	  options: []
+	)
+	console.log i
+	child[i].on "restart", ->
+	  console.log "uploader " + i.toString() +  " has restarted"
+	
+	child[i].start()

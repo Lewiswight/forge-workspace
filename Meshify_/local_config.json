@@ -10,19 +10,5 @@
 		},
 		"purge": true
 	},
-	"ios": {
-		"simulatorsdk": "6.1",
-		"simulatorfamily": "iphone",
-		"profiles": {
-			"DEFAULT": {
-				"developer_certificate_path": "/Users/lewiswight/forge-workspace/Certificates1.p12",
-				"developer_certificate_password": "12345678",
-				"provisioning_profile": "/Users/lewiswight/Library/MobileDevice/Provisioning Profiles/67706E9F-534D-425F-B17C-EC89A95424F1.mobileprovision"
-			}
-		},
-		"device": "simulator"
-	},
-	"general": {
-		"reload": {}
-	}
+	"general": {}
 }

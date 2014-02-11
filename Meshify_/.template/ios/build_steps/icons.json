@@ -33,6 +33,30 @@
 	},
 	{
 		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.icons.config.ios.120}}",
+				"dest": "120.png"
+			}
+		}
+	},
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.icons.config.ios.152}}",
+				"dest": "152.png"
+			}
+		}
+	},
+	{
+		"do": {
+			"copy_file_from_src": {
+				"filename": "{{modules.icons.config.ios.76}}",
+				"dest": "76.png"
+			}
+		}
+	},
+	{
+		"do": {
 			"icons_handle_prerendered": {}
 		}
 	}

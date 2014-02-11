@@ -280,3 +280,17 @@ tr
 {
   padding-bottom: 0px;
 }
+.custom-txt {
+	font-size: 14px;	
+}
+.custom-txt-address {
+	font-size: 12px;	
+}
+
+.custom-middle{
+	vertical-align: middle;
+	PADDING-TOP: 15px;
+}
+text{
+	font-size: 9px;
+}

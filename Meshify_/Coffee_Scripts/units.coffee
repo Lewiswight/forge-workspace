@@ -23,12 +23,14 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			if node.model.attributes.nodetemplate == "header"
 				@template = "#label-template"
 				@.$el.attr('data-role', 'list-divider')
-			
+			else if node.model.attributes.nodetemplate == "resultsIndictor"
+				@template = '#nodeitem-' + node.model.attributes.nodetemplate
+				@.$el.attr('data-role', 'list-divider')
+				@.$el.attr('data-theme', 'c')
 			else 
 				@template = '#nodeitem-' + node.model.attributes.nodetemplate
 
-			
-			
+	
 			
 			
 		
@@ -111,7 +113,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			return
 		
 		if not refresh and Meshable.current_units != "" and Meshable.refreshUnits == false
-			showResults Meshable.current_units
+			showResults()
 			return
 		
 		#if not refresh and Meshable.currentDataObj != ""
@@ -197,11 +199,12 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			$.mobile.hidePageLoadingMsg()
 			Meshable.loading = false
 			return
+			
+		Meshable.headers = 0
 		
 		for obj in dataObj.list
-			
 			do (obj) ->
-		
+				obj.models = new Array()
 				$.mobile.showPageLoadingMsg("a", "Loading", false)
 				forge.request.ajax
 					url: Meshable.rooturl + "/api/gateway"
@@ -215,8 +218,10 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 							tempNode = new nodea { 
 								nodetemplate: "add"
 								}
-							Meshable.current_units.add tempNode
-							showResults Meshable.current_units
+							obj.models.push(tempNode)
+							buildViews dataObj.list
+							#Meshable.current_units.add tempNode
+							#showResults Meshable.current_units
 					success: (data) =>
 						if data.isAuthenticated == false
 							Backbone.history.navigate "logout", replace: false, trigger: true
@@ -232,7 +237,9 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 								phone1: obj.person.phone1
 								mac: obj.gateway.macaddress
 								}
-							Meshable.current_units.add tempNode
+							Meshable.headers += 1
+							obj.models.push(tempNode)
+							#Meshable.current_units.add tempNode
 							
 							for obja in data
 								obja.person = new Object
@@ -241,16 +248,19 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 								obja.address = obj.address
 								if obja.nodetemplate != "mainMistaway"
 									tempNode = new nodea
-									Meshable.current_units.add tempNode.parse(obja)
+									obj.models.push(tempNode.parse(obja))
+									#Meshable.current_units.add tempNode.parse(obja)
 							count += 1
 							if count >= listlen
-								if count > 1
+								
+								###if count > 1
 									tempNode = new nodea { 
 										nodetemplate: "add"
 										}
-									Meshable.current_units.add tempNode
-									
-								showResults Meshable.current_units
+									Meshable.current_units.add tempNode###
+								
+								buildViews dataObj.list	
+								#showResults Meshable.current_units
 								
 									
 				
@@ -258,16 +268,42 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 	
 		
 		
-						
+	buildViews = (obj) ->
+		for unit in obj
+			for model in unit.models
+				Meshable.current_units.add model
+				
+		
+		if Meshable.current_units.size() >= 20
+			tempNode = new nodea { 
+				nodetemplate: "add"
+				}
+			Meshable.current_units.add tempNode
+		
+		if Meshable.headers != 1
+			if Meshable.current_searchTerm == "" or Meshable.current_searchTerm == "_"
+				resIndicator = "All Units"
+			else
+				resIndicator = ("Results For: " + Meshable.current_searchTerm)
+		
+			tempNode = new nodea {
+				res: resIndicator 
+				nodetemplate: "resultsIndictor"
+				}
+			Meshable.current_units.add tempNode, {at: 0}	
+		
+		showResults()			
 		
 			
-	showResults = (temp) ->
-		hi = temp
+	showResults = ->
+		
+		
 		Meshable.nodeCoView = new nodeCompView
 			collection: Meshable.current_units
 	
 		
-		if Meshable.current_units.size() == 2
+		
+		if Meshable.current_units.size() == 2 and (typeof Meshable.current_units.at(1).attributes.macaddress != undefined)  
 			mac = Meshable.current_units.at(1).attributes.macaddress
 			nodeId = Meshable.current_units.at(1).attributes.node.NodeId
 			first = Meshable.current_units.at(1).attributes.person.first
@@ -280,11 +316,13 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			route = "/gateway/" + mac + "/" + nodeId + "/" + first + "/" + last + "/" + phone + "/" + city + "/" + state + "/" + street + "/" + zip
 			Meshable.router.navigate route, trigger : true, replace: true
 			Meshable.unitsButton.setActive()
-			return
-	
+			return  
+		
+		
+		
 					
 		Meshable.currentpage = "units"
-		#$('#mainDiv').hide()
+		#$('#mainDiv').hide() 
 		
 		Meshable.nodeCoView.render()
 		$('#mainDiv').empty()
@@ -296,7 +334,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 		
 		Meshable.unitsButton.setActive()
 		if Meshable.backplace != ""
-				$('html, body').animate({scrollTop: $(Meshable.backplace).offset().top}, 0)
+				$('html, body').animate({scrollTop: ($(Meshable.backplace).offset().top - 10)}, 0)
 				Meshable.backplace = ""
 		#Meshable.changePage nodeCoView, false
 
@@ -361,7 +399,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 					for obj in dataObj.list
 						
 						do (obj) ->
-					
+							obj.models = new Array()
 							$.mobile.showPageLoadingMsg("a", "Loading", false)
 							forge.request.ajax
 								url: Meshable.rooturl + "/api/gateway"
@@ -375,10 +413,11 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 										tempNode = new nodea { 
 											nodetemplate: "add"
 											}
-										modelList.push(tempNode)
-										for model in modelList
+										obj.models.push(tempNode)
+										build10Views dataObj.list
+										###for model in obj.models
 											Meshable.current_units.add model
-										showResults10 Meshable.current_units, true
+										showResults10 Meshable.current_units, true###
 								success: (data) =>
 									if data.isAuthenticated == false
 										Backbone.history.navigate "logout", replace: false, trigger: true
@@ -394,7 +433,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 											phone1: obj.person.phone1
 											mac: obj.gateway.macaddress
 											}
-										modelList.push(tempNode)
+										obj.models.push(tempNode)
 										#Meshable.current_units.add tempNode
 										
 										for obja in data
@@ -405,19 +444,30 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 											if obja.nodetemplate != "mainMistaway"
 												tempNode = new nodea
 												tempNode1 = tempNode.parse(obja)
-												modelList.push(tempNode1)
+												obj.models.push(tempNode1)
 												
 												
 										count += 1
 										if count >= listlen
-											tempNode = new nodea { 
-												nodetemplate: "add"
-												}
-											modelList.push(tempNode)
-											for model in modelList
+				
+											build10Views dataObj.list
+											###for model in obj.models
 												Meshable.current_units.add model
-											showResults10 Meshable.current_units, true
+											showResults10 Meshable.current_units, true###
 											
+	
+	build10Views = (obj) ->
+		
+		for unit in obj
+			for model in unit.models
+				Meshable.current_units.add model
+				
+		if Meshable.current_units.size() >= 20
+			tempNode = new nodea { 
+				nodetemplate: "add"
+				}
+			Meshable.current_units.add tempNode
+		showResults10 Meshable.current_units, true	
 							
 	showResults10 = (temp, go) ->
 		hi = temp			

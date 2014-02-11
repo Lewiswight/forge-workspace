@@ -64,6 +64,8 @@ require.config({
         
     	"jquery": "vendor/jquery",
     	"async": "vendor/async",
+    	"propertyParser": 'vendor/propertyParser',
+    	"goog": "vendor/goog",
     	'jqmglobe': 'js/jqm.globals',
     	"jqm": "vendor/jquery.mobile-1.3.1",
     	'backbone': "vendor/backbone",

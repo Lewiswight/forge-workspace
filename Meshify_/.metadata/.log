@@ -966,3 +966,694 @@ java.lang.NullPointerException
 	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:144)
 	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:242)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+!SESSION 2013-09-21 18:23:22.774 -----------------------------------------------
+eclipse.buildId=4.3.0.I20130605-2000
+java.version=1.6.0_51
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.dsl.product -keyring /Users/lewiswight/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.dsl.product -keyring /Users/lewiswight/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.resources 4 567 2013-09-21 18:23:44.515
+!MESSAGE Workspace restored, but some problems occurred.
+!SUBENTRY 1 org.eclipse.core.resources 4 567 2013-09-21 18:23:44.515
+!MESSAGE Could not read metadata for 'Meshify_1'.
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: The project description file (.project) for 'Meshify_1' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.read(FileSystemResourceManager.java:851)
+	at org.eclipse.core.internal.resources.SaveManager.restoreMetaInfo(SaveManager.java:874)
+	at org.eclipse.core.internal.resources.SaveManager.restoreMetaInfo(SaveManager.java:854)
+	at org.eclipse.core.internal.resources.SaveManager.restore(SaveManager.java:703)
+	at org.eclipse.core.internal.resources.SaveManager.startup(SaveManager.java:1530)
+	at org.eclipse.core.internal.resources.Workspace.startup(Workspace.java:2503)
+	at org.eclipse.core.internal.resources.Workspace.open(Workspace.java:2252)
+	at org.eclipse.core.resources.ResourcesPlugin.start(ResourcesPlugin.java:439)
+	at org.eclipse.osgi.framework.internal.core.BundleContextImpl$1.run(BundleContextImpl.java:711)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at org.eclipse.osgi.framework.internal.core.BundleContextImpl.startActivator(BundleContextImpl.java:702)
+	at org.eclipse.osgi.framework.internal.core.BundleContextImpl.start(BundleContextImpl.java:683)
+	at org.eclipse.osgi.framework.internal.core.BundleHost.startWorker(BundleHost.java:381)
+	at org.eclipse.osgi.framework.internal.core.AbstractBundle.start(AbstractBundle.java:300)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:478)
+	at org.eclipse.osgi.internal.loader.BundleLoader.setLazyTrigger(BundleLoader.java:263)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:109)
+	at org.eclipse.osgi.baseadaptor.loader.ClasspathManager.findLocalClass(ClasspathManager.java:469)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.findLocalClass(DefaultClassLoader.java:216)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:395)
+	at org.eclipse.osgi.internal.loader.SingleSourcePackage.loadClass(SingleSourcePackage.java:35)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:461)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:421)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:412)
+	at org.eclipse.osgi.internal.baseadaptor.DefaultClassLoader.loadClass(DefaultClassLoader.java:107)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:125)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:110)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:79)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:354)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:181)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:636)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:591)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1450)
+!SUBENTRY 2 org.eclipse.core.resources 4 567 2013-09-21 18:23:44.516
+!MESSAGE The project description file (.project) for 'Meshify_1' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+
+!ENTRY org.eclipse.core.net 1 0 2013-09-21 18:23:46.054
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.core.resources 4 567 2013-09-21 18:23:56.612
+!MESSAGE The project description file (.project) for 'Meshify_1' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+!SESSION 2013-09-21 18:24:29.893 -----------------------------------------------
+eclipse.buildId=4.3.0.I20130605-2000
+java.version=1.6.0_51
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.dsl.product -product org.eclipse.epp.package.dsl.product -keyring /Users/lewiswight/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.dsl.product -data /Users/lewiswight/forge-workspace/Meshify_ -product org.eclipse.epp.package.dsl.product -keyring /Users/lewiswight/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2013-09-21 18:24:33.706
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.core.resources 4 567 2013-09-21 18:24:40.019
+!MESSAGE The project description file (.project) for 'Meshify_1' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2013-09-21 18:25:50.728
+!MESSAGE Server returned lastModified <= 0 for http://coffeescript-editor.eclipselabs.org.codespot.com/hg/content.jar
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2013-09-21 18:26:22.048
+!MESSAGE Server returned lastModified <= 0 for http://coffeescript-editor.eclipselabs.org.codespot.com/hg/artifacts.jar
+!SESSION 2013-09-21 18:27:08.338 -----------------------------------------------
+eclipse.buildId=4.3.0.I20130605-2000
+java.version=1.6.0_51
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.dsl.product -product org.eclipse.epp.package.dsl.product -keyring /Users/lewiswight/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.dsl.product -data /Users/lewiswight/forge-workspace/Meshify_ -product org.eclipse.epp.package.dsl.product -keyring /Users/lewiswight/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.core.net 1 0 2013-09-21 18:27:14.088
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.core.resources 4 567 2013-09-21 18:27:19.986
+!MESSAGE The project description file (.project) for 'Meshify_1' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2013-09-21 18:30:40.334
+!MESSAGE Server returned lastModified <= 0 for http://coffeescript-editor.eclipselabs.org.codespot.com/hg/content.jar
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:31:18.319
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:31:18.319
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:31:18.319
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:31:18.319
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:31:18.319
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.319
+!MESSAGE Software being installed: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.319
+!MESSAGE Missing requirement: JavaServer Faces Tools - DesignTime Tests Plug-in 1.1.105.v201001271707 (org.eclipse.jst.jsf.designtime.tests 1.1.105.v201001271707) requires 'bundle org.eclipse.jdt.core.manipulation [1.3.0,1.4.0]' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:31:18.319
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.319
+!MESSAGE From: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.319
+!MESSAGE To: org.eclipse.jst.jsf.designtime.tests [1.1.105.v201001271707]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:31:18.333
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:31:18.333
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:31:18.333
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:31:18.333
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:31:18.333
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.333
+!MESSAGE Software being installed: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.333
+!MESSAGE Missing requirement: JavaServer Faces Tools - DesignTime Tests Plug-in 1.1.105.v201001271707 (org.eclipse.jst.jsf.designtime.tests 1.1.105.v201001271707) requires 'bundle org.eclipse.jdt.core.manipulation [1.3.0,1.4.0]' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:31:18.333
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.333
+!MESSAGE From: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.333
+!MESSAGE To: org.eclipse.jst.jsf.designtime.tests [1.1.105.v201001271707]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:31:18.385
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:31:18.385
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:31:18.385
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:31:18.385
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:31:18.385
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.385
+!MESSAGE Software being installed: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.385
+!MESSAGE Missing requirement: JavaServer Faces Tools - DesignTime Tests Plug-in 1.1.105.v201001271707 (org.eclipse.jst.jsf.designtime.tests 1.1.105.v201001271707) requires 'bundle org.eclipse.jdt.core.manipulation [1.3.0,1.4.0]' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:31:18.385
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.385
+!MESSAGE From: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.385
+!MESSAGE To: org.eclipse.jst.jsf.designtime.tests [1.1.105.v201001271707]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:31:18.385
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:31:18.385
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:31:18.385
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:31:18.385
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:31:18.385
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.385
+!MESSAGE Software being installed: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.385
+!MESSAGE Missing requirement: JavaServer Faces Tools - DesignTime Tests Plug-in 1.1.105.v201001271707 (org.eclipse.jst.jsf.designtime.tests 1.1.105.v201001271707) requires 'bundle org.eclipse.jdt.core.manipulation [1.3.0,1.4.0]' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:31:18.385
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.385
+!MESSAGE From: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:31:18.385
+!MESSAGE To: org.eclipse.jst.jsf.designtime.tests [1.1.105.v201001271707]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2013-09-21 18:32:07.860
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10011 2013-09-21 18:32:07.860
+!MESSAGE "Patch feature for tests" is not applicable to the current configuration and will not be installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10011 2013-09-21 18:32:07.860
+!MESSAGE "WTP Patches for org.eclipse.wst.web_core.feature" is not applicable to the current configuration and will not be installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2013-09-21 18:32:07.861
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10011 2013-09-21 18:32:07.861
+!MESSAGE "Patch feature for tests" is not applicable to the current configuration and will not be installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10011 2013-09-21 18:32:07.861
+!MESSAGE "WTP Patches for org.eclipse.wst.web_core.feature" is not applicable to the current configuration and will not be installed.
+
+!ENTRY org.eclipse.equinox.p2.repository 2 0 2013-09-21 18:32:11.813
+!MESSAGE Server returned lastModified <= 0 for http://coffeescript-editor.eclipselabs.org.codespot.com/hg/artifacts.jar
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:32:47.686
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:32:47.686
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:32:47.686
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:32:47.686
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:32:47.686
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.686
+!MESSAGE Software being installed: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.686
+!MESSAGE Missing requirement: JavaServer Faces Tools - DesignTime Tests Plug-in 1.1.105.v201001271707 (org.eclipse.jst.jsf.designtime.tests 1.1.105.v201001271707) requires 'bundle org.eclipse.jdt.core.manipulation [1.3.0,1.4.0]' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:32:47.686
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.686
+!MESSAGE From: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.686
+!MESSAGE To: org.eclipse.jst.jsf.designtime.tests [1.1.105.v201001271707]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:32:47.691
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:32:47.691
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:32:47.691
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:32:47.691
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:32:47.691
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.691
+!MESSAGE Software being installed: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.691
+!MESSAGE Missing requirement: JavaServer Faces Tools - DesignTime Tests Plug-in 1.1.105.v201001271707 (org.eclipse.jst.jsf.designtime.tests 1.1.105.v201001271707) requires 'bundle org.eclipse.jdt.core.manipulation [1.3.0,1.4.0]' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:32:47.691
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.691
+!MESSAGE From: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.691
+!MESSAGE To: org.eclipse.jst.jsf.designtime.tests [1.1.105.v201001271707]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:32:47.726
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:32:47.726
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:32:47.726
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:32:47.726
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:32:47.726
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.726
+!MESSAGE Software being installed: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.726
+!MESSAGE Missing requirement: JavaServer Faces Tools - DesignTime Tests Plug-in 1.1.105.v201001271707 (org.eclipse.jst.jsf.designtime.tests 1.1.105.v201001271707) requires 'bundle org.eclipse.jdt.core.manipulation [1.3.0,1.4.0]' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:32:47.726
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.726
+!MESSAGE From: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.726
+!MESSAGE To: org.eclipse.jst.jsf.designtime.tests [1.1.105.v201001271707]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:32:47.726
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:32:47.726
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:32:47.726
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:32:47.726
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:32:47.726
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.726
+!MESSAGE Software being installed: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.726
+!MESSAGE Missing requirement: JavaServer Faces Tools - DesignTime Tests Plug-in 1.1.105.v201001271707 (org.eclipse.jst.jsf.designtime.tests 1.1.105.v201001271707) requires 'bundle org.eclipse.jdt.core.manipulation [1.3.0,1.4.0]' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:32:47.726
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.726
+!MESSAGE From: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:32:47.726
+!MESSAGE To: org.eclipse.jst.jsf.designtime.tests [1.1.105.v201001271707]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2013-09-21 18:33:17.116
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10011 2013-09-21 18:33:17.116
+!MESSAGE "Patch feature for tests" is not applicable to the current configuration and will not be installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10011 2013-09-21 18:33:17.116
+!MESSAGE "WTP Patches for org.eclipse.wst.web_core.feature" is not applicable to the current configuration and will not be installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2013-09-21 18:33:17.117
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10011 2013-09-21 18:33:17.117
+!MESSAGE "Patch feature for tests" is not applicable to the current configuration and will not be installed.
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10011 2013-09-21 18:33:17.117
+!MESSAGE "WTP Patches for org.eclipse.wst.web_core.feature" is not applicable to the current configuration and will not be installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:34:25.601
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:34:25.601
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.601
+!MESSAGE Software being installed: Dali Java Persistence Tools Plug-in SDK 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp (org.eclipse.jpt_sdk.feature.feature.group 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.601
+!MESSAGE Missing requirement: Dali Java Persistence Tools - DB UI 1.1.100.v200906070220 (org.eclipse.jpt.db.ui 1.1.100.v200906070220) requires 'bundle org.eclipse.datatools.connectivity.ui [1.1.0,1.2.0)' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:34:25.601
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.601
+!MESSAGE From: Dali Java Persistence Tools 2.2.2.v200911250220-7L7OAPFBBoPS0TBgXV1je (org.eclipse.jpt.feature.feature.group 2.2.2.v200911250220-7L7OAPFBBoPS0TBgXV1je)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.601
+!MESSAGE To: org.eclipse.jpt.db.ui [1.1.100.v200906070220]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:34:25.601
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.601
+!MESSAGE From: Dali Java Persistence Tools Plug-in SDK 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp (org.eclipse.jpt_sdk.feature.feature.group 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.601
+!MESSAGE To: org.eclipse.jpt.feature.feature.group [2.2.2.v200911250220-7L7OAPFBBoPS0TBgXV1je]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:34:25.603
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:34:25.603
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.603
+!MESSAGE Software being installed: Dali Java Persistence Tools Plug-in SDK 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp (org.eclipse.jpt_sdk.feature.feature.group 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.603
+!MESSAGE Missing requirement: Dali Java Persistence Tools - DB UI 1.1.100.v200906070220 (org.eclipse.jpt.db.ui 1.1.100.v200906070220) requires 'bundle org.eclipse.datatools.connectivity.ui [1.1.0,1.2.0)' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:34:25.603
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.603
+!MESSAGE From: Dali Java Persistence Tools 2.2.2.v200911250220-7L7OAPFBBoPS0TBgXV1je (org.eclipse.jpt.feature.feature.group 2.2.2.v200911250220-7L7OAPFBBoPS0TBgXV1je)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.603
+!MESSAGE To: org.eclipse.jpt.db.ui [1.1.100.v200906070220]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:34:25.603
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.603
+!MESSAGE From: Dali Java Persistence Tools Plug-in SDK 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp (org.eclipse.jpt_sdk.feature.feature.group 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.603
+!MESSAGE To: org.eclipse.jpt.feature.feature.group [2.2.2.v200911250220-7L7OAPFBBoPS0TBgXV1je]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:34:25.619
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:34:25.619
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.619
+!MESSAGE Software being installed: Dali Java Persistence Tools Plug-in SDK 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp (org.eclipse.jpt_sdk.feature.feature.group 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.619
+!MESSAGE Missing requirement: Dali Java Persistence Tools - DB UI 1.1.100.v200906070220 (org.eclipse.jpt.db.ui 1.1.100.v200906070220) requires 'bundle org.eclipse.datatools.connectivity.ui [1.1.0,1.2.0)' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:34:25.619
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.619
+!MESSAGE From: Dali Java Persistence Tools 2.2.2.v200911250220-7L7OAPFBBoPS0TBgXV1je (org.eclipse.jpt.feature.feature.group 2.2.2.v200911250220-7L7OAPFBBoPS0TBgXV1je)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.619
+!MESSAGE To: org.eclipse.jpt.db.ui [1.1.100.v200906070220]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:34:25.619
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.619
+!MESSAGE From: Dali Java Persistence Tools Plug-in SDK 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp (org.eclipse.jpt_sdk.feature.feature.group 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.619
+!MESSAGE To: org.eclipse.jpt.feature.feature.group [2.2.2.v200911250220-7L7OAPFBBoPS0TBgXV1je]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:34:25.619
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:34:25.620
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.620
+!MESSAGE Software being installed: Dali Java Persistence Tools Plug-in SDK 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp (org.eclipse.jpt_sdk.feature.feature.group 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.620
+!MESSAGE Missing requirement: Dali Java Persistence Tools - DB UI 1.1.100.v200906070220 (org.eclipse.jpt.db.ui 1.1.100.v200906070220) requires 'bundle org.eclipse.datatools.connectivity.ui [1.1.0,1.2.0)' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:34:25.620
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.620
+!MESSAGE From: Dali Java Persistence Tools 2.2.2.v200911250220-7L7OAPFBBoPS0TBgXV1je (org.eclipse.jpt.feature.feature.group 2.2.2.v200911250220-7L7OAPFBBoPS0TBgXV1je)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.620
+!MESSAGE To: org.eclipse.jpt.db.ui [1.1.100.v200906070220]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:34:25.620
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.620
+!MESSAGE From: Dali Java Persistence Tools Plug-in SDK 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp (org.eclipse.jpt_sdk.feature.feature.group 2.2.2.v200911250220-65390UCTXVRIQtYa5VM2gvF9wCCp)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:34:25.620
+!MESSAGE To: org.eclipse.jpt.feature.feature.group [2.2.2.v200911250220-7L7OAPFBBoPS0TBgXV1je]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2013-09-21 18:34:28.264
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10011 2013-09-21 18:34:28.264
+!MESSAGE "WTP Patches for org.eclipse.wst.web_core.feature" is not applicable to the current configuration and will not be installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2013-09-21 18:34:28.272
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10011 2013-09-21 18:34:28.272
+!MESSAGE "WTP Patches for org.eclipse.wst.web_core.feature" is not applicable to the current configuration and will not be installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:36:09.817
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:36:09.817
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:36:09.817
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:36:09.817
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.817
+!MESSAGE Software being installed: Web Page Editor (Optional) 2.2.2.v201001271707-43799oB5855B7A2242 (org.eclipse.jst.webpageeditor.feature.feature.group 2.2.2.v201001271707-43799oB5855B7A2242)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.817
+!MESSAGE Missing requirement: JavaServer Faces Tools - JSP Core Pagedesigner 1.1.3.v201002111131 (org.eclipse.jst.pagedesigner.jsp.core 1.1.3.v201002111131) requires 'package org.apache.commons.el 1.0.0' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:36:09.817
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.817
+!MESSAGE From: Web Page Editor (Optional) 2.2.2.v201001271707-43799oB5855B7A2242 (org.eclipse.jst.webpageeditor.feature.feature.group 2.2.2.v201001271707-43799oB5855B7A2242)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.817
+!MESSAGE To: org.eclipse.jst.pagedesigner.jsp.core [1.1.3.v201002111131]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:36:09.820
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:36:09.820
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:36:09.820
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:36:09.820
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.820
+!MESSAGE Software being installed: Web Page Editor (Optional) 2.2.2.v201001271707-43799oB5855B7A2242 (org.eclipse.jst.webpageeditor.feature.feature.group 2.2.2.v201001271707-43799oB5855B7A2242)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.821
+!MESSAGE Missing requirement: JavaServer Faces Tools - JSP Core Pagedesigner 1.1.3.v201002111131 (org.eclipse.jst.pagedesigner.jsp.core 1.1.3.v201002111131) requires 'package org.apache.commons.el 1.0.0' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:36:09.821
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.821
+!MESSAGE From: Web Page Editor (Optional) 2.2.2.v201001271707-43799oB5855B7A2242 (org.eclipse.jst.webpageeditor.feature.feature.group 2.2.2.v201001271707-43799oB5855B7A2242)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.821
+!MESSAGE To: org.eclipse.jst.pagedesigner.jsp.core [1.1.3.v201002111131]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:36:09.836
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:36:09.837
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:36:09.837
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:36:09.837
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.837
+!MESSAGE Software being installed: Web Page Editor (Optional) 2.2.2.v201001271707-43799oB5855B7A2242 (org.eclipse.jst.webpageeditor.feature.feature.group 2.2.2.v201001271707-43799oB5855B7A2242)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.837
+!MESSAGE Missing requirement: JavaServer Faces Tools - JSP Core Pagedesigner 1.1.3.v201002111131 (org.eclipse.jst.pagedesigner.jsp.core 1.1.3.v201002111131) requires 'package org.apache.commons.el 1.0.0' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:36:09.837
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.837
+!MESSAGE From: Web Page Editor (Optional) 2.2.2.v201001271707-43799oB5855B7A2242 (org.eclipse.jst.webpageeditor.feature.feature.group 2.2.2.v201001271707-43799oB5855B7A2242)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.837
+!MESSAGE To: org.eclipse.jst.pagedesigner.jsp.core [1.1.3.v201002111131]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:36:09.837
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:36:09.837
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:36:09.837
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:36:09.837
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.837
+!MESSAGE Software being installed: Web Page Editor (Optional) 2.2.2.v201001271707-43799oB5855B7A2242 (org.eclipse.jst.webpageeditor.feature.feature.group 2.2.2.v201001271707-43799oB5855B7A2242)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.837
+!MESSAGE Missing requirement: JavaServer Faces Tools - JSP Core Pagedesigner 1.1.3.v201002111131 (org.eclipse.jst.pagedesigner.jsp.core 1.1.3.v201002111131) requires 'package org.apache.commons.el 1.0.0' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:36:09.837
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.837
+!MESSAGE From: Web Page Editor (Optional) 2.2.2.v201001271707-43799oB5855B7A2242 (org.eclipse.jst.webpageeditor.feature.feature.group 2.2.2.v201001271707-43799oB5855B7A2242)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:36:09.837
+!MESSAGE To: org.eclipse.jst.pagedesigner.jsp.core [1.1.3.v201002111131]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2013-09-21 18:36:13.677
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10011 2013-09-21 18:36:13.677
+!MESSAGE "WTP Patches for org.eclipse.wst.web_core.feature" is not applicable to the current configuration and will not be installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2013-09-21 18:36:13.687
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10011 2013-09-21 18:36:13.687
+!MESSAGE "WTP Patches for org.eclipse.wst.web_core.feature" is not applicable to the current configuration and will not be installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:37:06.455
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:37:06.455
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:37:06.455
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:37:06.455
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.455
+!MESSAGE Software being installed: Eclipse Web Developer Tools 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3 (org.eclipse.wst.web_ui.feature.feature.group 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.455
+!MESSAGE Missing requirement: Java EMF Model Utilities 2.0.201.v201001252130 (org.eclipse.jem.util 2.0.201.v201001252130) requires 'bundle com.ibm.icu [3.8.1.1,4.1.0)' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:37:06.455
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.455
+!MESSAGE From: WST Common Core 3.1.1.v200908102300-7B77FZ6F7RZHKDIwRlOwUN (org.eclipse.wst.common_core.feature.feature.group 3.1.1.v200908102300-7B77FZ6F7RZHKDIwRlOwUN)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.456
+!MESSAGE To: org.eclipse.jem.util [2.0.201.v201001252130]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:37:06.456
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.456
+!MESSAGE From: WST Common UI 3.1.1.v200908102300-7B5FRHDhdMOGnoekn4gtEJxSmPxV (org.eclipse.wst.common_ui.feature.feature.group 3.1.1.v200908102300-7B5FRHDhdMOGnoekn4gtEJxSmPxV)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.456
+!MESSAGE To: org.eclipse.wst.common_core.feature.feature.group [3.1.1.v200908102300-7B77FZ6F7RZHKDIwRlOwUN]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:37:06.456
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.456
+!MESSAGE From: Eclipse Web Developer Tools 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3 (org.eclipse.wst.web_ui.feature.feature.group 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.456
+!MESSAGE To: org.eclipse.wst.common_ui.feature.feature.group [3.1.1.v200908102300-7B5FRHDhdMOGnoekn4gtEJxSmPxV]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:37:06.464
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:37:06.464
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:37:06.464
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:37:06.464
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.464
+!MESSAGE Software being installed: Eclipse Web Developer Tools 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3 (org.eclipse.wst.web_ui.feature.feature.group 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.464
+!MESSAGE Missing requirement: Java EMF Model Utilities 2.0.201.v201001252130 (org.eclipse.jem.util 2.0.201.v201001252130) requires 'bundle com.ibm.icu [3.8.1.1,4.1.0)' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:37:06.464
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.464
+!MESSAGE From: WST Common Core 3.1.1.v200908102300-7B77FZ6F7RZHKDIwRlOwUN (org.eclipse.wst.common_core.feature.feature.group 3.1.1.v200908102300-7B77FZ6F7RZHKDIwRlOwUN)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.464
+!MESSAGE To: org.eclipse.jem.util [2.0.201.v201001252130]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:37:06.464
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.464
+!MESSAGE From: WST Common UI 3.1.1.v200908102300-7B5FRHDhdMOGnoekn4gtEJxSmPxV (org.eclipse.wst.common_ui.feature.feature.group 3.1.1.v200908102300-7B5FRHDhdMOGnoekn4gtEJxSmPxV)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.464
+!MESSAGE To: org.eclipse.wst.common_core.feature.feature.group [3.1.1.v200908102300-7B77FZ6F7RZHKDIwRlOwUN]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:37:06.464
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.464
+!MESSAGE From: Eclipse Web Developer Tools 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3 (org.eclipse.wst.web_ui.feature.feature.group 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.464
+!MESSAGE To: org.eclipse.wst.common_ui.feature.feature.group [3.1.1.v200908102300-7B5FRHDhdMOGnoekn4gtEJxSmPxV]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:37:06.472
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:37:06.472
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:37:06.472
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:37:06.473
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.473
+!MESSAGE Software being installed: Eclipse Web Developer Tools 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3 (org.eclipse.wst.web_ui.feature.feature.group 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.473
+!MESSAGE Missing requirement: Java EMF Model Utilities 2.0.201.v201001252130 (org.eclipse.jem.util 2.0.201.v201001252130) requires 'bundle com.ibm.icu [3.8.1.1,4.1.0)' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:37:06.473
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.473
+!MESSAGE From: WST Common Core 3.1.1.v200908102300-7B77FZ6F7RZHKDIwRlOwUN (org.eclipse.wst.common_core.feature.feature.group 3.1.1.v200908102300-7B77FZ6F7RZHKDIwRlOwUN)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.473
+!MESSAGE To: org.eclipse.jem.util [2.0.201.v201001252130]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:37:06.473
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.473
+!MESSAGE From: WST Common UI 3.1.1.v200908102300-7B5FRHDhdMOGnoekn4gtEJxSmPxV (org.eclipse.wst.common_ui.feature.feature.group 3.1.1.v200908102300-7B5FRHDhdMOGnoekn4gtEJxSmPxV)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.473
+!MESSAGE To: org.eclipse.wst.common_core.feature.feature.group [3.1.1.v200908102300-7B77FZ6F7RZHKDIwRlOwUN]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:37:06.473
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.473
+!MESSAGE From: Eclipse Web Developer Tools 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3 (org.eclipse.wst.web_ui.feature.feature.group 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.473
+!MESSAGE To: org.eclipse.wst.common_ui.feature.feature.group [3.1.1.v200908102300-7B5FRHDhdMOGnoekn4gtEJxSmPxV]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:37:06.473
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 2 10001 2013-09-21 18:37:06.473
+!MESSAGE Your original request has been modified.
+!SUBENTRY 2 org.eclipse.equinox.p2.operations 2 10004 2013-09-21 18:37:06.473
+!MESSAGE "Eclipse XML Editors and Tools" will be ignored because a newer version is already installed. 
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:37:06.473
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.473
+!MESSAGE Software being installed: Eclipse Web Developer Tools 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3 (org.eclipse.wst.web_ui.feature.feature.group 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.473
+!MESSAGE Missing requirement: Java EMF Model Utilities 2.0.201.v201001252130 (org.eclipse.jem.util 2.0.201.v201001252130) requires 'bundle com.ibm.icu [3.8.1.1,4.1.0)' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:37:06.473
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.473
+!MESSAGE From: WST Common Core 3.1.1.v200908102300-7B77FZ6F7RZHKDIwRlOwUN (org.eclipse.wst.common_core.feature.feature.group 3.1.1.v200908102300-7B77FZ6F7RZHKDIwRlOwUN)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.473
+!MESSAGE To: org.eclipse.jem.util [2.0.201.v201001252130]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:37:06.473
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.473
+!MESSAGE From: WST Common UI 3.1.1.v200908102300-7B5FRHDhdMOGnoekn4gtEJxSmPxV (org.eclipse.wst.common_ui.feature.feature.group 3.1.1.v200908102300-7B5FRHDhdMOGnoekn4gtEJxSmPxV)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.473
+!MESSAGE To: org.eclipse.wst.common_core.feature.feature.group [3.1.1.v200908102300-7B77FZ6F7RZHKDIwRlOwUN]
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:37:06.473
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.474
+!MESSAGE From: Eclipse Web Developer Tools 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3 (org.eclipse.wst.web_ui.feature.feature.group 3.1.1.v200908120400-7R77FStEVw2z07WtDz-OZrhL5C-3)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:37:06.474
+!MESSAGE To: org.eclipse.wst.common_ui.feature.feature.group [3.1.1.v200908102300-7B5FRHDhdMOGnoekn4gtEJxSmPxV]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2013-09-21 18:37:08.484
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10011 2013-09-21 18:37:08.484
+!MESSAGE "WTP Patches for org.eclipse.wst.web_core.feature" is not applicable to the current configuration and will not be installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 0 2013-09-21 18:37:08.493
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.operations 4 10011 2013-09-21 18:37:08.494
+!MESSAGE "WTP Patches for org.eclipse.wst.web_core.feature" is not applicable to the current configuration and will not be installed.
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:38:19.444
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:38:19.444
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.444
+!MESSAGE Software being installed: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.444
+!MESSAGE Missing requirement: JavaServer Faces Tools - DesignTime Tests Plug-in 1.1.105.v201001271707 (org.eclipse.jst.jsf.designtime.tests 1.1.105.v201001271707) requires 'bundle org.eclipse.jdt.core.manipulation [1.3.0,1.4.0]' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:38:19.444
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.444
+!MESSAGE From: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.444
+!MESSAGE To: org.eclipse.jst.jsf.designtime.tests [1.1.105.v201001271707]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:38:19.446
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:38:19.446
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.446
+!MESSAGE Software being installed: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.446
+!MESSAGE Missing requirement: JavaServer Faces Tools - DesignTime Tests Plug-in 1.1.105.v201001271707 (org.eclipse.jst.jsf.designtime.tests 1.1.105.v201001271707) requires 'bundle org.eclipse.jdt.core.manipulation [1.3.0,1.4.0]' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:38:19.446
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.446
+!MESSAGE From: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.446
+!MESSAGE To: org.eclipse.jst.jsf.designtime.tests [1.1.105.v201001271707]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:38:19.463
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:38:19.463
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.463
+!MESSAGE Software being installed: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.463
+!MESSAGE Missing requirement: JavaServer Faces Tools - DesignTime Tests Plug-in 1.1.105.v201001271707 (org.eclipse.jst.jsf.designtime.tests 1.1.105.v201001271707) requires 'bundle org.eclipse.jdt.core.manipulation [1.3.0,1.4.0]' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:38:19.463
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.463
+!MESSAGE From: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.463
+!MESSAGE To: org.eclipse.jst.jsf.designtime.tests [1.1.105.v201001271707]
+
+!ENTRY org.eclipse.equinox.p2.operations 4 10053 2013-09-21 18:38:19.463
+!MESSAGE Operation details
+!SUBENTRY 1 org.eclipse.equinox.p2.director 4 10053 2013-09-21 18:38:19.463
+!MESSAGE Cannot complete the install because one or more required items could not be found.
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.463
+!MESSAGE Software being installed: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.463
+!MESSAGE Missing requirement: JavaServer Faces Tools - DesignTime Tests Plug-in 1.1.105.v201001271707 (org.eclipse.jst.jsf.designtime.tests 1.1.105.v201001271707) requires 'bundle org.eclipse.jdt.core.manipulation [1.3.0,1.4.0]' but it could not be found
+!SUBENTRY 2 org.eclipse.equinox.p2.director 4 1 2013-09-21 18:38:19.463
+!MESSAGE Cannot satisfy dependency:
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.463
+!MESSAGE From: JSF Tooling Tests Feature 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu (org.eclipse.jst.jsf.tests.feature.feature.group 2.1.5.v201001271707-7E7ADmFBBoPWKQ0gZKjNu)
+!SUBENTRY 3 org.eclipse.equinox.p2.director 4 0 2013-09-21 18:38:19.463
+!MESSAGE To: org.eclipse.jst.jsf.designtime.tests [1.1.105.v201001271707]
+!SESSION 2013-09-21 18:41:49.776 -----------------------------------------------
+eclipse.buildId=4.3.0.I20130605-2000
+java.version=1.6.0_51
+java.vendor=Apple Inc.
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.dsl.product -product org.eclipse.epp.package.dsl.product -keyring /Users/lewiswight/.eclipse_keyring -showlocation
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.dsl.product -data /Users/lewiswight/forge-workspace/Meshify_ -product org.eclipse.epp.package.dsl.product -keyring /Users/lewiswight/.eclipse_keyring -showlocation
+
+!ENTRY org.eclipse.osgi 2 0 2013-09-21 18:41:50.424
+!MESSAGE The plugin "org.eclipse.jst.j2ee.core.tests.performance" with the version "1.1.0" and location "reference:file:plugins/org.eclipse.jst.j2ee.core.tests.performance_1.1.0/" is an old style Eclipse 2.0 plugin with no OSGi bundle manifest.  Support for Eclipse 2.0 style plugins will be removed in a future release. Refer to the migration guide for details.
+
+!ENTRY org.eclipse.osgi 2 0 2013-09-21 18:41:50.454
+!MESSAGE The plugin "org.eclipse.jst.j2ee.tests.performance" with the version "1.1.0" and location "reference:file:plugins/org.eclipse.jst.j2ee.tests.performance_1.1.0/" is an old style Eclipse 2.0 plugin with no OSGi bundle manifest.  Support for Eclipse 2.0 style plugins will be removed in a future release. Refer to the migration guide for details.
+
+!ENTRY org.eclipse.osgi 2 0 2013-09-21 18:41:50.496
+!MESSAGE The plugin "org.eclipse.jst.validation.sample" with the version "1.1.0" and location "reference:file:plugins/org.eclipse.jst.validation.sample_1.1.0/" is an old style Eclipse 2.0 plugin with no OSGi bundle manifest.  Support for Eclipse 2.0 style plugins will be removed in a future release. Refer to the migration guide for details.
+
+!ENTRY org.eclipse.core.net 1 0 2013-09-21 18:41:56.818
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.core.resources 4 567 2013-09-21 18:42:01.329
+!MESSAGE The project description file (.project) for 'Meshify_1' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.

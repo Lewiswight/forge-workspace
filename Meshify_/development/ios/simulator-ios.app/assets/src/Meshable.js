@@ -57,6 +57,7 @@
         pushState: false
       });
     });
+    forge.topbar.setTitle("Meshify");
     forge.topbar.addButton({
       text: "Refresh",
       position: "right"

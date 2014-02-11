@@ -1,0 +1,52 @@
+forever = require("forever-monitor") 
+email = require("emailjs")
+child = new Array
+for i in [0..24]
+	
+	
+	child[i] = new (forever.Monitor)("uploadprocessnode/start.js",
+	  max: 100
+	  silent: true
+	  options: []
+	)
+	console.log i
+	child[i].on "restart",  ->
+		
+		server = email.server.connect(
+			host: "localhost"
+			ssl: false
+		)
+		
+		# send the message and get a callback with an error or details of the message that was sent
+		server.send
+			text: "one of your " + i.toString() + " uploaders has restarted"
+			from: "you <lewis@meshify.com>"
+			to: "lewiswight@gmail.com, dane@meshify.com"
+			cc: ""
+			subject: "one of your " + i.toString() + " uploaders has restarted"
+		, (err, message) ->
+			console.log err or message
+		console.log "one of your " + i.toString() + " uploaders has restarted"
+	    
+	child[i].on "exit",  ->
+		
+		server = email.server.connect(
+			host: "localhost"
+			ssl: false
+		)
+		
+		# send the message and get a callback with an error or details of the message that was sent
+		server.send
+			text: "one of your " + i.toString() + " uploaders has exited permenantly"
+			from: "you <lewis@meshify.com>"
+			to: "lewiswight@gmail.com, dane@meshify.com"
+			cc: ""
+			subject: "one of your " + i.toString() + " uploaders has exited permenantly"
+		, (err, message) ->
+			console.log err or message
+		console.log "one of your " + i.toString() + " uploaders has exited permenantly" 
+	  
+	
+	child[i].start()
+	
+

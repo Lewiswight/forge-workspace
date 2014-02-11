@@ -50,6 +50,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 						$('#pw').val value
 					forge.prefs.get "username", (value) ->
 						$('#un').val value
+						$('#unNew').val value
 				#if value is false
 					#$('#password-input').val false
 			#@passwordcheck()
@@ -153,12 +154,12 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 				$.mobile.hidePageLoadingMsg()
 			else
 				forge.request.ajax
-					url: Meshable.rooturl + "/api/authentication/login"
+					url: Meshable.rooturl + "/api/authentication/login" 
 					type: "POST"
 					dataType: "json"
 					timeout: "10000"
 					contentType: 'application/json; charset=utf-8'
-					data: JSON.stringify({ "UserName" : $('#un').val(), "Password" : $('#pw').val(), "RememberMe" : $('#remember-me').prop("checked"), "AppType" : "mobile"})
+					data: JSON.stringify({ "UserName" : $('#un').val(), "Password" : $('#pw').val(), "RememberMe" : $('#remember-me').prop("checked"), "AppType" : "web"})
 					
 					error: (e) -> 
 						$("body").removeClass('ui-disabled')
@@ -166,10 +167,86 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 						forge.notification.alert("Error", e.message) 
 						Meshable.router.navigate "", trigger : true
 						#self.model.updateMsg "An error occurred on authentication... sorry!"
+						
+						
 					success: (data) ->
+						
 						
 						#data.company.Name Name to display on Units company.logoUrl path to S3 image for role in data.roles {ADMIN, SUPER_ADMIN DEALER CUSTOMER MOBILE_ONLY}
 						if data.IsAuthenticated == true
+							
+							
+							###addTemplate = (file) ->
+								forge.file.string file, (string) ->
+										$('body').append(string)
+									 
+							checkCachedTemplate = (templateName) ->
+								forge.prefs.get templateName, (file) ->
+									if file == null
+										cacheTemplate()
+										return
+									
+									forge.file.isFile file, (isFile) ->
+								    	
+							            if isFile == false
+							            	
+							                #msg = "File no longer available"
+							                #forge.notification.alert("Message", msg)  
+							                cacheTemplate()
+							            else
+							                #msg = "Template available Locally"
+							                #forge.notification.alert("Message", msg) 
+							                addTemplate file
+							
+							cacheTemplate = ->
+								forge.file.cacheURL "https://s3.amazonaws.com/LynxMVC4-Bucket/template-apgus.html", (file) ->
+									#alert "template cached"
+									
+									#$('body').append(forge.file.sting(file))
+							    	# File cached save the file object for later
+									forge.prefs.set "template-apgus1", file, ->
+							      		#alert "templated saved" 
+							      		addTemplate file
+							    							      		
+							checkCachedTemplate "template-apgus1"###
+							
+
+							# unsubscribe to all of the channels you subcribed to last time you logged in
+							forge.parse.push.subscribedChannels ((channels) ->
+								for channel in channels
+									forge.parse.push.unsubscribe channel, (->
+										forge.logging.info ("no more notifications from: " + channel
+										) 
+									), (err) ->
+										forge.logging.error "couldn't unsubscribe from beta-tester notifications: " + JSON.stringify(err)											
+							), (err) ->
+								forge.logging.error "couldn't retreive subscribed channels: " + JSON.stringify(err)
+							
+							channelName = $('#un').val()
+							channelName = channelName.replace("@", "")
+							channelName = channelName.replace(/\./g,'')
+							channelName = channelName.toLowerCase()
+							
+							# this alerts the user when they get a notification 
+							forge.event.messagePushed.addListener (msg) ->
+						  		forge.notification.alert("Message", msg.alert)  
+						  		
+						  	# subscribe to your username, your company, and your parent company
+						 	forge.parse.push.subscribe channelName, (->
+								forge.logging.info "subscribed to: " + channelName
+							), (err) ->
+								forge.logging.error "error subscribing to : " + JSON.stringify(err)
+								
+							forge.parse.push.subscribe ("company" + JSON.stringify(data.company.CompanyId)), (->
+								forge.logging.info "subscribed to: " + channelName
+							), (err) ->
+								forge.logging.error "error subscribing to : " + JSON.stringify(err)
+								
+							forge.parse.push.subscribe ( "parent" + JSON.stringify(data.company.Parent_CompanyId)), (->
+								forge.logging.info "subscribed to: " + channelName
+							), (err) ->
+								forge.logging.error "error subscribing to : " + JSON.stringify(err)
+								
 							Meshable.company.zip = data.company.Address.zip
 							Meshable.company.city = data.company.Address.city
 							Meshable.company.state = data.company.Address.state
@@ -252,7 +329,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			success: (data) ->
 				forge.request.ajax
 					url: Meshable.rooturl + "/api/authentication/sendEmail"
-					data:  {UserName: $('#unNew').val() } 
+					data:  {UserName: "lewis@meshify.com" } 
 					dataType: "json"
 					type: "POST"
 					error: (e) -> 
@@ -305,6 +382,44 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 				success: (data) ->	
 					
 					if data.IsAuthenticated == true
+						
+						
+						###addTemplate = (file) ->
+								forge.file.string file, (string) ->
+										$('body').append(string)
+									 
+							checkCachedTemplate = (templateName) ->
+								forge.prefs.get templateName, (file) ->
+									if file == null
+										cacheTemplate()
+										return
+									
+									forge.file.isFile file, (isFile) ->
+								    	
+							            if isFile == false
+							            	
+							                #msg = "File no longer available"
+							                #forge.notification.alert("Message", msg)  
+							                cacheTemplate()
+							            else
+							                #msg = "Template available Locally"
+							                #forge.notification.alert("Message", msg) 
+							                addTemplate file
+							
+							cacheTemplate = ->
+								forge.file.cacheURL "https://s3.amazonaws.com/LynxMVC4-Bucket/template-apgus.html", (file) ->
+									#alert "template cached"
+									
+									#$('body').append(forge.file.sting(file))
+							    	# File cached save the file object for later
+									forge.prefs.set "template-apgus1", file, ->
+							      		#alert "templated saved" 
+							      		addTemplate file
+							    
+							      		
+							checkCachedTemplate "template-apgus1"###
+						
+						
 						Meshable.company.zip = data.company.Address.zip
 						Meshable.company.city = data.company.Address.city
 						Meshable.company.state = data.company.Address.state

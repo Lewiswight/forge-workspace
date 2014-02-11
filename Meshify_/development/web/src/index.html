@@ -26,7 +26,6 @@
     
     <script data-main="./meshable-config" src="./vendor/require.js" type="text/javascript"></script>
 	
-	
     
     
     
@@ -142,7 +141,7 @@
 
 			<% timestamp = channels["mc3.LM"].timestamp;  %>
 
-			<% if (timestamp.length > 10) {  %>
+			<% if (timestamp.substring(0, 4) != "Last") {  %>
  			 <% timestampArray = timestamp.split(" ");  %>
  			 <% dateArray = timestampArray[0].split("/");  %>
  			 <% timeArray = timestampArray[1].split(":");  %>
@@ -210,7 +209,7 @@
 
 			<% timestamp = channels["mc3z.LM"].timestamp;  %>
 
-			<% if (timestamp.length > 10) {  %>
+			<% if (timestamp.substring(0, 4) != "Last") {  %>
  			 <% timestampArray = timestamp.split(" ");  %>
  			 <% dateArray = timestampArray[0].split("/");  %>
  			 <% timeArray = timestampArray[1].split(":");  %>
@@ -275,7 +274,7 @@
 
 			<% timestamp = channels["mc13.LM"].timestamp;  %>
 
-			<% if (timestamp.length > 10) {  %>
+			<% if (timestamp.substring(0, 4) != "Last") {  %>
  			 <% timestampArray = timestamp.split(" ");  %>
  			 <% dateArray = timestampArray[0].split("/");  %>
  			 <% timeArray = timestampArray[1].split(":");  %>
@@ -341,7 +340,7 @@
 
 			<% timestamp = channels["mc13z.LM"].timestamp;  %>
 
-			<% if (timestamp.length > 10) {  %>
+			<% if (timestamp.substring(0, 4) != "Last") {  %>
  			 <% timestampArray = timestamp.split(" ");  %>
  			 <% dateArray = timestampArray[0].split("/");  %>
  			 <% timeArray = timestampArray[1].split(":");  %>
@@ -446,7 +445,23 @@
 	
      </script>
     
+    <script type="text/template" id="nodeitem-apgus">
+    	<a href="#gateway/<%= macaddress %>/<%= node.NodeId %>/first/last/phone/city/state/street/zip"   class="ui-link-inherit"> 
+	
+
+	hi
+	
+	
+     </script>
     
+    <script type="text/template" id="nodeitem-resultsIndictor">
+    	
+	
+
+	<%= res %>
+	
+	
+     </script>
     
     <script type="text/template" id="nodeitem-add">
     	
@@ -495,7 +510,9 @@
 
         <div data-theme="a" id="login_page" >
             
-        
+        <div data-theme="a" data-role="footer" data-position="fixed" data-tap-toggle="false" data-update-page-padding="false">  
+				<h3>Version 1.0.6</h3>
+        </div>  
 		
   
     </script>
@@ -590,10 +607,24 @@
 						
 						
 						<input type="button" value="Login" id="auth-submit-btn" class="submit-btn padding10" /> 
-						
-						<p class="status-message"> <%= statusmsg %> </p><br />
+						</form>
 
-					</form>
+						<a href="#popupBasic" id="getnewpass" data-rel="popup">Forgot your password?</a>
+
+							<div data-theme="b" data-role="popup" id="popupBasic">
+								<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+								<p>Enter the e-mail address associated with your account, then click Continue. We'll email you a link to a page where you can easily create a new password.</p>
+								<ul data-role="listview">
+									<label for="unNew" class="ui-hidden-accessible" >email address:</label>
+        							<input type="email" name="user" id="unNew" placeholder="email address" />
+								</ul>								
+									<input type="button" value="Continue" id="newPas" class="submit-btn padding10" />
+								
+							</div>
+
+						
+
+					
 				</div>
 			
 
@@ -629,13 +660,23 @@
 				<input type="text" name="search" id="search-main" value="" />
         	</div>
 		</div>
-        <input id="search-btn" type="submit" data-icon="arrow-r" class="submit-btn" data-iconpos="right" value="Search">
+        <input id="search-btn" type="submit" data-icon="arrow-r" class="submit-btn" data-iconpos="right" value="Search"/>
 		<div data-role="fieldcontain">
-			<label for="flip-3">Results Type:</label>
-				<select name="flip-3" id="flip-3" data-role="slider" data-theme="a">
-					<option value="List">List</option>
-					<option value="Map">Map</option>
-				</select> 
+			<fieldset class="ui-grid-b">
+				<div class="ui-block-a">
+					   
+				
+					
+					<select data-inline="true" name="flip-3" id="flip-3" data-role="slider" data-theme="a">
+						<option value="List">List</option>
+						<option value="Map">Map</option>
+					</select> 
+				</div>
+				<div class="ui-block-b">   </div>
+				<div class="ui-block-c">
+						<input id="view-all" type="submit"  data-mini="true" data-role="button" data-inline="true" data-theme="a" value="View All"/>
+				</div>
+			</fieldset>
 		</div>
     </div>
 
@@ -812,6 +853,13 @@
 	</div>
     </script>
     
+    <script type="text/template" id="template-apgus">
+	<div id='chart_div'>hi there</div>
+
+	
+ 	
+
+    </script>
     
     
     <script type="text/template" id="template-mc13"
@@ -920,7 +968,7 @@
                 		
 	<div data-role="navbar">
 		<ul>
-			<% if (channels["mc13.SS"].value == "Off") { %>
+			<% if (channels["mc13.MD"].value == "0") { %>
     			<li><a data-role="button" class="setstatic" data-channel="MD" data-nodetype="mc13" data-setvalue="2" data-theme="e"  >Turn On</a></li>
 			<% } %>
 
@@ -1081,7 +1129,7 @@
                 		
 	<div data-role="navbar">
 		<ul>
-			<% if (channels["mc13z.SS"].value == "Off") { %>
+			<% if (channels["mc13z.MD"].value == "0") { %>
     			<li><a data-role="button" class="setstatic" data-channel="MD" data-nodetype="mc13z" data-setvalue="2" data-theme="e"  >Turn On</a></li>
 			<% } %>
 
@@ -1246,7 +1294,7 @@
                 		
 	<div data-role="navbar">
 		<ul>
-			<% if (channels["mc3.SS"].value == "Off") { %>
+			<% if (channels["mc3.MD"].value == "0") { %>
     			<li><a data-role="button" class="setstatic" data-channel="MD" data-nodetype="mc3" data-setvalue="2" data-theme="e"  >Turn On</a></li>
 			<% } %>
 
@@ -1412,7 +1460,7 @@
                 		
 	<div data-role="navbar">
 		<ul>
-			<% if (channels["mc3z.SS"].value == "Off") { %>
+			<% if (channels["mc3z.MD"].value == "0") { %>
     			<li><a data-role="button" class="setstatic" data-channel="MD" data-nodetype="mc3z" data-setvalue="2" data-theme="e"  >Turn On</a></li>
 			<% } %>
 

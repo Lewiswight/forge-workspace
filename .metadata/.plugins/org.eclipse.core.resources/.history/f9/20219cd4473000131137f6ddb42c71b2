@@ -1,0 +1,30 @@
+forever = require("forever-monitor") 
+email = require("emailjs")
+child = new Array
+for i in [0..19]
+	child[i] = new (forever.Monitor)("start.js",
+	  max: 50
+	  silent: true
+	  options: []
+	)
+	console.log i
+	child[i].on "restart", ->
+		server = email.server.connect(
+			host: "localhost"
+			ssl: false
+		)
+		
+		# send the message and get a callback with an error or details of the message that was sent
+		server.send
+			text: "uploader " + i.toString() +  " has restarted"
+			from: "you <lewis@meshify.com>"
+			to: "lewiswight@gmail.com, dane@meshify.com"
+			cc: ""
+			subject: "uploader " + i.toString() +  " has restarted"
+		, (err, message) ->
+			console.log err or message
+	  console.log "uploader " + i.toString() +  " has restarted"
+	
+	child[i].start() 
+	
+

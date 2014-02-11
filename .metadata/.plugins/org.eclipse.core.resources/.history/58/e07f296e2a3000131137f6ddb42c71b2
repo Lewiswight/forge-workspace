@@ -1,0 +1,12 @@
+forever = require("forever-monitor") 
+child = new Array
+for i in [0..20]
+	child = new (forever.Monitor)("start.js",
+	  max: 50
+	  silent: true
+	  options: []
+	)
+	child.on "restart", ->
+	  console.log "your-filename.js has exited after 3 restarts"
+	
+	child.start()

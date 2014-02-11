@@ -53,6 +53,27 @@
         return Meshable.vent.trigger("goto:units", false, "");
       },
       nodeDetails: function(mac, id, first, last, phone1, city, state, street1, zip) {
+        if (first === "unknown" || first === null) {
+          first = "";
+        }
+        if (last === "unknown" || last === null) {
+          last = "";
+        }
+        if (phone1 === "unknown" || phone1 === null) {
+          phone1 = "";
+        }
+        if (city === "unknown" || city === null) {
+          city = "";
+        }
+        if (state === "unknown" || state === null) {
+          state = "";
+        }
+        if (street1 === "unknown" || street1 === null) {
+          street1 = "";
+        }
+        if (zip === "unknown" || zip === null) {
+          zip = "";
+        }
         if (!forge.is.connection.connected()) {
           forge.notification.alert("Failed to Load", "No Internet Connection");
           window.history.back();
@@ -73,6 +94,7 @@
           error: function(e) {
             $("body").removeClass('ui-disabled');
             $.mobile.hidePageLoadingMsg();
+            Meshable.current_index = 0;
             Meshable.current_units = "";
             Meshable.current_gateways = "";
             Meshable.current_searchTerm = "";
@@ -81,6 +103,7 @@
             return $('#mainDiv').empty();
           },
           success: function(data) {
+            Meshable.current_index = 0;
             Meshable.currentMap = null;
             Meshable.current_units = "";
             Meshable.current_gateways = "";
@@ -104,6 +127,7 @@
         return Meshable.vent.trigger("goto:nodes", macaddress);
       },
       gateways: function() {
+        Meshable.loading = true;
         $("body").addClass('ui-disabled');
         $.mobile.showPageLoadingMsg("a", "Loading", false);
         return Meshable.vent.trigger("showmap");

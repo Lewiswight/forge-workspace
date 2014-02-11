@@ -4,8 +4,13 @@
     var Map, MapView, geocoder, latlngbounds, locationmaps, mapOpts, markers, onMapBound, onMapRendered;
 
     Meshable.vent.on("showmap", function() {
-      var bindmap;
+      var bindmap, searchTer;
 
+      if (Meshable.current_searchTerm.length > 1) {
+        searchTer = Meshable.current_searchTerm.replace(/\ /g, "+");
+      } else {
+        searchTer = Meshable.current_searchTerm;
+      }
       Meshable.loading = true;
       Meshable.locationButton.setActive();
       if (Meshable.currentMap === null) {
@@ -14,13 +19,13 @@
           return Meshable.vent.trigger('maps:bind', {
             mapContainerId: 'mapwrapper',
             mapOpts: {
-              center: center,
+              zoom: 6,
               mapTypeId: google.maps.MapTypeId.ROADMAP
             },
             onMapRendered: function() {
               console.log('on onMapRendered callback');
               return forge.request.ajax({
-                url: Meshable.rooturl + '/api/locations?term=' + Meshable.current_searchTerm,
+                url: Meshable.rooturl + '/api/locations?term=' + searchTer,
                 type: "GET",
                 dataType: "json",
                 timeout: "20000",
@@ -158,6 +163,9 @@
         Meshable.vent.trigger('maps:addmarker', obj.items[i]);
       }
       locationmaps.fitBounds(latlngbounds);
+      if (obj.items.length === 1) {
+        locationmaps.setZoom(10);
+      }
     });
     Meshable.vent.on('maps:addmarker', function(obj) {
       var clickfunction, position, thisicon, thismarker, thisorigin;

@@ -2,8 +2,8 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="263" key="DIALOG_WIDTH"/>
-		<item value="248" key="DIALOG_Y_ORIGIN"/>
-		<item value="0" key="DIALOG_X_ORIGIN"/>
+		<item value="504" key="DIALOG_Y_ORIGIN"/>
+		<item value="795" key="DIALOG_X_ORIGIN"/>
 		<item value="395" key="DIALOG_HEIGHT"/>
 		<item value="1|Lucida Grande|11.0|0|COCOA|1|LucidaGrande" key="DIALOG_FONT_NAME"/>
 	</section>
@@ -13,16 +13,16 @@
 		<item value="false" key="isRegEx"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wholeword"/>
-		<item value="auth" key="selection"/>
+		<item value="template-apc" key="selection"/>
 		<list key="findhistory">
-			<item value="auth"/>
-			<item value="create"/>
-			<item value="refresh"/>
-			<item value="theme"/>
-			<item value="$(&quot;body&quot;).removeClass(&apos;ui-disabled&apos;)"/>
-			<item value="margin-bottom: 50px"/>
-			<item value="hidemargin-bottom: 50px"/>
-			<item value="hide"/>
+			<item value="template-apc"/>
+			<item value="template-apg"/>
+			<item value="template-gate"/>
+			<item value="gate"/>
+			<item value="socket"/>
+			<item value="socket.io"/>
+			<item value="s3"/>
+			<item value="apg"/>
 		</list>
 		<list key="replacehistory">
 			<item value="Last Refilled"/>

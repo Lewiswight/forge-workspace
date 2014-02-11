@@ -34,7 +34,38 @@
       tagName: 'li',
       className: "list_item",
       events: {
-        "click #search-btn": "update"
+        "click #search-btn": "update",
+        "click #view-all": "viewAll"
+      },
+      viewAll: function() {
+        var includeUnits, param, resultType, route, searchField;
+
+        if (!forge.is.connection.connected()) {
+          forge.notification.alert("Failed to Load", "No Internet Connection");
+          $("body").removeClass('ui-disabled');
+          $.mobile.hidePageLoadingMsg();
+          return;
+        }
+        includeUnits = $('#include-units').prop("checked");
+        resultType = $('#flip-3').val();
+        searchField = "";
+        param = new Object({
+          search: searchField
+        });
+        forge.flurry.customEvent("start up", param, function() {
+          return console.log("set sent to flury");
+        }, function(e) {
+          return console.log(e);
+        });
+        if (searchField === "") {
+          searchField = "_";
+        }
+        route = "#searching/" + searchField + "/" + resultType;
+        return Backbone.history.navigate(route, {
+          trigger: true,
+          replace: false,
+          pushState: false
+        });
       },
       update: function() {
         var includeUnits, param, resultType, route, searchField;
