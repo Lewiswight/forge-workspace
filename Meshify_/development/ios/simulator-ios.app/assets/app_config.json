@@ -1,6 +1,6 @@
 {
     "author": "lewis@meshify.com", 
-    "config_hash": "b7943dec8f36cb31fc1c7636fc760bdb08e29dad", 
+    "config_hash": "418287378c33501dc4571c7fa518eb812d27d3c1", 
     "config_version": "4", 
     "core": {
         "android": {
@@ -130,7 +130,7 @@
             "version": "2.2"
         }, 
         "topbar": {
-            "version": "2.3"
+            "version": "2.4"
         }
     }, 
     "name": "Meshify", 

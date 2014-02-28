@@ -6,24 +6,36 @@ server = email.server.connect(
 	ssl: false
 )
 
+folder =  process.argv[2]
+instances =  process.argv[3]
+trys =  process.argv[4]
+Pname = process.argv[5]
+
+
+instances = (parseInt(instances,10)) - 1
+trys = parseInt(trys,10)
+
+dir = folder + "/start.js" 
+
+
 # send the message and get a callback with an error or details of the message that was sent
 server.send
-	text: "New Uploader Precess Started"
-	from: "Uploader <lewis@meshify.com>"
+	text: Pname + " Started"
+	from: "NodeServer <lewis@meshify.com>"
 	to: "lewiswight@gmail.com, dane@meshify.com"
 	cc: ""
-	subject: "New Uploader Precess Started"
+	subject: Pname + " Started"
 , (err, message) ->
 	console.log err or message
-console.log "New Uploader Precess Started" 
+console.log "New Uploader Process Started" 
 
 spinUp = (name) ->
 	i = name
 	name = name.toString()
-	directory = "./tmp/log" + name + ".txt"	
-	directory2 = "./tmp/error" + name + ".txt"
-	child[i] = new (forever.Monitor)("uploadprocessnode/start.js",
-	  max: 100
+	directory = "./tmp/log" + "_" + Pname + name + ".txt"	
+	directory2 = "./tmp/error" + "_" + Pname + name + ".txt"
+	child[i] = new (forever.Monitor)(dir,
+	  max: trys
 	  silent: true
 	  outFile: directory
 	  errFile: directory2
@@ -41,11 +53,11 @@ spinUp = (name) ->
 		
 		# send the message and get a callback with an error or details of the message that was sent
 		server.send
-			text: "uploader: " + name + " has restarted"
+			text: Pname + " " + name + " has restarted"
 			from: "you <lewis@meshify.com>"
 			to: "lewiswight@gmail.com, dane@meshify.com"
 			cc: ""
-			subject: "uploader: " + name + " has restarted"
+			subject: Pname + " " + name + " has restarted"
 			attachment: [
 				data: "<html><i>Log File</i></html>"
 				alternative: true
@@ -74,19 +86,22 @@ spinUp = (name) ->
 		
 		# send the message and get a callback with an error or details of the message that was sent
 		server.send
-			text: "one of your " + name + " uploaders has exited permenantly"
+			text: "one of your " + Pname + " processes has exited permanently"
 			from: "Uploader <lewis@meshify.com>"
 			to: "lewiswight@gmail.com, dane@meshify.com"
 			cc: ""
-			subject: "one of your " + name + " uploaders has exited permenantly"
+			subject: "one of your " + Pname + " processes has exited permanently"
 		, (err, message) ->
 			console.log err or message
-		console.log "one of your " + name + " uploaders has exited permenantly" 
+		console.log "one of your " + Pname + " processes has exited permanently"
 	  
 	
 	child[i].start()
 
-for i in [0..24]
+
+
+
+for i in [0..instances]
 	spinUp(i)
 
 

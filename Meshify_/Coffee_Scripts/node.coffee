@@ -433,7 +433,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			Meshable.vent.trigger "update:chart", val, timestamp
 
 			IntVal = parseInt(val)
-
+			
 			percent = (IntVal / 1000)
 			percent = percent * 100
 			percent = Math.round(percent)
@@ -450,16 +450,19 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 			#d.setUTCSeconds(timeInt)
 		
 		
-		socket = io.connect("http://50.19.101.205:5000")
+		socket = io.connect("http://ws.meshify.com:80")
 		socket.on "connect", ->
 		
 			socket.emit "subscribe",
-		    	topic: "meshify/db/ctan/B827EB795886/apc_[b8:27:eb:79:58:86:00:02]!/TIMELEFT"
+		    	topic: "meshify/db/ctan/C49300007B94/apgus_[c4:93:00:00:7b:94:00:01]!/raw"
 			socket.on "mqtt", (msg) =>
-		    	alert msg.topic + " " + msg.payload
+				msg.payload = $.parseJSON( msg.payload )
+				
+					
+		    	#alert msg.topic + " " + msg.payload
 		    	#dis = msg.payload.split(";")
 		    	#alert parseInt(dis[0])
-		    	#Meshable.vent.trigger "update:guage", dis[0], dis[1]
+				Meshable.vent.trigger "update:guage", msg.payload[0].value, msg.payload[0].timestamp
 		    	
 		    	#data.setValue(0, 0, label1)
 				#data.setValue(0, 1, parseInt(d[0]))
@@ -480,8 +483,8 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 				position: "top"
 			chartArea:{left:"15%",top:50,width:"80%",height:"50%"}
 			animation:
-				easing: "inAndOut"
-				duration: 2000
+				easing: "linear"
+				duration: 1000
 			title: chartLabel
 			hAxis:
 				title: xLabel
@@ -528,6 +531,7 @@ define ['jquery', 'jqm', 'backbone','underscore','marionette', 'Meshable', 'Even
 				Meshable.vent.on "update:chart", (val, timestamp) ->
 					d = new Date(parseInt(timestamp)*1000)
 					data.addRow([d, parseInt(val)])
+					chart.draw data, options
 					if data.getNumberOfRows() > 20
 						data.removeRow(0)
 					chart.draw data, options

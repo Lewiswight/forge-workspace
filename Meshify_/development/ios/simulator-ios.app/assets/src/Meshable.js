@@ -8,7 +8,7 @@
     Meshable.user = new Object;
     Meshable.location = new Object;
     Meshable.theme = "a";
-    Meshable.rooturl = "http://imistaway.com";
+    Meshable.rooturl = "http://apg.meshify.com";
     Meshable.current - (search = null);
     Meshable.current_units = "";
     Meshable.current_gateways = "";

@@ -1,6 +1,6 @@
 {
 	"config_version": "4",
-	"description": "iMistAway",
+	"description": "Meshify",
 	"author": "lewis@meshify.com",
 	"modules": {
 		"geolocation": {
@@ -54,7 +54,7 @@
 			"version": "2.2"
 		},
 		"topbar": {
-			"version": "2.3"
+			"version": "2.4"
 		},
 		"request": {
 			"version": "2.3",
@@ -120,6 +120,6 @@
 		},
 		"general": {}
 	},
-	"name": "iMistAway",
+	"name": "Meshify",
 	"homepage": "imistaway.com"
 }
